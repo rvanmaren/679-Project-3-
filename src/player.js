@@ -12,7 +12,7 @@ function Player(position, scene_handle, camera_handle)
 	this.camera.position.set(position.x,position.y,position.z);
 	
 	this.direction = new THREE.Vector3(0,0,1);
-	this.speed = .5;
+	this.speed = 2;
     this.rotationSpeed = .5;
 	
 	this.key_down = function(keyEvent)
@@ -74,11 +74,11 @@ function Player(position, scene_handle, camera_handle)
 											0, this.direction.x*Math.sin(Math.PI/2)+this.direction.z*Math.cos(Math.PI/2));//just rotate by 90 degrees same direction every time
 		//Do y direction with a jump
 		//sideways motion
-		this.position.x += directionPerp.x*sideways;
-		this.position.z += directionPerp.z*sideways;
+		this.position.x += directionPerp.x*sideways*this.speed;
+		this.position.z += directionPerp.z*sideways*this.speed;
 		//forward motion
-		this.position.x += this.direction.x*forward;
-		this.position.z += this.direction.z*forward;
+		this.position.x += this.direction.x*forward*this.speed;
+		this.position.z += this.direction.z*forward*this.speed;
 		//console.log("Direction:" + this.direction.x + "," + this.direction.z);
 		this.camera.position.set(this.position.x, this.position.y, this.position.z);
 		//this.camera.lookAt(this.position.x + dir.x, this.position.y + dir.y, this.position.z + dir.x);
