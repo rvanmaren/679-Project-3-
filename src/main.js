@@ -27,11 +27,11 @@ var camera = new THREE.PerspectiveCamera(
 scene.add( camera );
 
 //SET UP. probably could move all this out
-var mainPlayer = new Player(new THREE.Vector3(20,0,10), scene, camera);
+var mainPlayer = new Player(new THREE.Vector3(20,30,10), scene, camera);
 var mainBuilder = new Builder(new THREE.Vector3(20,80,10), scene, camera);
 
 var currentEntity = mainPlayer;
-var grid = new Grid(scene);
+var grid = new Grid(10000,10000,1000,scene);
 
 var light = new THREE.PointLight( 0xFFFF00 );
 light.position.set( 10, 0, 10 );
