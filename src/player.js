@@ -27,7 +27,6 @@ function Player(position, scene_handle, camera_handle)
 			case 68:
 				this.keys[RIGHT] = true;
 				break;
-				
 			case 83:
 				this.keys[DOWN] = true;
 				break;
@@ -71,8 +70,8 @@ function Player(position, scene_handle, camera_handle)
 		//Compute movement based on key press
 		var forward = this.keys[UP] ? (this.keys[DOWN] ? 0 : 1) : (this.keys[DOWN] ? -1 : 0); //1,0,-1
 		var sideways = this.keys[RIGHT] ? (this.keys[LEFT] ? 0 : 1) : (this.keys[LEFT] ? -1 : 0);
-		console.log(forward + "," + this.keys[UP]);
-		var directionPerp = new THREE.Vector3(this.direction.x*Math.cos(Math.PI/2)- this.direction.z*Math.sin(Math.PI/2),0, this.direction.x*Math.sin(Math.PI/2)+this.direction.z*Math.cos(Math.PI/2));//just rotate by 90 degrees same direction every time
+		var directionPerp = new THREE.Vector3(this.direction.x*Math.cos(Math.PI/2)- this.direction.z*Math.sin(Math.PI/2),
+											0, this.direction.x*Math.sin(Math.PI/2)+this.direction.z*Math.cos(Math.PI/2));//just rotate by 90 degrees same direction every time
 		//Do y direction with a jump
 		//sideways motion
 		this.position.x += directionPerp.x*sideways;

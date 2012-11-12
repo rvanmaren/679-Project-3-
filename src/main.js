@@ -11,6 +11,7 @@ window.requestAnimFrame = (function(){
                 window.setTimeout(callback, 1000 / 60);
               };
     })();
+	
 //Initialize the renderer
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( WINDOW_WIDTH, WINDOW_HEIGHT );
@@ -27,6 +28,9 @@ scene.add( camera );
 
 //SET UP. probably could move all this out
 var mainPlayer = new Player(new THREE.Vector3(20,0,10), scene, camera);
+var mainBuilder = new Builder(new THREE.Vector3(20,80,10), scene, camera);
+
+var currentEntity = mainPlayer;
 var grid = new Grid(scene);
 
 var light = new THREE.PointLight( 0xFFFF00 );
@@ -49,9 +53,6 @@ function goFullScreen() {
     rfs.call(el);
 	
 }
-document.body.requestPointerLock = document.body.requestPointerLock ||
-	document.body.mozRequestPointerLock ||
-	document.body.webkitRequestPointerLock;
 function key_down(keyEvt)
 {
 	switch (event.keyCode){	
@@ -62,16 +63,26 @@ function key_down(keyEvt)
 				// Ask the browser to lock the pointer
 				document.body.requestPointerLock();
 				break;
+			case 84:
+				if(currentEntity == mainBuilder)
+					currentEntity = mainPlayer;
+				else
+					currentEntity = mainBuilder;
+				break;
 			default:
-				mainPlayer.key_down(keyEvt);
+				currentEntity.key_down(keyEvt);
 				break;
 	}
 }
 function key_up(keyEvt)
 {
-	mainPlayer.key_up(keyEvt);
+	currentEntity.key_up(keyEvt);
 }
 
+document.body.requestPointerLock = document.body.requestPointerLock ||
+	document.body.mozRequestPointerLock ||
+	document.body.webkitRequestPointerLock;
+	
 function mouseLockChange()
 {
 if (document.body.pointerLockElement === requestedElement ||
@@ -113,7 +124,7 @@ function render() {
 }
 function animloop(){
 	window.requestAnimFrame(animloop);
-	mainPlayer.update(10);
+	currentEntity.update(10);
     render(); 
 };
 
