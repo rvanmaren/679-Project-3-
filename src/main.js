@@ -29,7 +29,7 @@ scene.add( camera );
 //SET UP. probably could move all this out
 var grid = new Grid(10000,10000,1000,scene);
 var mainPlayer = new Player(new THREE.Vector3(20,30,10), scene, camera);
-var mainBuilder = new Builder(new THREE.Vector3(20,200,10), scene, camera, grid);
+var mainBuilder = new Builder(new THREE.Vector3(20,400,10), scene, camera, grid);
 
 var currentEntity = mainPlayer;
 

@@ -23,11 +23,11 @@ function Builder(position, scene_handle, camera_handle, grid_handle)
 	});
 	
 	//THIS IS BAD. NEED TO REFACTOR SOON!
-	this.sphere = new THREE.Mesh( new THREE.SphereGeometry(3, 8, 8), this.targetMaterial);
+	this.sphere = new THREE.Mesh( new THREE.SphereGeometry(1, 8, 8), this.targetMaterial);
 	
 	this.sphere.position.x = position.x; 
 	this.sphere.position.z = position.z;
-	this.sphere.position.y = position.y-20;
+	this.sphere.position.y = 0;
 
 	scene.add(this.sphere);
 	
@@ -86,8 +86,8 @@ function Builder(position, scene_handle, camera_handle, grid_handle)
 	};
 	this.mouseMovement = function(mouseMoveX, mouseMoveY)
 	{
-		this.sphere.position.x += mouseMoveY/2; 
-		this.sphere.position.z -= mouseMoveX/2;
+		this.sphere.position.x -= mouseMoveY/2; 
+		this.sphere.position.z += mouseMoveX/2;
 	}
 	this.mouse_down = function()
 	{
@@ -98,11 +98,11 @@ function Builder(position, scene_handle, camera_handle, grid_handle)
 		var forward = this.keys[UP] ? (this.keys[DOWN] ? 0 : 1) : (this.keys[DOWN] ? -1 : 0); //1,0,-1
 		var sideways = this.keys[RIGHT] ? (this.keys[LEFT] ? 0 : 1) : (this.keys[LEFT] ? -1 : 0);
 		
-		this.position.x -= forward*this.speed;
-		this.position.z -= sideways*this.speed;
+		this.position.x += forward*this.speed;
+		this.position.z += sideways*this.speed;
 		//Move the crosshair with the camera! sneaky
-		this.sphere.position.x -= forward*this.speed;
-		this.sphere.position.z -= sideways*this.speed;
+		this.sphere.position.x += forward*this.speed;
+		this.sphere.position.z += sideways*this.speed;
 		//this.position.z += this.direction.z*forward;
 		this.camera.position.set(this.position.x, this.position.y, this.position.z);
 		//this.camera.lookAt(this.position.x + dir.x, this.position.y + dir.y, this.position.z + dir.x);
@@ -110,5 +110,6 @@ function Builder(position, scene_handle, camera_handle, grid_handle)
 											this.position.y + this.direction.y,
 											this.position.z + this.direction.z);
 		this.camera.lookAt(camTarget);
+		this.camera.rotation.z = -90 * Math.PI/180;
 	};
 }
