@@ -65,9 +65,15 @@ function key_down(keyEvt)
 				break;
 			case 84:
 				if(currentEntity == mainBuilder)
+				{
+					mainBuilder.hideTracker();
 					currentEntity = mainPlayer;
+				}
 				else
+				{
+					mainBuilder.showTracker();
 					currentEntity = mainBuilder;
+				}
 				break;
 			default:
 				currentEntity.key_down(keyEvt);
@@ -81,6 +87,10 @@ function key_up(keyEvt)
 function mouse_down(event)
 {
 	currentEntity.mouse_down();
+}
+function mouse_up(event)
+{
+	currentEntity.mouse_up();
 }
 document.body.requestPointerLock = document.body.requestPointerLock ||
 	document.body.mozRequestPointerLock ||
@@ -121,6 +131,7 @@ document.body.addEventListener('webkitpointerlockchange', mouseLockChange, false
 // Hook mouse move events
 document.body.addEventListener("mousemove", this.moveCallback, false);
 window.addEventListener("mousedown", this.mouse_down, false);
+window.addEventListener("mouseup", this.mouse_up, false);
 window.addEventListener( 'keyup', key_up, false );
 window.addEventListener( 'keydown', key_down, false );
 

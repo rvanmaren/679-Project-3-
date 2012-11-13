@@ -16,6 +16,7 @@ function Builder(position, scene_handle, camera_handle, grid_handle)
 	this.grid = grid_handle;
 	//always look directly down
 	this.direction = new THREE.Vector3(0,-1,0);
+	this.building = false;
 	
 	this.targetMaterial = new THREE.MeshLambertMaterial(
 	{
@@ -28,8 +29,6 @@ function Builder(position, scene_handle, camera_handle, grid_handle)
 	this.sphere.position.x = position.x; 
 	this.sphere.position.z = position.z;
 	this.sphere.position.y = 0;
-
-	scene.add(this.sphere);
 	
 	this.zoom = function(zoomKey)
 	{
@@ -84,14 +83,31 @@ function Builder(position, scene_handle, camera_handle, grid_handle)
 				break;
 		}
 	};
+	this.hideTracker = function()
+	{
+		this.scene.remove(this.sphere);
+	}
+	this.showTracker = function()
+	{
+		this.scene.add(this.sphere);
+	}
 	this.mouseMovement = function(mouseMoveX, mouseMoveY)
 	{
 		this.sphere.position.x -= mouseMoveY/2; 
 		this.sphere.position.z += mouseMoveX/2;
+		if(this.building)
+		{
+			this.grid.handle_command(this.sphere.position.x,this.sphere.position.z,"build");
+		}
 	}
 	this.mouse_down = function()
 	{
+		this.building=true;
 		this.grid.handle_command(this.sphere.position.x,this.sphere.position.z,"build");
+	}
+	this.mouse_up = function()
+	{
+		this.building=false;
 	}
 	this.update = function(time)
 	{

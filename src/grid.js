@@ -7,12 +7,20 @@ handle_click(x,y) which will add a block to the place clicked*/
 var X_POSITION = 0;
 var Z_POSITION = 1;
 
+var EMPTY = 0;
+var WALL_TYPE = 1;
 function Grid(width, height, blocks, scene)
 {
 	this.grid_spots = new Array(blocks);
 	//this makes the array 2D;
 	for (var i = 0; i < blocks; i++) {
 		this.grid_spots[i] = new Array(blocks);
+	}
+	for (var i = 0; i < blocks; i++) {
+		for (var f = 0; f < blocks; f++)
+		{
+			this.grid_spots[i][f] = 0;
+		}
 	}
 	this.scene = scene;
 	this.width = width;
@@ -39,7 +47,11 @@ function Grid(width, height, blocks, scene)
 		{
 			//look up grid spot
 			var spot = this.grid_spot(clickX,clickY);
-			var temp = new WallPiece(new THREE.Vector3(spot[0]*width/blocks,0,spot[1]*height/blocks),this.scene);
+			if(this.grid_spots[spot[0]][spot[1]] == EMPTY)
+			{
+				var temp = new WallPiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,10,spot[1]*height/blocks+height/blocks/2),this.scene);
+				this.grid_spots[spot[0]][spot[1]] = WALL_TYPE;
+			}
 		}
 	}
 	var material = new THREE.LineBasicMaterial({
