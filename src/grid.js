@@ -37,7 +37,6 @@ function Grid(width, height, blocks, scene)
 	{
 		if(command == "build")
 		{
-			console.log(clickX +","+clickY);
 			//look up grid spot
 			var spot = this.grid_spot(clickX,clickY);
 			var temp = new WallPiece(new THREE.Vector3(spot[0]*width/blocks,0,spot[1]*height/blocks),this.scene);

@@ -80,7 +80,7 @@ function key_up(keyEvt)
 }
 function mouse_down(event)
 {
-	mainBuilder.mouse_down();
+	currentEntity.mouse_down();
 }
 document.body.requestPointerLock = document.body.requestPointerLock ||
 	document.body.mozRequestPointerLock ||

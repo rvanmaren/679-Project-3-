@@ -15,6 +15,9 @@ function Player(position, scene_handle, camera_handle)
 	this.speed = 2;
     this.rotationSpeed = .5;
 	
+	this.mouse_down = function(keyEvent)
+	{
+	}
 	this.key_down = function(keyEvent)
 	{
 		switch (event.keyCode){	
