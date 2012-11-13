@@ -15,6 +15,21 @@ function Builder(position, scene_handle, camera_handle)
 	//always look directly down
 	this.direction = new THREE.Vector3(0,-1,0);
 	
+	this.targetMaterial = new THREE.MeshLambertMaterial(
+	{
+	    color: 0xCC0000
+	});
+	
+	// create a new mesh with sphere geometry -
+	// we will cover the sphereMaterial next!
+	this.sphere = new THREE.Mesh( new THREE.SphereGeometry(3, 8, 8), this.targetMaterial);
+	
+	this.sphere.position.x = position.x; 
+	this.sphere.position.z = position.z;
+	this.sphere.position.y = position.y-20;
+
+	scene.add(this.sphere);
+	
 	this.zoom = function(zoomKey)
 	{
 		if(zoomKey == "in")
@@ -68,9 +83,10 @@ function Builder(position, scene_handle, camera_handle)
 				break;
 		}
 	};
-	this.mousePosition = function(mouseMoveX, mouseMoveY)
+	this.mouseMovement = function(mouseMoveX, mouseMoveY)
 	{
-		
+		this.sphere.position.x += mouseMoveY/2; 
+		this.sphere.position.z -= mouseMoveX/2;
 	}
 	this.update = function(time)
 	{
@@ -79,6 +95,9 @@ function Builder(position, scene_handle, camera_handle)
 		
 		this.position.x -= forward*this.speed;
 		this.position.z -= sideways*this.speed;
+		//Move the crosshair with the camera! sneaky
+		this.sphere.position.x -= forward*this.speed;
+		this.sphere.position.z -= sideways*this.speed;
 		//this.position.z += this.direction.z*forward;
 		this.camera.position.set(this.position.x, this.position.y, this.position.z);
 		//this.camera.lookAt(this.position.x + dir.x, this.position.y + dir.y, this.position.z + dir.x);

@@ -98,6 +98,7 @@ if (document.body.pointerLockElement === requestedElement ||
   this.unlockHook(this.element);
 }
 }
+
 function moveCallback(e) {
   MOUSE_X = e.movementX ||
       e.webkitMovementX ||
@@ -105,7 +106,7 @@ function moveCallback(e) {
   MOUSE_Y = e.movementY ||
       e.webkitMovementY   ||
       0;
-   	mainPlayer.mouseMovement(MOUSE_X,MOUSE_Y);
+   	currentEntity.mouseMovement(MOUSE_X,MOUSE_Y);
 	MOUSE_X = 0;
 	MOUSE_Y = 0;
 }
