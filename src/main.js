@@ -27,11 +27,11 @@ var camera = new THREE.PerspectiveCamera(
 scene.add( camera );
 
 //SET UP. probably could move all this out
+var grid = new Grid(10000,10000,1000,scene);
 var mainPlayer = new Player(new THREE.Vector3(20,30,10), scene, camera);
-var mainBuilder = new Builder(new THREE.Vector3(20,200,10), scene, camera);
+var mainBuilder = new Builder(new THREE.Vector3(20,200,10), scene, camera, grid);
 
 var currentEntity = mainPlayer;
-var grid = new Grid(10000,10000,1000,scene);
 
 var light = new THREE.PointLight( 0xFFFF00 );
 light.position.set( 10, 0, 10 );
@@ -78,7 +78,10 @@ function key_up(keyEvt)
 {
 	currentEntity.key_up(keyEvt);
 }
-
+function mouse_down(event)
+{
+	mainBuilder.mouse_down();
+}
 document.body.requestPointerLock = document.body.requestPointerLock ||
 	document.body.mozRequestPointerLock ||
 	document.body.webkitRequestPointerLock;
@@ -117,6 +120,7 @@ document.body.addEventListener('webkitpointerlockchange', mouseLockChange, false
 
 // Hook mouse move events
 document.body.addEventListener("mousemove", this.moveCallback, false);
+window.addEventListener("mousedown", this.mouse_down, false);
 window.addEventListener( 'keyup', key_up, false );
 window.addEventListener( 'keydown', key_down, false );
 

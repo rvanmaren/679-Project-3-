@@ -4,7 +4,8 @@ var LEFT = 2;
 var RIGHT = 3;
 var builderSpeed = 2;
 var zoomSpeed = 10;
-function Builder(position, scene_handle, camera_handle)
+
+function Builder(position, scene_handle, camera_handle, grid_handle)
 {
 	this.keys  = [false,false,false,false];
 	this.scene = scene_handle;
@@ -12,6 +13,7 @@ function Builder(position, scene_handle, camera_handle)
 	this.position = position;
 	this.speed = builderSpeed;
 	this.height = position.y;
+	this.grid = grid_handle;
 	//always look directly down
 	this.direction = new THREE.Vector3(0,-1,0);
 	
@@ -20,8 +22,7 @@ function Builder(position, scene_handle, camera_handle)
 	    color: 0xCC0000
 	});
 	
-	// create a new mesh with sphere geometry -
-	// we will cover the sphereMaterial next!
+	//THIS IS BAD. NEED TO REFACTOR SOON!
 	this.sphere = new THREE.Mesh( new THREE.SphereGeometry(3, 8, 8), this.targetMaterial);
 	
 	this.sphere.position.x = position.x; 
@@ -87,6 +88,10 @@ function Builder(position, scene_handle, camera_handle)
 	{
 		this.sphere.position.x += mouseMoveY/2; 
 		this.sphere.position.z -= mouseMoveX/2;
+	}
+	this.mouse_down = function()
+	{
+		this.grid.handle_command(this.sphere.position.x,this.sphere.position.z,"build");
 	}
 	this.update = function(time)
 	{
