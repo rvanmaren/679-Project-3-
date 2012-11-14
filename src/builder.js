@@ -5,11 +5,9 @@ var RIGHT = 3;
 var builderSpeed = 2;
 var zoomSpeed = 10;
 
-function Builder(position, scene_handle, camera_handle, grid_handle)
+function Builder(position, grid_handle)
 {
 	this.keys  = [false,false,false,false];
-	this.scene = scene_handle;
-	this.camera = camera_handle;
 	this.position = position;
 	this.speed = builderSpeed;
 	this.height = position.y;
@@ -85,11 +83,11 @@ function Builder(position, scene_handle, camera_handle, grid_handle)
 	};
 	this.hideTracker = function()
 	{
-		this.scene.remove(this.sphere);
+		SCENE.remove(this.sphere);
 	}
 	this.showTracker = function()
 	{
-		this.scene.add(this.sphere);
+		SCENE.add(this.sphere);
 	}
 	this.mouseMovement = function(mouseMoveX, mouseMoveY)
 	{
@@ -120,12 +118,12 @@ function Builder(position, scene_handle, camera_handle, grid_handle)
 		this.sphere.position.x += forward*this.speed;
 		this.sphere.position.z += sideways*this.speed;
 		//this.position.z += this.direction.z*forward;
-		this.camera.position.set(this.position.x, this.position.y, this.position.z);
+		CAMERA.position.set(this.position.x, this.position.y, this.position.z);
 		//this.camera.lookAt(this.position.x + dir.x, this.position.y + dir.y, this.position.z + dir.x);
 		var camTarget = new THREE.Vector3(this.position.x + this.direction.x,
 											this.position.y + this.direction.y,
 											this.position.z + this.direction.z);
-		this.camera.lookAt(camTarget);
-		this.camera.rotation.z = -90 * Math.PI/180;
+		CAMERA.lookAt(camTarget);
+		CAMERA.rotation.z = -90 * Math.PI/180;
 	};
 }

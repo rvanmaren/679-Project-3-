@@ -3,13 +3,11 @@ var DOWN = 1;
 var LEFT = 2;
 var RIGHT = 3;
 
-function Player(position, scene_handle, camera_handle)
+function Player(position)
 {
 	this.keys  = [false,false,false,false];
-	this.scene = scene_handle;
-	this.camera = camera_handle;
 	this.position = position;
-	this.camera.position.set(position.x,position.y,position.z);
+	CAMERA.position.set(position.x,position.y,position.z);
 	
 	this.direction = new THREE.Vector3(0,0,1);
 	this.speed = 2;
@@ -83,11 +81,11 @@ function Player(position, scene_handle, camera_handle)
 		this.position.x += this.direction.x*forward*this.speed;
 		this.position.z += this.direction.z*forward*this.speed;
 		//console.log("Direction:" + this.direction.x + "," + this.direction.z);
-		this.camera.position.set(this.position.x, this.position.y, this.position.z);
+		CAMERA.position.set(this.position.x, this.position.y, this.position.z);
 		//this.camera.lookAt(this.position.x + dir.x, this.position.y + dir.y, this.position.z + dir.x);
 		var camTarget = new THREE.Vector3(this.position.x + this.direction.x,
 											this.position.y + this.direction.y,
 											this.position.z + this.direction.z);
-		this.camera.lookAt(camTarget);
+		CAMERA.lookAt(camTarget);
 	};
 }

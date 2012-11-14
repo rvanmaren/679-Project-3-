@@ -1,42 +1,16 @@
-var MOUSE_X = 0;
-var MOUSE_Y = 0;
+//Should do this on onWindowLoad
+webGL_intialize();
 
-window.requestAnimFrame = (function(){
-      return  window.requestAnimationFrame       || 
-              window.webkitRequestAnimationFrame || 
-              window.mozRequestAnimationFrame    || 
-              window.oRequestAnimationFrame      || 
-              window.msRequestAnimationFrame     || 
-              function( callback ){
-                window.setTimeout(callback, 1000 / 60);
-              };
-    })();
-	
-//Initialize the renderer
-var renderer = new THREE.WebGLRenderer();
-renderer.setSize( WINDOW_WIDTH, WINDOW_HEIGHT );
-document.body.appendChild( renderer.domElement );
-//Initialize the scene
-var scene = new THREE.Scene();
-var camera = new THREE.PerspectiveCamera(
-    35,         // Field of view
-    WINDOW_WIDTH / WINDOW_HEIGHT,  // Aspect ratio
-    .1,         // Near
-    10000       // Far
-);
-scene.add( camera );
-
-//SET UP. probably could move all this out
-var grid = new Grid(10000,10000,1000,scene);
-var mainPlayer = new Player(new THREE.Vector3(20,30,10), scene, camera);
-var mainBuilder = new Builder(new THREE.Vector3(20,400,10), scene, camera, grid);
-
+//SET UP THE GAME. probably could move all this out
+var grid = new Grid(10000,10000,1000);
+var mainPlayer = new Player(new THREE.Vector3(20,30,10));
+var mainBuilder = new Builder(new THREE.Vector3(20,400,10), grid);
 var currentEntity = mainPlayer;
 
 var light = new THREE.PointLight( 0xFFFF00 );
 light.position.set( 10, 0, 10 );
-scene.add( light );
-renderer.render(scene, camera);
+SCENE.add( light );
+RENDERER.render(SCENE, CAMERA);
 
 var havePointerLock = 'pointerLockElement' in document ||
     'mozPointerLockElement' in document ||
@@ -136,7 +110,7 @@ window.addEventListener( 'keyup', key_up, false );
 window.addEventListener( 'keydown', key_down, false );
 
 function render() {
-	renderer.render( scene, camera );
+	RENDERER.render( SCENE, CAMERA );
 }
 function animloop(){
 	window.requestAnimFrame(animloop);

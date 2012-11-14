@@ -2,7 +2,7 @@ var wall_width = 10;
 var wall_height = 60;
 
 
-function WallPiece(position, scene)
+function WallPiece(position)
 {
 	
 	var material = new THREE.MeshNormalMaterial({
@@ -12,6 +12,6 @@ function WallPiece(position, scene)
 	this.cube.position.x = position.x;
 	this.cube.position.y = wall_height/2;
 	this.cube.position.z = position.z;
-	scene.add(this.cube);
+	SCENE.add(this.cube);
 	
 }

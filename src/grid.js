@@ -9,7 +9,7 @@ var Z_POSITION = 1;
 
 var EMPTY = 0;
 var WALL_TYPE = 1;
-function Grid(width, height, blocks, scene)
+function Grid(width, height, blocks)
 {
 	this.grid_spots = new Array(blocks);
 	//this makes the array 2D;
@@ -22,7 +22,6 @@ function Grid(width, height, blocks, scene)
 			this.grid_spots[i][f] = 0;
 		}
 	}
-	this.scene = scene;
 	this.width = width;
 	this.height = height;
 	this.blocks = blocks;
@@ -49,7 +48,7 @@ function Grid(width, height, blocks, scene)
 			var spot = this.grid_spot(clickX,clickY);
 			if(this.grid_spots[spot[0]][spot[1]] == EMPTY)
 			{
-				var temp = new WallPiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2),this.scene);
+				var temp = new WallPiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2));
 				this.grid_spots[spot[0]][spot[1]] = WALL_TYPE;
 			}
 		}
@@ -63,7 +62,7 @@ function Grid(width, height, blocks, scene)
 		geometry.vertices.push(new THREE.Vector3( x, 0, 0));
 		geometry.vertices.push(new THREE.Vector3( x, 10, height));
 		var line = new THREE.Line(geometry, material);
-		scene.add( line );
+		SCENE.add( line );
 	}
 	material = new THREE.LineBasicMaterial({
         color: 0xFF0000,
@@ -74,6 +73,6 @@ function Grid(width, height, blocks, scene)
 		geometry.vertices.push(new THREE.Vector3( 0, 0, y));
 		geometry.vertices.push(new THREE.Vector3( width, 10, y));
 		var line = new THREE.Line(geometry, material);
-		scene.add( line );
+		SCENE.add( line );
 	}
 }
