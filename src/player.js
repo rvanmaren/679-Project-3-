@@ -7,13 +7,15 @@ function Player(position)
 {
 	this.keys  = [false,false,false,false];
 	this.position = position;
-	CAMERA.position.set(position.x,position.y,position.z);
 	
 	this.direction = new THREE.Vector3(0,0,1);
 	this.speed = 2;
     this.rotationSpeed = .5;
 	
 	this.mouse_down = function(keyEvent)
+	{
+	}
+	this.mouse_up = function(keyEvent)
 	{
 	}
 	this.key_down = function(keyEvent)

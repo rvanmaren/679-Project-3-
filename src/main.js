@@ -1,13 +1,19 @@
 //Should do this on onWindowLoad
 webGL_intialize();
-
+//objManager.loadModel( 'C:\\Users\\Msquared\\Desktop\\679-Project-3-\\src\\fences.js', 'PlayerModel' );
+var loader = new THREE.JSONLoader();
+loader.load( 'resources/fence/fence.js', function ( geometry ) {  
+ var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial({overdraw: true}));  
+ mesh.scale.set(10,30,10);
+ SCENE.add( mesh );  
+});
 //SET UP THE GAME. probably could move all this out
 var grid = new Grid(10000,10000,1000);
 var mainPlayer = new Player(new THREE.Vector3(20,30,10));
 var mainBuilder = new Builder(new THREE.Vector3(20,400,10), grid);
 var currentEntity = mainPlayer;
 
-var light = new THREE.PointLight( 0xFFFF00 );
+var light = new THREE.PointLight( 0xFFFFFF );
 light.position.set( 10, 0, 10 );
 SCENE.add( light );
 RENDERER.render(SCENE, CAMERA);
