@@ -5,6 +5,8 @@ var loader = new THREE.JSONLoader();
 loader.load( 'resources/fence/fence.js', function ( geometry ) {  
  var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial({overdraw: true}));  
  mesh.scale.set(10,30,10);
+mesh.position.x= 30;
+mesh.position.z= 60;
  SCENE.add( mesh );  
 });
 //SET UP THE GAME. probably could move all this out
