@@ -49,7 +49,7 @@ function Grid(width, height, blocks, scene)
 			var spot = this.grid_spot(clickX,clickY);
 			if(this.grid_spots[spot[0]][spot[1]] == EMPTY)
 			{
-				var temp = new WallPiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,10,spot[1]*height/blocks+height/blocks/2),this.scene);
+				var temp = new WallPiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2),this.scene);
 				this.grid_spots[spot[0]][spot[1]] = WALL_TYPE;
 			}
 		}
