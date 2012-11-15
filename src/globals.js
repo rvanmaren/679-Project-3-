@@ -22,3 +22,6 @@ function makeHandler(meshName) {
     }
 }
 /*GRID GLOBALS*/
+var GRID_HEIGHT = 10000;
+var GRID_WIDTH = 10000;
+var NUM_BOXES = 100;

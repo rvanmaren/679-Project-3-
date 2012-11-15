@@ -5,8 +5,8 @@ LOADER = new THREE.JSONLoader();
 LOADER.load( 'resources/fence/fence.js', makeHandler(" "));
 //objManager.loadModel( 'C:\\Users\\Msquared\\Desktop\\679-Project-3-\\src\\fences.js', 'PlayerModel' );
 //SET UP THE GAME. probably could move all this out
-var grid = new Grid(10000,10000,1000);
-var mainPlayer = new Player(new THREE.Vector3(2000,30,2000));
+var grid = new Grid(GRID_WIDTH,GRID_HEIGHT,NUM_BOXES);
+var mainPlayer = new Player(new THREE.Vector3(2000,30,2000),grid);
 var mainBuilder = new Builder(new THREE.Vector3(2000,400,2000), grid);
 var currentEntity = mainPlayer;
 

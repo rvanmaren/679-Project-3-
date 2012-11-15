@@ -1,5 +1,5 @@
 
-var wall_width = 10;
+var wall_width = GRID_WIDTH/NUM_BOXES;
 var wall_height = 60;
 
 function Build_Command(command,type,x,y)
@@ -18,7 +18,7 @@ function WallPiece(position)
 	/*LOADER.load( 'resources/fence/fence.js', makeHandler("a"));
 	MESHES["a"].scale.set(10,30,10);
 	MESHES["a"].position.x = position.x;
-	MESHES["a"].position.y = wall_height/2;
+	MESHES["a"].position.y = wall_height/2-20;
 	MESHES["a"].position.z = position.z;
 	SCENE.add(MESHES["a"]);*/
 	var material = new THREE.MeshBasicMaterial({

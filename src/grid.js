@@ -36,6 +36,13 @@ function Grid(width, height, blocks)
 		arry.push(xSpot);
 		return arry;
 	}
+	this.isOccupied = function(x,y)
+	{
+		if(this.grid_spots[x][y] == EMPTY)
+			return false;
+		else
+			return true;
+	}
 	this.handle_click = function(clickX,clickY)
 	{
 		//Do some sort of look up what there

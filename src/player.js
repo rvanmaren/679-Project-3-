@@ -3,7 +3,7 @@ var DOWN = 1;
 var LEFT = 2;
 var RIGHT = 3;
 
-function Player(position)
+function Player(position, the_grid)
 {
 	this.keys  = [false,false,false,false];
 	this.position = position;
@@ -11,7 +11,7 @@ function Player(position)
 	this.direction = new THREE.Vector3(0,0,1);
 	this.speed = 2;
     this.rotationSpeed = .5;
-	
+	this.grid = the_grid;
 	this.gun = new Gun(this.position,this.direction);
 	this.mouse_down = function(keyEvent)
 	{
@@ -78,11 +78,22 @@ function Player(position)
 											0, this.direction.x*Math.sin(Math.PI/2)+this.direction.z*Math.cos(Math.PI/2));//just rotate by 90 degrees same direction every time
 		//Do y direction with a jump
 		//sideways motion
-		this.position.x += directionPerp.x*sideways*this.speed;
+		var nextX = this.position.x + directionPerp.x*sideways*this.speed + this.direction.x*forward*this.speed;
+		var nextY = this.position.z + directionPerp.z*sideways*this.speed + this.direction.z*forward*this.speed;
+		var temp = this.grid.grid_spot(nextX,nextY);
+		
+		if(!this.grid.isOccupied(temp[0],temp[1]))
+		{
+			this.position.x = nextX;
+			this.position.z = nextY;
+		}
+		/*this.position.x += directionPerp.x*sideways*this.speed;
 		this.position.z += directionPerp.z*sideways*this.speed;
+		var temp = this.grid.grid_spot(this.position.x,this.position.z);
+		
 		//forward motion
 		this.position.x += this.direction.x*forward*this.speed;
-		this.position.z += this.direction.z*forward*this.speed;
+		this.position.z += this.direction.z*forward*this.speed;*/
 		//console.log("Direction:" + this.direction.x + "," + this.direction.z);
 		LIGHT.position.set(this.position.x, this.position.y + 2 , this.position.z);
 		CAMERA.position.set(this.position.x, this.position.y, this.position.z);
