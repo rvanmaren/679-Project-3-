@@ -9,6 +9,7 @@ var Z_POSITION = 1;
 
 var EMPTY = 0;
 var WALL_TYPE = 1;
+var HOUSE_TYPE = 1;
 function Grid(width, height, blocks)
 {
 	this.grid_spots = new Array(blocks);
@@ -42,17 +43,30 @@ function Grid(width, height, blocks)
 	}
 	this.handle_command = function(clickX,clickY, command)
 	{
-		if(command == "build")
+		//this is nasty
+		if(command[0] == "build")
 		{
 			//look up grid spot
 			var spot = this.grid_spot(clickX,clickY);
-			if(this.grid_spots[spot[0]][spot[1]] == EMPTY)
+			if(spot[0] >=0 && spot[1] >=0)
 			{
-				var temp = new WallPiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2));
-				this.grid_spots[spot[0]][spot[1]] = WALL_TYPE;
+				if(this.grid_spots[spot[0]][spot[1]] == EMPTY)
+				{
+					if(command[1] == "house")
+					{
+						var temp = new HousePiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2));
+						this.grid_spots[spot[0]][spot[1]] = HOUSE_TYPE; //instead of ints we should make a type call GridPiece w/ health info and such
+					}
+					if(command[1] == "wall")
+					{
+						var temp = new WallPiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2));
+						this.grid_spots[spot[0]][spot[1]] = WALL_TYPE;
+					}
+				}
 			}
 		}
 	}
+	/*draw some lines*/
 	var material = new THREE.LineBasicMaterial({
         color: 0x00FF00,
     });

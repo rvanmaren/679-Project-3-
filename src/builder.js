@@ -7,8 +7,6 @@ var zoomSpeed = 10;
 
 function Builder_Target(position)
 {
-	this.totalY = 0;
-	this.totalX = 0;
 	this.targetMaterial = new THREE.MeshLambertMaterial(
 	{
 	    color: 0xCC0000
@@ -53,7 +51,7 @@ function Builder(position, grid_handle)
 	//always look directly down
 	this.direction = new THREE.Vector3(0,-1,0);
 	this.building = false;
-	
+	this.type = "wall"
 	this.target = new Builder_Target(this.position);
 	
 	this.zoom = function(zoomKey)
@@ -71,7 +69,7 @@ function Builder(position, grid_handle)
 	}
 	this.key_down = function(keyEvent)
 	{
-		switch (event.keyCode){	
+		switch (event.keyCode){		
 			case 65:
 				this.keys[LEFT] = true;		
 				break;
@@ -83,6 +81,12 @@ function Builder(position, grid_handle)
 				break;
 			case 83:
 				this.keys[DOWN] = true;
+				break;
+			case 49:
+				this.type = "wall";	
+				break;
+			case 50:
+				this.type = "house";	
 				break;
 			case 81:
 				this.zoom("out");
@@ -122,13 +126,13 @@ function Builder(position, grid_handle)
 		this.target.mouseMove(mouseMoveX, mouseMoveY);
 		if(this.building)
 		{
-			this.grid.handle_command(this.target.position().x,this.target.position().z,"build");
+			this.grid.handle_command(this.target.position().x,this.target.position().z,new Array("build",this.type));
 		}
 	}
 	this.mouse_down = function()
 	{
 		this.building=true;
-		this.grid.handle_command(this.target.position().x,this.target.position().z,"build");
+		this.grid.handle_command(this.target.position().x,this.target.position().z,new Array("build",this.type));
 	}
 	this.mouse_up = function()
 	{

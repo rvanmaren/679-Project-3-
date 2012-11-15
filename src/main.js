@@ -6,8 +6,8 @@ LOADER.load( 'resources/fence/fence.js', makeHandler(" "));
 //objManager.loadModel( 'C:\\Users\\Msquared\\Desktop\\679-Project-3-\\src\\fences.js', 'PlayerModel' );
 //SET UP THE GAME. probably could move all this out
 var grid = new Grid(10000,10000,1000);
-var mainPlayer = new Player(new THREE.Vector3(20,30,10));
-var mainBuilder = new Builder(new THREE.Vector3(20,400,10), grid);
+var mainPlayer = new Player(new THREE.Vector3(2000,30,2000));
+var mainBuilder = new Builder(new THREE.Vector3(2000,400,2000), grid);
 var currentEntity = mainPlayer;
 
 var light = new THREE.PointLight( 0xFFFFFF );
