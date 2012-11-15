@@ -8,6 +8,7 @@ var LOADER;
 var RENDERER;
 var SCENE;
 var CAMERA;
+var FOV = 40;
 /*PLAYER GLOBALS*/
 
 /*BUILDER GLOBALS*/

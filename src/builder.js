@@ -5,6 +5,44 @@ var RIGHT = 3;
 var builderSpeed = 2;
 var zoomSpeed = 10;
 
+function Builder_Target(position)
+{
+	this.totalY = 0;
+	this.totalX = 0;
+	this.targetMaterial = new THREE.MeshLambertMaterial(
+	{
+	    color: 0xCC0000
+	});
+	this.mesh = new THREE.Mesh( new THREE.SphereGeometry(1, 8, 8), this.targetMaterial);
+	
+	this.mesh.position.x = position.x; 
+	this.mesh.position.z = position.z;
+	this.mesh.position.y = 0;
+	
+	this.show = function()
+	{
+		SCENE.add(this.mesh);
+	}
+	this.hide = function()
+	{
+		SCENE.remove(this.mesh);
+	}
+	this.mouseMove = function(mouseX,mouseY)
+	{
+		this.mesh.position.x -= mouseY;
+		this.mesh.position.z += mouseX;
+	}
+	this.position = function()
+	{
+		return this.mesh.position;
+	}
+	this.move = function(deltaX,deltaY)
+	{
+		this.mesh.position.x += deltaX;
+		this.mesh.position.z += deltaY;
+	}
+}
+
 function Builder(position, grid_handle)
 {
 	this.keys  = [false,false,false,false];
@@ -16,17 +54,7 @@ function Builder(position, grid_handle)
 	this.direction = new THREE.Vector3(0,-1,0);
 	this.building = false;
 	
-	this.targetMaterial = new THREE.MeshLambertMaterial(
-	{
-	    color: 0xCC0000
-	});
-	
-	//THIS IS BAD. NEED TO REFACTOR SOON!
-	this.sphere = new THREE.Mesh( new THREE.SphereGeometry(1, 8, 8), this.targetMaterial);
-	
-	this.sphere.position.x = position.x; 
-	this.sphere.position.z = position.z;
-	this.sphere.position.y = 0;
+	this.target = new Builder_Target(this.position);
 	
 	this.zoom = function(zoomKey)
 	{
@@ -83,25 +111,24 @@ function Builder(position, grid_handle)
 	};
 	this.hideTracker = function()
 	{
-		SCENE.remove(this.sphere);
+		this.target.hide();
 	}
 	this.showTracker = function()
 	{
-		SCENE.add(this.sphere);
+		this.target.show();
 	}
 	this.mouseMovement = function(mouseMoveX, mouseMoveY)
 	{
-		this.sphere.position.x -= mouseMoveY/2; 
-		this.sphere.position.z += mouseMoveX/2;
+		this.target.mouseMove(mouseMoveX, mouseMoveY);
 		if(this.building)
 		{
-			this.grid.handle_command(this.sphere.position.x,this.sphere.position.z,"build");
+			this.grid.handle_command(this.target.position().x,this.target.position().z,"build");
 		}
 	}
 	this.mouse_down = function()
 	{
 		this.building=true;
-		this.grid.handle_command(this.sphere.position.x,this.sphere.position.z,"build");
+		this.grid.handle_command(this.target.position().x,this.target.position().z,"build");
 	}
 	this.mouse_up = function()
 	{
@@ -114,9 +141,8 @@ function Builder(position, grid_handle)
 		
 		this.position.x += forward*this.speed;
 		this.position.z += sideways*this.speed;
-		//Move the crosshair with the camera! sneaky
-		this.sphere.position.x += forward*this.speed;
-		this.sphere.position.z += sideways*this.speed;
+		//Move the crosshair with the camera
+		this.target.move(forward*this.speed,sideways*this.speed);
 		//this.position.z += this.direction.z*forward;
 		CAMERA.position.set(this.position.x, this.position.y, this.position.z);
 		//this.camera.lookAt(this.position.x + dir.x, this.position.y + dir.y, this.position.z + dir.x);

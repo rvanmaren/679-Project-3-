@@ -20,7 +20,7 @@ function webGL_intialize()
 	SCENE = new THREE.Scene();
 	
 	CAMERA = new THREE.PerspectiveCamera(
-    35,         // Field of view
+    FOV,         // Field of view
     WINDOW_WIDTH / WINDOW_HEIGHT,  // Aspect ratio
     .1,         // Near
     10000       // Far
