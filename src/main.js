@@ -1,14 +1,9 @@
 //Should do this on onWindowLoad
 webGL_intialize();
+LOADER = new THREE.JSONLoader();
+//load the file now so we can use it later. probably better way to do this
+LOADER.load( 'resources/fence/fence.js', makeHandler(" "));
 //objManager.loadModel( 'C:\\Users\\Msquared\\Desktop\\679-Project-3-\\src\\fences.js', 'PlayerModel' );
-var loader = new THREE.JSONLoader();
-loader.load( 'resources/fence/fence.js', function ( geometry ) {  
- var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial({overdraw: true}));  
- mesh.scale.set(10,30,10);
-mesh.position.x= 30;
-mesh.position.z= 60;
- SCENE.add( mesh );  
-});
 //SET UP THE GAME. probably could move all this out
 var grid = new Grid(10000,10000,1000);
 var mainPlayer = new Player(new THREE.Vector3(20,30,10));

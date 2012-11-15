@@ -12,6 +12,7 @@ function Player(position)
 	this.speed = 2;
     this.rotationSpeed = .5;
 	
+	this.gun = new Gun(this.position,this.direction);
 	this.mouse_down = function(keyEvent)
 	{
 	}
