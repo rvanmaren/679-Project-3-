@@ -5,6 +5,37 @@ var RIGHT = 3;
 var builderSpeed = 2;
 var zoomSpeed = 10;
 
+/*function Builder_Bar()
+{
+	this.wall = new WallPiece(new THREE.Vector3(0,0,0));
+	this.wall.mesh.scale.set(.2,.2,.2)
+	this.meshes = new Array(this.wall.mesh);
+	
+	this.update = function(camPosition)
+	{
+		for(var i = 0; i < this.meshes.length; i++)
+		{
+			this.meshes[i].position.x = camPosition.x+35;
+			this.meshes[i].position.y = camPosition.y-100;
+			this.meshes[i].position.z = camPosition.z-50;
+		}
+	}
+	this.show = function()
+	{
+		for(var i = 0; i < this.meshes.length; i++)
+		{
+			SCENE.add(this.meshes[i]);
+		}
+	}
+	this.hide = function()
+	{
+		for(var i = 0; i < this.meshes.length; i++)
+		{
+			SCENE.remove(this.meshes[i]);
+		}
+	}
+	
+}*/
 function Builder_Target(position)
 {
 	this.targetMaterial = new THREE.MeshLambertMaterial(
@@ -54,6 +85,8 @@ function Builder(position, grid_handle)
 	this.mode = "build";
 	this.type = "wall"
 	this.target = new Builder_Target(this.position);
+	
+	//this.builderBar = new Builder_Bar();
 	
 	this.zoom = function(zoomKey)
 	{
@@ -121,10 +154,12 @@ function Builder(position, grid_handle)
 	};
 	this.hideTracker = function()
 	{
+		//this.builderBar.hide();
 		this.target.hide();
 	}
 	this.showTracker = function()
 	{
+		//this.builderBar.show();
 		this.target.show();
 	}
 	this.mouseMovement = function(mouseMoveX, mouseMoveY)
@@ -155,6 +190,7 @@ function Builder(position, grid_handle)
 		this.target.move(forward*this.speed,sideways*this.speed);
 		//this.position.z += this.direction.z*forward;
 		CAMERA.position.set(this.position.x, this.position.y, this.position.z);
+		//this.builderBar.update(CAMERA.position);
 		//this.camera.lookAt(this.position.x + dir.x, this.position.y + dir.y, this.position.z + dir.x);
 		var camTarget = new THREE.Vector3(this.position.x + this.direction.x,
 											this.position.y + this.direction.y,
