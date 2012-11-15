@@ -51,6 +51,7 @@ function Builder(position, grid_handle)
 	//always look directly down
 	this.direction = new THREE.Vector3(0,-1,0);
 	this.building = false;
+	this.mode = "build";
 	this.type = "wall"
 	this.target = new Builder_Target(this.position);
 	
@@ -83,10 +84,15 @@ function Builder(position, grid_handle)
 				this.keys[DOWN] = true;
 				break;
 			case 49:
+				this.mode = "build";
 				this.type = "wall";	
 				break;
 			case 50:
+				this.mode = "build";
 				this.type = "house";	
+				break;
+			case 51:
+				this.mode = "remove";	
 				break;
 			case 81:
 				this.zoom("out");
@@ -126,13 +132,13 @@ function Builder(position, grid_handle)
 		this.target.mouseMove(mouseMoveX, mouseMoveY);
 		if(this.building)
 		{
-			this.grid.handle_command(this.target.position().x,this.target.position().z,new Array("build",this.type));
+			this.grid.handle_command(new Build_Command(this.mode,this.type,this.target.position().x,this.target.position().z));
 		}
 	}
 	this.mouse_down = function()
 	{
 		this.building=true;
-		this.grid.handle_command(this.target.position().x,this.target.position().z,new Array("build",this.type));
+		this.grid.handle_command(new Build_Command(this.mode,this.type,this.target.position().x,this.target.position().z));
 	}
 	this.mouse_up = function()
 	{

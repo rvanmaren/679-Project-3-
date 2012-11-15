@@ -10,11 +10,6 @@ var mainPlayer = new Player(new THREE.Vector3(2000,30,2000));
 var mainBuilder = new Builder(new THREE.Vector3(2000,400,2000), grid);
 var currentEntity = mainPlayer;
 
-var light = new THREE.PointLight( 0xFFFFFF );
-light.position.set( 10, 0, 10 );
-SCENE.add( light );
-RENDERER.render(SCENE, CAMERA);
-
 var havePointerLock = 'pointerLockElement' in document ||
     'mozPointerLockElement' in document ||
     'webkitPointerLockElement' in document;

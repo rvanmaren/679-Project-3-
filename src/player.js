@@ -84,6 +84,7 @@ function Player(position)
 		this.position.x += this.direction.x*forward*this.speed;
 		this.position.z += this.direction.z*forward*this.speed;
 		//console.log("Direction:" + this.direction.x + "," + this.direction.z);
+		LIGHT.position.set(this.position.x, this.position.y + 2 , this.position.z);
 		CAMERA.position.set(this.position.x, this.position.y, this.position.z);
 		//this.camera.lookAt(this.position.x + dir.x, this.position.y + dir.y, this.position.z + dir.x);
 		var camTarget = new THREE.Vector3(this.position.x + this.direction.x,

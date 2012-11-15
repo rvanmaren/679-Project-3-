@@ -6,9 +6,9 @@ function Gun(position, direction)
 		mesh.scale.set(2,2,2);
 		mesh.rotation.x = Math.PI/2;
 		mesh.rotation.z = Math.PI/2;
-		mesh.position.x= 22;
+		mesh.position.x= position.x;
 		mesh.position.y = 18;
-		mesh.position.z= 22;
+		mesh.position.z= position.z;
 		SCENE.add( mesh );
 	});
 }

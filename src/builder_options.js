@@ -2,7 +2,17 @@
 var wall_width = 10;
 var wall_height = 60;
 
-//temp_mesh.scale.set(10,30,10);
+function Build_Command(command,type,x,y)
+{
+	this.command = command;
+	this.type = type;
+	this.x=x;
+	this.y=y;
+}
+function remove(piece)
+{
+	SCENE.remove(piece.cube);
+}
 function WallPiece(position)
 {
 	/*LOADER.load( 'resources/fence/fence.js', makeHandler("a"));
@@ -19,7 +29,6 @@ function WallPiece(position)
 	this.cube.position.y = wall_height/2;
 	this.cube.position.z = position.z;
 	SCENE.add(this.cube);
-	
 }
 var house_width = 10;
 var house_height = 20;

@@ -12,19 +12,24 @@ function webGL_intialize()
               };
     })();
 	
-	//Set up the renderer
+	//SET UP RENDERER
 	RENDERER = new THREE.WebGLRenderer();
 	RENDERER.setSize( WINDOW_WIDTH, WINDOW_HEIGHT );
 	document.body.appendChild( RENDERER.domElement );
 	
 	SCENE = new THREE.Scene();
 	
+	//SET UP CAMERA
 	CAMERA = new THREE.PerspectiveCamera(
     FOV,         // Field of view
     WINDOW_WIDTH / WINDOW_HEIGHT,  // Aspect ratio
     .1,         // Near
     10000       // Far
 	);
-	
 	SCENE.add(CAMERA);
+	
+	//SET UP LIGHT
+	LIGHT = new THREE.PointLight( 0xFFFFFF );
+	LIGHT.position.set(0, 0, 0);
+	SCENE.add(LIGHT);
 }

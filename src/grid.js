@@ -41,27 +41,31 @@ function Grid(width, height, blocks)
 		//Do some sort of look up what there
 		//return the set of options.
 	}
-	this.handle_command = function(clickX,clickY, command)
+	this.handle_command = function(buildCMD)
 	{
-		//this is nasty
-		if(command[0] == "build")
+		var spot = this.grid_spot(buildCMD.x,buildCMD.y);
+		if(spot[0] >=0 && spot[1] >=0)//check for bounds
 		{
-			//look up grid spot
-			var spot = this.grid_spot(clickX,clickY);
-			if(spot[0] >=0 && spot[1] >=0)
+			if(buildCMD.command == "build")
 			{
 				if(this.grid_spots[spot[0]][spot[1]] == EMPTY)
 				{
-					if(command[1] == "house")
+					if(buildCMD.type == "house")
 					{
-						var temp = new HousePiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2));
-						this.grid_spots[spot[0]][spot[1]] = HOUSE_TYPE; //instead of ints we should make a type call GridPiece w/ health info and such
+						this.grid_spots[spot[0]][spot[1]] = new HousePiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2));
 					}
-					if(command[1] == "wall")
+					if(buildCMD.type == "wall")
 					{
-						var temp = new WallPiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2));
-						this.grid_spots[spot[0]][spot[1]] = WALL_TYPE;
+						this.grid_spots[spot[0]][spot[1]] = new WallPiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2));
 					}
+				}
+			}
+			if(buildCMD.command == "remove")
+			{
+				if(this.grid_spots[spot[0]][spot[1]] != EMPTY)
+				{
+					remove(this.grid_spots[spot[0]][spot[1]]);
+					this.grid_spots[spot[0]][spot[1]] = EMPTY;
 				}
 			}
 		}
