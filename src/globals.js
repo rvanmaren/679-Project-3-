@@ -4,6 +4,9 @@ var WINDOW_WIDTH = window.innerWidth;
 var MOUSE_X = 0;
 var MOUSE_Y = 0;
 var LOADER;
+
+var THE_GRID;
+var GAME;
 /*WEBGL GLOBALS*/
 var RENDERER;
 var SCENE;
@@ -14,13 +17,14 @@ var FOV = 40;
 var PLAYER;
 /*BUILDER GLOBALS*/
 
-var MESHES = new Array();
-function makeHandler(meshName) {
-    return function(geometry) {
-        var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial({overdraw: true}));  
-        mesh.doubleSided = true;
-        MESHES[meshName] = mesh;
-    }
+var GEOMETRIES = new Array();
+function load( geometry,id) {  
+		//var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial({overdraw: true}));   
+		GEOMETRIES.push(geometry);
+		console.log(GEOMETRIES.length);
+};
+function loadGeometry(meshToLoad, id) {
+	LOADER.load( './resources/rifle/rifle_0.js',function(geometry){load(geometry,id)});
 }
 /*GRID GLOBALS*/
 var GRID_HEIGHT = 10000;

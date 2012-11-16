@@ -3,7 +3,7 @@ var DOWN = 1;
 var LEFT = 2;
 var RIGHT = 3;
 
-function Player(position, the_grid)
+function Night()
 {
 	this.keys  = [false,false,false,false];
 	this.position = position;

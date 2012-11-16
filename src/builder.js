@@ -76,13 +76,12 @@ function Builder_Target(position)
 	}
 }
 
-function Builder(position, grid_handle)
+function Builder(position, THE_GRID_handle)
 {
 	this.keys  = [false,false,false,false];
 	this.position = position;
 	this.speed = builderSpeed;
 	this.height = position.y;
-	this.grid = grid_handle;
 	//always look directly down
 	this.direction = new THREE.Vector3(0,-1,0);
 	this.building = false;
@@ -182,13 +181,13 @@ function Builder(position, grid_handle)
         this.target.show();
         this.target.setPosition(PLAYER.position.x, this.target.position().y, PLAYER.position.z);
         this.playerMarker.visible = true;
-        grid.showLines();
+        THE_GRID.showLines();
     }
 
     this.switchOut = function () {
         this.playerMarker.visible = false;
 		this.target.hide();
-        grid.hideLines();
+        THE_GRID.hideLines();
     }
 
 	this.mouseMovement = function(mouseMoveX, mouseMoveY)
@@ -196,13 +195,13 @@ function Builder(position, grid_handle)
 		this.target.mouseMove(mouseMoveX, mouseMoveY);
 		if(this.building)
 		{
-			this.grid.handle_command(new Build_Command(this.mode,this.type,this.target.position().x,this.target.position().z));
+			THE_GRID.handle_command(new Build_Command(this.mode,this.type,this.target.position().x,this.target.position().z));
 		}
 	}
 	this.mouse_down = function()
 	{
 		this.building=true;
-		this.grid.handle_command(new Build_Command(this.mode,this.type,this.target.position().x,this.target.position().z));
+		THE_GRID.handle_command(new Build_Command(this.mode,this.type,this.target.position().x,this.target.position().z));
 	}
 	this.mouse_up = function()
 	{
