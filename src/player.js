@@ -7,7 +7,7 @@ function Player(position, the_grid)
 {
 	this.keys  = [false,false,false,false];
 	this.position = position;
-	
+	this.level;
 	this.direction = new THREE.Vector3(0,0,1);
 	this.speed = 2;
     this.rotationSpeed = .5;
@@ -20,6 +20,7 @@ function Player(position, the_grid)
 	this.mouse_up = function(keyEvent) {
 
 	}
+	
 	this.key_down = function(keyEvent)
 	{
 		switch (event.keyCode){	
@@ -71,6 +72,10 @@ function Player(position, the_grid)
 	}
 	this.update = function(time)
 	{
+		if(this.level){
+			this.level.update(10);
+		}
+		
 		//Move in the direction of looking.
 		//Compute movement based on key press
 		var forward = this.keys[UP] ? (this.keys[DOWN] ? 0 : 1) : (this.keys[DOWN] ? -1 : 0); //1,0,-1

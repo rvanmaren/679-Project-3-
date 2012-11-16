@@ -17,7 +17,6 @@ PLAYER = mainPlayer;
 var mainBuilder = new Builder(new THREE.Vector3(2000, 400, 2000), grid);
 
 var currentEntity = mainPlayer;
-
 var havePointerLock = 'pointerLockElement' in document ||
     'mozPointerLockElement' in document ||
     'webkitPointerLockElement' in document;
@@ -47,11 +46,15 @@ case 84:
     if (currentEntity == mainBuilder) {
         mainBuilder.switchOut();
         currentEntity = mainPlayer;
+		mainPlayer.level = new Level(grid);
     }
     else {
         mainBuilder.switchInto();
+		if(mainPlayer.level){
+			mainPlayer.level.exitLevel();
+		}
         currentEntity = mainBuilder;
-    }
+	}
     break;
 			default:
 				currentEntity.key_down(keyEvt);
