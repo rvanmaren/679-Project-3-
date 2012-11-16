@@ -1,17 +1,22 @@
 //Should do this on onWindowLoad
 webGL_intialize();
-
+LOADER = new THREE.JSONLoader();
+//load the file now so we can use it later. probably better way to do this
+LOADER.load( 'resources/fence/fence.js', makeHandler(" "));
+//objManager.loadModel( 'C:\\Users\\Msquared\\Desktop\\679-Project-3-\\src\\fences.js', 'PlayerModel' );
 //SET UP THE GAME. probably could move all this out
-var grid = new Grid(1000,1000,100);
+
+/*var grid = new Grid(1000,1000,100);
 var mainPlayer = new Player(new THREE.Vector3(500, 30, 500));
 PLAYER = mainPlayer;
-var mainBuilder = new Builder(new THREE.Vector3(20,400,10), grid);
-var currentEntity = mainPlayer;
+var mainBuilder = new Builder(new THREE.Vector3(20,400,10), grid);*/
 
-var light = new THREE.PointLight( 0xFFFF00 );
-light.position.set( 10, 0, 10 );
-SCENE.add( light );
-RENDERER.render(SCENE, CAMERA);
+var grid = new Grid(GRID_WIDTH,GRID_HEIGHT,NUM_BOXES);
+var mainPlayer = new Player(new THREE.Vector3(2000, 30, 2000), grid);
+PLAYER = mainPlayer;
+var mainBuilder = new Builder(new THREE.Vector3(2000, 400, 2000), grid);
+
+var currentEntity = mainPlayer;
 
 var havePointerLock = 'pointerLockElement' in document ||
     'mozPointerLockElement' in document ||

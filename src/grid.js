@@ -7,10 +7,12 @@ handle_click(x,y) which will add a block to the place clicked*/
 var X_POSITION = 0;
 var Z_POSITION = 1;
 
-var EMPTY = 0;
-var WALL_TYPE = 1;
 var gridLines = new Array();
 var gridVisible = false;
+
+var EMPTY = 0;
+var WALL_TYPE = 1;
+var HOUSE_TYPE = 1;
 
 function Grid(width, height, blocks)
 {
@@ -41,31 +43,48 @@ function Grid(width, height, blocks)
 		arry.push(xSpot);
 		return arry;
 	}
+	this.isOccupied = function(x,y)
+	{
+		if(this.grid_spots[x][y] == EMPTY)
+			return false;
+		else
+			return true;
+	}
 	this.handle_click = function(clickX,clickY)
 	{
 		//Do some sort of look up what there
 		//return the set of options.
 	}
-	this.handle_command = function(clickX,clickY, command)
+	this.handle_command = function(buildCMD)
 	{
-		if(command == "build")
+		var spot = this.grid_spot(buildCMD.x,buildCMD.y);
+		if(spot[0] >=0 && spot[1] >=0)//check for bounds
 		{
-			//look up grid spot
-			var spot = this.grid_spot(clickX,clickY);
-			if(this.grid_spots[spot[0]][spot[1]] == EMPTY)
+			if(buildCMD.command == "build")
 			{
-				var temp = new WallPiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2));
-				this.grid_spots[spot[0]][spot[1]] = WALL_TYPE;
-                if (this.grid_objects[spot[0]][spot[1]]) {
-                    this.grid_objects[spot[0]][spot[1]].visible = false;
-                    SCENE.remove(this.grid_objects[spot[0]][spot[1]]);
-                }
-                this.grid_objects[spot[0]][spot[1]] = temp.getMesh();
-
+				if(this.grid_spots[spot[0]][spot[1]] == EMPTY)
+				{
+					if(buildCMD.type == "house")
+					{
+						this.grid_spots[spot[0]][spot[1]] = new HousePiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2));
+					}
+					if(buildCMD.type == "wall")
+					{
+						this.grid_spots[spot[0]][spot[1]] = new WallPiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2));
+					}
+				}
+			}
+			if(buildCMD.command == "remove")
+			{
+				if(this.grid_spots[spot[0]][spot[1]] != EMPTY)
+				{
+					remove(this.grid_spots[spot[0]][spot[1]]);
+					this.grid_spots[spot[0]][spot[1]] = EMPTY;
+				}
 			}
 		}
 	}
-    
+   
     this.hideLines = function() {
         for (var index = 0; index < gridLines.length; index++) {
             gridLines[index].visible = false;
@@ -80,8 +99,10 @@ function Grid(width, height, blocks)
         gridVisible = true;
     }
 	
-    var material = new THREE.LineBasicMaterial({
-        color: 0x555555,
+  
+	/*draw some lines*/
+	var material = new THREE.LineBasicMaterial({
+        color: 0x00FF00,
     });
 	for(var x = 0; x < width; x+=width/blocks)
 	{
