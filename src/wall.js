@@ -13,5 +13,9 @@ function WallPiece(position)
 	this.cube.position.y = wall_height/2;
 	this.cube.position.z = position.z;
 	SCENE.add(this.cube);
+
+    this.getMesh = function() {
+        return this.cube;
+    }
 	
 }

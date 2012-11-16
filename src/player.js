@@ -16,6 +16,8 @@ function Player(position)
 	this.mouse_down = function(keyEvent)
 	{
 	}
+	this.mouse_up = function (keyEvent) {
+	}
 	this.key_down = function(keyEvent)
 	{
 		switch (event.keyCode){	

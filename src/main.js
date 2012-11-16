@@ -2,8 +2,9 @@
 webGL_intialize();
 
 //SET UP THE GAME. probably could move all this out
-var grid = new Grid(10000,10000,1000);
-var mainPlayer = new Player(new THREE.Vector3(20,30,10));
+var grid = new Grid(1000,1000,100);
+var mainPlayer = new Player(new THREE.Vector3(500, 30, 500));
+PLAYER = mainPlayer;
 var mainBuilder = new Builder(new THREE.Vector3(20,400,10), grid);
 var currentEntity = mainPlayer;
 
@@ -37,18 +38,16 @@ function key_down(keyEvt)
 				// Ask the browser to lock the pointer
 				document.body.requestPointerLock();
 				break;
-			case 84:
-				if(currentEntity == mainBuilder)
-				{
-					mainBuilder.hideTracker();
-					currentEntity = mainPlayer;
-				}
-				else
-				{
-					mainBuilder.showTracker();
-					currentEntity = mainBuilder;
-				}
-				break;
+case 84:
+    if (currentEntity == mainBuilder) {
+        mainBuilder.switchOut();
+        currentEntity = mainPlayer;
+    }
+    else {
+        mainBuilder.switchInto();
+        currentEntity = mainBuilder;
+    }
+    break;
 			default:
 				currentEntity.key_down(keyEvt);
 				break;

@@ -9,12 +9,18 @@ var Z_POSITION = 1;
 
 var EMPTY = 0;
 var WALL_TYPE = 1;
+var gridLines = new Array();
+var gridVisible = false;
+
 function Grid(width, height, blocks)
 {
 	this.grid_spots = new Array(blocks);
+    this.grid_objects = new Array(blocks);
 	//this makes the array 2D;
+
 	for (var i = 0; i < blocks; i++) {
 		this.grid_spots[i] = new Array(blocks);
+        this.grid_objects[i] = new Array(blocks);
 	}
 	for (var i = 0; i < blocks; i++) {
 		for (var f = 0; f < blocks; f++)
@@ -50,11 +56,32 @@ function Grid(width, height, blocks)
 			{
 				var temp = new WallPiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2));
 				this.grid_spots[spot[0]][spot[1]] = WALL_TYPE;
+                if (this.grid_objects[spot[0]][spot[1]]) {
+                    this.grid_objects[spot[0]][spot[1]].visible = false;
+                    SCENE.remove(this.grid_objects[spot[0]][spot[1]]);
+                }
+                this.grid_objects[spot[0]][spot[1]] = temp.getMesh();
+
 			}
 		}
 	}
-	var material = new THREE.LineBasicMaterial({
-        color: 0x00FF00,
+    
+    this.hideLines = function() {
+        for (var index = 0; index < gridLines.length; index++) {
+            gridLines[index].visible = false;
+        }
+        gridVisible = false;
+    }
+
+    this.showLines = function() {
+        for (var index = 0; index < gridLines.length; index++) {
+            gridLines[index].visible = true;
+        }
+        gridVisible = true;
+    }
+	
+    var material = new THREE.LineBasicMaterial({
+        color: 0x555555,
     });
 	for(var x = 0; x < width; x+=width/blocks)
 	{
@@ -63,9 +90,11 @@ function Grid(width, height, blocks)
 		geometry.vertices.push(new THREE.Vector3( x, 10, height));
 		var line = new THREE.Line(geometry, material);
 		SCENE.add( line );
+        line.visible = false;
+        gridLines.push(line);
 	}
 	material = new THREE.LineBasicMaterial({
-        color: 0xFF0000,
+        color: 0x555555,
     });
 	for(var y = 0; y < width; y+=height/blocks)
 	{
@@ -74,5 +103,23 @@ function Grid(width, height, blocks)
 		geometry.vertices.push(new THREE.Vector3( width, 10, y));
 		var line = new THREE.Line(geometry, material);
 		SCENE.add( line );
+        line.visible = false;
+        gridLines.push(line);
 	}
+    
+    var texture = THREE.ImageUtils.loadTexture('Resources/Textures/grass03_0.jpg');
+    var material = new THREE.MeshBasicMaterial({map: texture});
+    var plane = new THREE.PlaneGeometry(width/blocks, width/blocks);
+    
+    for (var i = 0; i < blocks; i++) {
+        for (var j = 0; j < blocks; j++) {
+            
+            var mesh = new THREE.Mesh(plane, material);
+            SCENE.add(mesh);
+            this.grid_objects[j][i] = mesh;
+            mesh.rotation.x = -(Math.PI/2);
+            mesh.translateZ((i*(width/blocks))+(width/blocks/2));
+            mesh.translateX((j*(width/blocks))+(width/blocks/2));
+        }
+    }
 }

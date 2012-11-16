@@ -15,6 +15,7 @@ function Builder(position, grid_handle)
 	//always look directly down
 	this.direction = new THREE.Vector3(0,-1,0);
 	this.building = false;
+	this.playerMarker = new THREE.Mesh(new THREE.SphereGeometry(1, 8, 8), this.targetMaterial);
 	
 	this.targetMaterial = new THREE.MeshLambertMaterial(
 	{
@@ -23,7 +24,15 @@ function Builder(position, grid_handle)
 	
 	//THIS IS BAD. NEED TO REFACTOR SOON!
 	this.sphere = new THREE.Mesh( new THREE.SphereGeometry(1, 8, 8), this.targetMaterial);
-	
+
+	this.markerMaterial = new THREE.MeshBasicMaterial(
+	{
+	    color: 0x2222EE
+	});
+	this.playerMarker = new THREE.Mesh(new THREE.SphereGeometry(8, 10, 10), this.markerMaterial);
+	SCENE.add(this.playerMarker);
+	this.playerMarker.visible = false;
+
 	this.sphere.position.x = position.x; 
 	this.sphere.position.z = position.z;
 	this.sphere.position.y = 0;
@@ -79,16 +88,24 @@ function Builder(position, grid_handle)
 			case 83:
 				this.keys[DOWN] = false;
 				break;
-		}
-	};
-	this.hideTracker = function()
-	{
-		SCENE.remove(this.sphere);
-	}
-	this.showTracker = function()
-	{
-		SCENE.add(this.sphere);
-	}
+        }
+    };
+    this.switchInto = function () {
+        this.position.x = PLAYER.position.x;
+        this.position.z = PLAYER.position.z;
+        this.playerMarker.position.set(PLAYER.position.x, 1, PLAYER.position.z);
+        this.sphere.position.set(PLAYER.position.x, this.sphere.position.y, PLAYER.position.z);
+        this.playerMarker.visible = true;
+        SCENE.add(this.sphere);
+        grid.showLines();
+    }
+
+    this.switchOut = function () {
+        this.playerMarker.visible = false;
+        SCENE.remove(this.sphere);
+        grid.hideLines();
+    }
+
 	this.mouseMovement = function(mouseMoveX, mouseMoveY)
 	{
 		this.sphere.position.x -= mouseMoveY/2; 
