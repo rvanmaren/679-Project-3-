@@ -15,8 +15,10 @@ var LIGHT;
 var FOV = 40;
 /*PLAYER GLOBALS*/
 var PLAYER;
-/*BUILDER GLOBALS*/
+/*ZOMBIE GLOBALS*/
+var ZOMBIES = new Array();
 
+/*BUILDER GLOBALS*/
 var GEOMETRIES = new Array();
 function load( geometry,id) {  
 		//var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial({overdraw: true}));   

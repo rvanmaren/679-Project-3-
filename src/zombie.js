@@ -1,13 +1,12 @@
 var zombie_height = 40;
 var zombie_width = 10;
-function Zombie(position, the_grid)
+function Zombie(position)
 {
 	this.position = position;
 	
 	this.direction = new THREE.Vector3(0,0,1);
 	this.speed = .5;
     this.rotationSpeed = .5;
-	this.grid = the_grid;
 	this.health = 100;
 	this.target = PLAYER;
 	
@@ -49,15 +48,20 @@ function Zombie(position, the_grid)
 		this.computeNextMove();
 		//Move in the direction of looking.
 		//Compute movement based on key press
-			var directionPerp = new THREE.Vector3(this.direction.x*Math.cos(Math.PI/2)- this.direction.z*Math.sin(Math.PI/2),
-											0, this.direction.x*Math.sin(Math.PI/2)+this.direction.z*Math.cos(Math.PI/2));//just rotate by 90 degrees same direction every time
+		//	var directionPerp = new THREE.Vector3(this.direction.x*Math.cos(Math.PI/2)- this.direction.z*Math.sin(Math.PI/2),
+			//								0, this.direction.x*Math.sin(Math.PI/2)+this.direction.z*Math.cos(Math.PI/2));//just rotate by 90 degrees same direction every time
 		//Do y direction with a jump
 		//sideways motion
-		var nextX = this.position.x + directionPerp.x*this.speed + this.direction.x*this.speed;
-		var nextY = this.position.z + directionPerp.z*this.speed + this.direction.z*this.speed;
-		var temp = this.grid.grid_spot(nextX,nextY);
+		//var nextX = this.position.x + directionPerp.x*this.speed + this.direction.x*this.speed;
+		//var nextY = this.position.z + directionPerp.z*this.speed + this.direction.z*this.speed;
 		
-		if(!this.grid.isOccupied(temp[0],temp[1]))
+		var nextX = this.position.x + this.direction.x*this.speed + this.direction.x*this.speed;
+		var nextY = this.position.z + this.direction.z*this.speed + this.direction.z*this.speed;
+		
+		
+		var temp = THE_GRID.grid_spot(nextX,nextY);
+		
+		if(!THE_GRID.isOccupied(temp[0],temp[1]))
 		{
 			this.position.x = nextX;
 			this.position.z = nextY;
