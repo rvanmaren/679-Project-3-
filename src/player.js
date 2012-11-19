@@ -58,15 +58,16 @@ function Player(position)
 	{
 		//Update direction based on mouse movement (rotate and point up)
 		var ang = Math.sin(mouseMoveX/WINDOW_WIDTH);
+		this.gun.rotateSide(ang);
 		var xTheta = this.direction.x*Math.cos(ang)- this.direction.z*Math.sin(ang);
 		var zTheta = this.direction.x*Math.sin(ang)+this.direction.z*Math.cos(ang);
 		this.direction.x = xTheta;
 		this.direction.z = zTheta;
 		//Upwards looking
 		ang = -1*Math.sin(mouseMoveY/WINDOW_HEIGHT);
+		this.gun.rotateUp(ang);
 		var yTheta = 1*Math.sin(ang)+ this.direction.y*Math.cos(ang);
 		this.direction.y = yTheta;
-		
 		this.direction = this.direction.normalize();
 	}
 	this.update = function(time)
@@ -92,7 +93,7 @@ function Player(position)
 			this.position.x = nextX;
 			this.position.z = nextY;
 		}
-		this.gun.update(this.position);
+		this.gun.update(this.position, this.direction);
 		/*this.position.x += directionPerp.x*sideways*this.speed;
 		this.position.z += directionPerp.z*sideways*this.speed;
 		var temp = THE_GRID.grid_spot(this.position.x,this.position.z);

@@ -16,6 +16,6 @@ function Level()
 	};
 	
 	this.exitLevel = function(){
-		this.zombie.kill();
+		//this.zombie.kill();
 	}
 }
