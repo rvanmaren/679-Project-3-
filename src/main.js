@@ -1,26 +1,25 @@
+//Should do this on onWindowLoad?
 webGL_intialize();
-//Should do this on onWindowLoad
+//Initialize the mesh loader
 LOADER = new THREE.JSONLoader();
 //loadEverything
 loadGeometry('./resources/rifle/rifle_0.js', "gun");
+
+var havePointerLock;
 function initalize_game()
 {
     GAME = new Game();
-	havePointerLock = 'pointerLockElement' in document ||
-    'mozPointerLockElement' in document ||
-    'webkitPointerLockElement' in document;
+	havePointerLock = 'pointerLockElement' in document;
 	
 	// Hook pointer lock state change events
-document.body.addEventListener('pointerlockchange', mouseLockChange, false);
-document.body.addEventListener('mozpointerlockchange', mouseLockChange, false);
-document.body.addEventListener('webkitpointerlockchange', mouseLockChange, false);
+	document.body.addEventListener('pointerlockchange', mouseLockChange, false);
 
-// Hook mouse move events
-document.body.addEventListener("mousemove", this.moveCallback, false);
-window.addEventListener("mousedown", this.mouse_down, false);
-window.addEventListener("mouseup", this.mouse_up, false);
-window.addEventListener( 'keyup', key_up, false );
-window.addEventListener( 'keydown', key_down, false );
+	// Hook mouse move events
+	document.body.addEventListener("mousemove", this.moveCallback, false);
+	window.addEventListener("mousedown", this.mouse_down, false);
+	window.addEventListener("mouseup", this.mouse_up, false);
+	window.addEventListener( 'keyup', key_up, false );
+	window.addEventListener( 'keydown', key_down, false );
 }
 function render() {
 	RENDERER.render( SCENE, CAMERA );
@@ -44,29 +43,11 @@ function loadLoop()
 	}
 }
 loadLoop();
-//load the file now so we can use it later. probably better way to do this
-//LOADER.load( 'resources/fence/fence.js', makeHandler(" "));
-//loadGeometry('./resources/rifle/rifle_0.js', "gun");
-//objManager.loadModel( 'C:\\Users\\Msquared\\Desktop\\679-Project-3-\\src\\fences.js', 'PlayerModel' );
-//SET UP THE GAME. probably could move all this out
-
-/*var THE_GRID = new Grid(1000,1000,100);
-var mainPlayer = new Player(new THREE.Vector3(500, 30, 500));
-PLAYER = mainPlayer;
-var mainBuilder = new Builder(new THREE.Vector3(20,400,10), THE_GRID);*/
-
-var havePointerLock;
 	
 function goFullScreen() {
-    var
-          el = document.documentElement
-        , rfs =
-               el.requestFullScreen
-            || el.webkitRequestFullScreen
-            || el.mozRequestFullScreen
-    ;
-    rfs.call(el);
-	
+    var	el = document.documentElement
+        , rfs =el.requestFullScreen;
+    rfs.call(el);	
 }
 function key_down(keyEvt)
 {
@@ -81,7 +62,7 @@ function key_down(keyEvt)
 		default:
 			GAME.key_down(keyEvt);
 			break;
-}
+	}
 }
 function key_up(keyEvt)
 {

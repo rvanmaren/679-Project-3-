@@ -7,9 +7,12 @@ function Game()
 {
 	THE_GRID = new Grid(GRID_WIDTH,GRID_HEIGHT,NUM_BOXES);
 	PLAYER = new Player(new THREE.Vector3(2000, 30, 2000));
+	this.skybox = new Skybox();
 	this.night = new Night();
 	this.day = new Builder(new THREE.Vector3(2000, 400, 2000), THE_GRID);
 	this.gameState = this.night;
+	//timing for state switching. We will wait until there are no more zombies
+	//And have a variable for the amount you can build in a round
 	this.key_down = function(keyEvt)
 	{
 		switch (event.keyCode){	

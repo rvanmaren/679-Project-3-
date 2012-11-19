@@ -13,7 +13,7 @@ function webGL_intialize()
     })();
 	
 	//SET UP RENDERER
-	RENDERER = new THREE.WebGLRenderer();
+	RENDERER = new THREE.WebGLRenderer({antialias:true});
 	RENDERER.setSize( WINDOW_WIDTH, WINDOW_HEIGHT );
 	document.body.appendChild( RENDERER.domElement );
 	
@@ -24,7 +24,7 @@ function webGL_intialize()
     FOV,         // Field of view
     WINDOW_WIDTH / WINDOW_HEIGHT,  // Aspect ratio
     .1,         // Near
-    10000       // Far
+    20000       // Far
 	);
 	SCENE.add(CAMERA);
 	

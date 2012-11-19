@@ -5,44 +5,14 @@ var RIGHT = 3;
 var builderSpeed = 2;
 var zoomSpeed = 10;
 
-/*function Builder_Bar()
-{
-	this.wall = new WallPiece(new THREE.Vector3(0,0,0));
-	this.wall.mesh.scale.set(.2,.2,.2)
-	this.meshes = new Array(this.wall.mesh);
-	
-	this.update = function(camPosition)
-	{
-		for(var i = 0; i < this.meshes.length; i++)
-		{
-			this.meshes[i].position.x = camPosition.x+35;
-			this.meshes[i].position.y = camPosition.y-100;
-			this.meshes[i].position.z = camPosition.z-50;
-		}
-	}
-	this.show = function()
-	{
-		for(var i = 0; i < this.meshes.length; i++)
-		{
-			SCENE.add(this.meshes[i]);
-		}
-	}
-	this.hide = function()
-	{
-		for(var i = 0; i < this.meshes.length; i++)
-		{
-			SCENE.remove(this.meshes[i]);
-		}
-	}
-	
-}*/
 function Builder_Target(position)
 {
 	this.targetMaterial = new THREE.MeshLambertMaterial(
 	{
 	    color: 0xCC0000
 	});
-	this.mesh = new THREE.Mesh( new THREE.SphereGeometry(1, 8, 8), this.targetMaterial);
+	this.size = 2;
+	this.mesh = new THREE.Mesh( new THREE.SphereGeometry(this.size, 8, 8), this.targetMaterial);
 	
 	this.mesh.position.x = position.x; 
 	this.mesh.position.z = position.z;
@@ -74,6 +44,19 @@ function Builder_Target(position)
 		this.mesh.position.x += deltaX;
 		this.mesh.position.z += deltaY;
 	}
+	this.grow = function()
+	{
+		this.size+=.1;
+		this.mesh.scale.set(this.size,this.size,this.size);
+	}
+	this.shrink = function()
+	{
+		if(this.size-1>0)
+		{
+			this.size-=.1;
+			this.mesh.scale.set(this.size,this.size,this.size);
+		}
+	}
 }
 
 function Builder(position, THE_GRID_handle)
@@ -86,16 +69,6 @@ function Builder(position, THE_GRID_handle)
 	this.direction = new THREE.Vector3(0,-1,0);
 	this.building = false;
 
-	/*this.playerMarker = new THREE.Mesh(new THREE.SphereGeometry(1, 8, 8), this.targetMaterial);
-	
-	this.targetMaterial = new THREE.MeshLambertMaterial(
-	{
-	    color: 0xCC0000
-	});
-	
-	//THIS IS BAD. NEED TO REFACTOR SOON!
-	this.sphere = new THREE.Mesh( new THREE.SphereGeometry(1, 8, 8), this.targetMaterial);
-    */
 	this.markerMaterial = new THREE.MeshBasicMaterial(
 	{
 	    color: 0x2222EE
@@ -116,11 +89,13 @@ function Builder(position, THE_GRID_handle)
 		{
 			this.position.y-=zoomSpeed;
 			this.speed-=2;
+			this.target.shrink();
 		}
 		else
 		{
 			this.position.y+=zoomSpeed;
 			this.speed+=2;
+			this.target.grow();
 		}
 	}
 	this.key_down = function(keyEvent)
@@ -141,10 +116,12 @@ function Builder(position, THE_GRID_handle)
 			case 49:
 				this.mode = "build";
 				this.type = "wall";	
+				this.target.update(this.type);
 				break;
 			case 50:
 				this.mode = "build";
-				this.type = "house";	
+				this.type = "house";
+				this.target.update(this.type);				
 				break;
 			case 51:
 				this.mode = "remove";	
@@ -212,8 +189,15 @@ function Builder(position, THE_GRID_handle)
 		var forward = this.keys[UP] ? (this.keys[DOWN] ? 0 : 1) : (this.keys[DOWN] ? -1 : 0); //1,0,-1
 		var sideways = this.keys[RIGHT] ? (this.keys[LEFT] ? 0 : 1) : (this.keys[LEFT] ? -1 : 0);
 		
-		this.position.x += forward*this.speed;
-		this.position.z += sideways*this.speed;
+		if(this.position.x + forward*this.speed >0 && this.position.x + forward*this.speed < GRID_HEIGHT)
+		{
+			this.position.x += forward*this.speed;
+		}
+		if(this.position.z + sideways*this.speed >0 && this.position.z + sideways*this.speed < GRID_HEIGHT)
+		{
+			this.position.z += sideways*this.speed;
+		}
+		//console.log(2*this.position.y*Math.tan(FOV/2));
 		//Move the crosshair with the camera
 		this.target.move(forward*this.speed,sideways*this.speed);
 		//this.position.z += this.direction.z*forward;
