@@ -14,6 +14,10 @@ function Night()
 	
 	this.key_down = function(keyEvent)
 	{
+		if(keyEvent.keyCode == 75)
+		{
+			this.level.exitLevel();
+		}
 		PLAYER.key_down(keyEvent);
 	};
 	this.key_up = function(keyEvent)
@@ -42,4 +46,13 @@ function Night()
 		PLAYER.update(time);
 		this.level.update(time);
 	};
+	this.finished = function()
+	{
+		if(this.level.zombies.length == 0)
+		{
+			return true;
+		}
+		else
+			return false;
+	}
 }

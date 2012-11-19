@@ -40,6 +40,20 @@ function Game()
 	this.update = function(time)
 	{
 		this.gameState.update(10);
+		//Check if we need to toggle
+		if(this.gameState.finished())
+		{
+				if (this.gameState == this.day) {
+					this.day.switchOut();
+					this.night.switchInto();
+					this.gameState = this.night;
+				}
+				else {
+					this.day.switchInto();
+					this.night.switchOut();
+					this.gameState = this.day;
+				}
+		}
 	}
 	this.mouseMovement = function(deltaX, deltaY)
 	{

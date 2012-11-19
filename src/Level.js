@@ -11,11 +11,14 @@ function Level()
 	
 		//this.zombie.update(time);
 		for(var i = 0; i < this.zombies.length; i++){
-		//	zombie.update(time);
+			this.zombies[i].update(time);
 		} 
 	};
 	
 	this.exitLevel = function(){
-		//this.zombie.kill();
+		for(var i = 0; i < this.zombies.length; i++){
+			this.zombies[i].kill();
+		}
+		this.zombies = new Array();
 	}
 }

@@ -67,10 +67,12 @@ function Grid(width, height, blocks)
 					if(buildCMD.type == "house")
 					{
 						this.grid_spots[spot[0]][spot[1]] = new HousePiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2));
+						return true;
 					}
 					if(buildCMD.type == "wall")
 					{
 						this.grid_spots[spot[0]][spot[1]] = new WallPiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2));
+						return true;
 					}
 				}
 			}
@@ -83,6 +85,7 @@ function Grid(width, height, blocks)
 				}
 			}
 		}
+		return false;
 	}
    
     this.hideLines = function() {

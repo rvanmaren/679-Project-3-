@@ -68,7 +68,17 @@ function Builder(position, THE_GRID_handle)
 	//always look directly down
 	this.direction = new THREE.Vector3(0,-1,0);
 	this.building = false;
-
+	this.blocksLeft = 5;
+	/*this.playerMarker = new THREE.Mesh(new THREE.SphereGeometry(1, 8, 8), this.targetMaterial);
+	
+	this.targetMaterial = new THREE.MeshLambertMaterial(
+	{
+	    color: 0xCC0000
+	});
+	
+	//THIS IS BAD. NEED TO REFACTOR SOON!
+	this.sphere = new THREE.Mesh( new THREE.SphereGeometry(1, 8, 8), this.targetMaterial);
+    */
 	this.markerMaterial = new THREE.MeshBasicMaterial(
 	{
 	    color: 0x2222EE
@@ -89,13 +99,11 @@ function Builder(position, THE_GRID_handle)
 		{
 			this.position.y-=zoomSpeed;
 			this.speed-=2;
-			this.target.shrink();
 		}
 		else
 		{
 			this.position.y+=zoomSpeed;
 			this.speed+=2;
-			this.target.grow();
 		}
 	}
 	this.key_down = function(keyEvent)
@@ -116,12 +124,10 @@ function Builder(position, THE_GRID_handle)
 			case 49:
 				this.mode = "build";
 				this.type = "wall";	
-				this.target.update(this.type);
 				break;
 			case 50:
 				this.mode = "build";
-				this.type = "house";
-				this.target.update(this.type);				
+				this.type = "house";	
 				break;
 			case 51:
 				this.mode = "remove";	
@@ -159,6 +165,7 @@ function Builder(position, THE_GRID_handle)
         this.target.setPosition(PLAYER.position.x, this.target.position().y, PLAYER.position.z);
         this.playerMarker.visible = true;
         THE_GRID.showLines();
+		this.blocksLeft = 5;
     }
 
     this.switchOut = function () {
@@ -172,13 +179,23 @@ function Builder(position, THE_GRID_handle)
 		this.target.mouseMove(mouseMoveX, mouseMoveY);
 		if(this.building)
 		{
-			THE_GRID.handle_command(new Build_Command(this.mode,this.type,this.target.position().x,this.target.position().z));
+			if(this.blocksLeft)
+			{
+				var built = THE_GRID.handle_command(new Build_Command(this.mode,this.type,this.target.position().x,this.target.position().z));
+				if(built)
+					this.blocksLeft--;
+			}
 		}
 	}
 	this.mouse_down = function()
 	{
 		this.building=true;
-		THE_GRID.handle_command(new Build_Command(this.mode,this.type,this.target.position().x,this.target.position().z));
+		if(this.blocksLeft)
+		{
+			var built = THE_GRID.handle_command(new Build_Command(this.mode,this.type,this.target.position().x,this.target.position().z));
+			if(built)
+				this.blocksLeft--;
+		}				
 	}
 	this.mouse_up = function()
 	{
@@ -189,15 +206,8 @@ function Builder(position, THE_GRID_handle)
 		var forward = this.keys[UP] ? (this.keys[DOWN] ? 0 : 1) : (this.keys[DOWN] ? -1 : 0); //1,0,-1
 		var sideways = this.keys[RIGHT] ? (this.keys[LEFT] ? 0 : 1) : (this.keys[LEFT] ? -1 : 0);
 		
-		if(this.position.x + forward*this.speed >0 && this.position.x + forward*this.speed < GRID_HEIGHT)
-		{
-			this.position.x += forward*this.speed;
-		}
-		if(this.position.z + sideways*this.speed >0 && this.position.z + sideways*this.speed < GRID_HEIGHT)
-		{
-			this.position.z += sideways*this.speed;
-		}
-		//console.log(2*this.position.y*Math.tan(FOV/2));
+		this.position.x += forward*this.speed;
+		this.position.z += sideways*this.speed;
 		//Move the crosshair with the camera
 		this.target.move(forward*this.speed,sideways*this.speed);
 		//this.position.z += this.direction.z*forward;
@@ -210,4 +220,12 @@ function Builder(position, THE_GRID_handle)
 		CAMERA.lookAt(camTarget);
 		CAMERA.rotation.z = -90 * Math.PI/180;
 	};
+	this.finished = function()
+	{
+		if(this.blocksLeft==0)
+			return true;
+		else
+			return false;
+	}
 }
+
