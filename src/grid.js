@@ -40,6 +40,9 @@ function Grid(width, height, blocks)
 	}
 	this.isOccupied = function(x,y)
 	{
+        if(x < 0 || x > this.grid_spots.length || y < 0 || y > this.grid_spots[0].length){
+            return true;
+        }
 		if(this.grid_spots[x][y] == EMPTY)
 			return false;
 		else

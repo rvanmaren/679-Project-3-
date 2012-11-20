@@ -41,10 +41,12 @@ function Night()
 		this.level.exitLevel();
 	}
 
-	this.update = function(time)
-	{
-		PLAYER.update(time);
-		this.level.update(time);
+	this.update = function (time) {
+	    PLAYER.update(time);
+	    for (var i = 0; i < BULLETS.length; i++) {
+	        BULLETS[i].update(time);
+	    }
+	    this.level.update(time);
 	};
 	this.finished = function()
 	{

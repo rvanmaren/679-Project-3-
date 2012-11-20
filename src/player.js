@@ -12,8 +12,8 @@ function Player(position)
 	this.speed = P_SPEED;
     this.rotationSpeed = P_ROTATE;
 	this.gun = new Gun(this.position,this.direction);
-	this.mouse_down = function(keyEvent)
-	{
+	this.mouse_down = function(keyEvent) {
+        BULLETS.push(new Bullet(this.position, this.direction.clone()));
 	}
 
 	this.mouse_up = function(keyEvent) {
@@ -54,21 +54,21 @@ function Player(position)
 				break;
 		}
 	};
-	this.mouseMovement = function(mouseMoveX, mouseMoveY)
-	{
-		//Update direction based on mouse movement (rotate and point up)
-		var ang = Math.sin(mouseMoveX/WINDOW_WIDTH);
-		this.gun.rotateSide(ang);
-		var xTheta = this.direction.x*Math.cos(ang)- this.direction.z*Math.sin(ang);
-		var zTheta = this.direction.x*Math.sin(ang)+this.direction.z*Math.cos(ang);
-		this.direction.x = xTheta;
-		this.direction.z = zTheta;
-		//Upwards looking
-		ang = -1*Math.sin(mouseMoveY/WINDOW_HEIGHT);
-		this.gun.rotateUp(ang);
-		var yTheta = 1*Math.sin(ang)+ this.direction.y*Math.cos(ang);
-		this.direction.y = yTheta;
-		this.direction = this.direction.normalize();
+	this.mouseMovement = function (mouseMoveX, mouseMoveY) {
+	    //Update direction based on mouse movement (rotate and point up)
+	    var ang = Math.sin(mouseMoveX / WINDOW_WIDTH);
+	    this.gun.rotateSide(ang);
+	    var xTheta = this.direction.x * Math.cos(ang) - this.direction.z * Math.sin(ang);
+	    var zTheta = this.direction.x * Math.sin(ang) + this.direction.z * Math.cos(ang);
+	    this.direction.x = xTheta;
+	    this.direction.z = zTheta;
+	    //Upwards looking
+	    ang = -1 * Math.sin(mouseMoveY / WINDOW_HEIGHT);
+	    this.gun.rotateUp(ang);
+	    var yTheta = 1 * Math.sin(ang) + this.direction.y * Math.cos(ang);
+	    this.direction.y = yTheta;
+	    this.direction = this.direction.normalize();
+
 	}
 	this.update = function(time)
 	{
