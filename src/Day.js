@@ -165,6 +165,7 @@ function Day(position)
     this.switchOut = function () {
         this.playerMarker.visible = false;
 		this.target.hide();
+		this.building = false;
         THE_GRID.hideLines();
     }
 
