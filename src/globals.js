@@ -35,3 +35,7 @@ function loadGeometry(meshToLoad, id) {
 var GRID_HEIGHT = 10000;
 var GRID_WIDTH = 10000;
 var NUM_BOXES = 1000;
+
+/*BULLET GLOBALS*/
+var BULLET_SPEED = 10;
+var BULLETS = new Array();
