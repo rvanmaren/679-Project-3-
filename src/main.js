@@ -4,7 +4,7 @@ webGL_intialize();
 LOADER = new THREE.JSONLoader();
 //loadEverything
 loadGeometry('./resources/rifle/rifle_0.js', "gun");
-loadGeometry('./resources/fence/fence.js', "fence");
+//loadGeometry('./resources/fence/fence.js', "fence");
 var havePointerLock;
 function initalize_game()
 {
