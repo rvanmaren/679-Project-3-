@@ -5,44 +5,14 @@ var RIGHT = 3;
 var builderSpeed = 2;
 var zoomSpeed = 10;
 
-/*function Builder_Bar()
-{
-	this.wall = new WallPiece(new THREE.Vector3(0,0,0));
-	this.wall.mesh.scale.set(.2,.2,.2)
-	this.meshes = new Array(this.wall.mesh);
-	
-	this.update = function(camPosition)
-	{
-		for(var i = 0; i < this.meshes.length; i++)
-		{
-			this.meshes[i].position.x = camPosition.x+35;
-			this.meshes[i].position.y = camPosition.y-100;
-			this.meshes[i].position.z = camPosition.z-50;
-		}
-	}
-	this.show = function()
-	{
-		for(var i = 0; i < this.meshes.length; i++)
-		{
-			SCENE.add(this.meshes[i]);
-		}
-	}
-	this.hide = function()
-	{
-		for(var i = 0; i < this.meshes.length; i++)
-		{
-			SCENE.remove(this.meshes[i]);
-		}
-	}
-	
-}*/
 function Builder_Target(position)
 {
 	this.targetMaterial = new THREE.MeshLambertMaterial(
 	{
 	    color: 0xCC0000
 	});
-	this.mesh = new THREE.Mesh( new THREE.SphereGeometry(1, 8, 8), this.targetMaterial);
+	this.size = 2;
+	this.mesh = new THREE.Mesh( new THREE.SphereGeometry(this.size, 8, 8), this.targetMaterial);
 	
 	this.mesh.position.x = position.x; 
 	this.mesh.position.z = position.z;
@@ -74,9 +44,22 @@ function Builder_Target(position)
 		this.mesh.position.x += deltaX;
 		this.mesh.position.z += deltaY;
 	}
+	this.grow = function()
+	{
+		this.size+=.1;
+		this.mesh.scale.set(this.size,this.size,this.size);
+	}
+	this.shrink = function()
+	{
+		if(this.size-1>0)
+		{
+			this.size-=.1;
+			this.mesh.scale.set(this.size,this.size,this.size);
+		}
+	}
 }
 
-function Builder2(position, THE_GRID_handle)
+function Day(position)
 {
 	this.keys  = [false,false,false,false];
 	this.position = position;
@@ -86,16 +69,6 @@ function Builder2(position, THE_GRID_handle)
 	this.direction = new THREE.Vector3(0,-1,0);
 	this.building = false;
 	this.blocksLeft = 5;
-	/*this.playerMarker = new THREE.Mesh(new THREE.SphereGeometry(1, 8, 8), this.targetMaterial);
-	
-	this.targetMaterial = new THREE.MeshLambertMaterial(
-	{
-	    color: 0xCC0000
-	});
-	
-	//THIS IS BAD. NEED TO REFACTOR SOON!
-	this.sphere = new THREE.Mesh( new THREE.SphereGeometry(1, 8, 8), this.targetMaterial);
-    */
 	this.markerMaterial = new THREE.MeshBasicMaterial(
 	{
 	    color: 0x2222EE
@@ -239,9 +212,10 @@ function Builder2(position, THE_GRID_handle)
 	};
 	this.finished = function()
 	{
-		if(blocksLeft==0)
+		if(this.blocksLeft==0)
 			return true;
 		else
 			return false;
 	}
 }
+

@@ -15,20 +15,23 @@ var LIGHT;
 var FOV = 40;
 /*PLAYER GLOBALS*/
 var PLAYER;
+var P_ROTATE = .5;
+var P_SPEED = 2;
 /*ZOMBIE GLOBALS*/
 var ZOMBIES = new Array();
 
 /*BUILDER GLOBALS*/
+var GUN_MESH = 0;
+var FENCE_MESH = 1;
 var GEOMETRIES = new Array();
 function load( geometry,id) {  
 		//var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial({overdraw: true}));   
 		GEOMETRIES.push(geometry);
-		console.log(GEOMETRIES.length);
 };
 function loadGeometry(meshToLoad, id) {
-	LOADER.load( './resources/rifle/rifle_0.js',function(geometry){load(geometry,id)});
+	LOADER.load( meshToLoad ,function(geometry){load(geometry,id)});
 }
 /*GRID GLOBALS*/
 var GRID_HEIGHT = 10000;
 var GRID_WIDTH = 10000;
-var NUM_BOXES = 100;
+var NUM_BOXES = 1000;

@@ -3,6 +3,7 @@ webGL_intialize();
 //Initialize the mesh loader
 LOADER = new THREE.JSONLoader();
 //loadEverything
+loadGeometry('./resources/fence/fence.js', "fence");
 loadGeometry('./resources/rifle/rifle_0.js', "gun");
 
 var havePointerLock;

@@ -1,6 +1,3 @@
-/*This will just be a wrapper around the 2dD grid. Planning on adding methods like
-handle_click(x,y) which will add a block to the place clicked*/
-
 //Green lines are parrallel to the z axis. its flipped so the "Y" axis is really the X axis...
 
 //define stuff for grid spot returns
@@ -11,8 +8,6 @@ var gridLines = new Array();
 var gridVisible = false;
 
 var EMPTY = 0;
-var WALL_TYPE = 1;
-var HOUSE_TYPE = 1;
 
 function Grid(width, height, blocks)
 {
@@ -49,11 +44,6 @@ function Grid(width, height, blocks)
 			return false;
 		else
 			return true;
-	}
-	this.handle_click = function(clickX,clickY)
-	{
-		//Do some sort of look up what there
-		//return the set of options.
 	}
 	this.handle_command = function(buildCMD)
 	{
@@ -133,17 +123,18 @@ function Grid(width, height, blocks)
     
     var texture = THREE.ImageUtils.loadTexture('Resources/Textures/grass03_0.jpg');
     var material = new THREE.MeshBasicMaterial({map: texture});
-    var plane = new THREE.PlaneGeometry(width/blocks, width/blocks);
+	var eas = 10;
+    var plane = new THREE.PlaneGeometry((width/blocks)*eas, (width/blocks)*eas);
     
-    for (var i = 0; i < blocks; i++) {
-        for (var j = 0; j < blocks; j++) {
+    for (var i = 0; i < blocks/eas; i++) {
+        for (var j = 0; j < blocks/eas; j++) {
             
             var mesh = new THREE.Mesh(plane, material);
             SCENE.add(mesh);
             this.grid_objects[j][i] = mesh;
             mesh.rotation.x = -(Math.PI/2);
-            mesh.translateZ((i*(width/blocks))+(width/blocks/2));
-            mesh.translateX((j*(width/blocks))+(width/blocks/2));
+            mesh.translateZ((i*(width/blocks)*eas)+(width/blocks)*eas/2);
+            mesh.translateX((j*(width/blocks)*eas)+(width/blocks)*eas/2);
         }
     }
 }

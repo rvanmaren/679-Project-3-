@@ -6,7 +6,7 @@ function length(vec)
 function Gun(position, direction)
 {
 	this.direction = direction;
-	this.mesh = new THREE.Mesh(GEOMETRIES[0], new THREE.MeshFaceMaterial({overdraw: true}));  
+	this.mesh = new THREE.Mesh(GEOMETRIES[GUN_MESH], new THREE.MeshFaceMaterial({overdraw: true}));  
 	this.mesh.scale.set(2,2,2);
 	this.mesh.rotation.x = Math.PI/2;
 	this.mesh.rotation.z = Math.PI/2;

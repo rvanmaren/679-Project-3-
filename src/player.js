@@ -9,8 +9,8 @@ function Player(position)
 	this.position = position;
 	this.level;
 	this.direction = new THREE.Vector3(0,0,1);
-	this.speed = 2;
-    this.rotationSpeed = .5;
+	this.speed = P_SPEED;
+    this.rotationSpeed = P_ROTATE;
 	this.gun = new Gun(this.position,this.direction);
 	this.mouse_down = function(keyEvent)
 	{
@@ -94,14 +94,6 @@ function Player(position)
 			this.position.z = nextY;
 		}
 		this.gun.update(this.position, this.direction);
-		/*this.position.x += directionPerp.x*sideways*this.speed;
-		this.position.z += directionPerp.z*sideways*this.speed;
-		var temp = THE_GRID.grid_spot(this.position.x,this.position.z);
-		
-		//forward motion
-		this.position.x += this.direction.x*forward*this.speed;
-		this.position.z += this.direction.z*forward*this.speed;*/
-		//console.log("Direction:" + this.direction.x + "," + this.direction.z);
 		LIGHT.position.set(this.position.x, this.position.y + 2 , this.position.z);
 		CAMERA.position.set(this.position.x, this.position.y, this.position.z);
 		//this.camera.lookAt(this.position.x + dir.x, this.position.y + dir.y, this.position.z + dir.x);
