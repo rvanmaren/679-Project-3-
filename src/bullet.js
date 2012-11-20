@@ -30,13 +30,16 @@ function Bullet(position, dir) {
 	
 
         var nextX = this.mesh.position.x + this.direction.x * this.speed;
-        var nextY = this.mesh.position.z + this.direction.z *  this.speed;
-        var temp = THE_GRID.grid_spot(nextX, nextY);
+        var nextZ = this.mesh.position.z + this.direction.z *  this.speed;
+		var nextY = this.mesh.position.y + this.direction.y * this.speed;
+        var temp = THE_GRID.grid_spot(nextX, nextZ);
 
         if (!THE_GRID.isOccupied(temp[0], temp[1])) {
             this.mesh.position.x = nextX;
-            this.mesh.position.z = nextY;
+            this.mesh.position.z = nextZ;
+			this.mesh.position.y = nextY;
         } else {
+			//check for height!
             SCENE.remove(this.mesh);
             BULLETS.splice(BULLETS.indexOf(this),1);
         }
