@@ -4,7 +4,7 @@ var LEFT = 2;
 var RIGHT = 3;
 var builderSpeed = 2;
 var zoomSpeed = 10;
-
+var buildingNumber = 500;
 function Builder_Target(position)
 {
 	this.targetMaterial = new THREE.MeshLambertMaterial(
@@ -68,7 +68,7 @@ function Day(position)
 	//always look directly down
 	this.direction = new THREE.Vector3(0,-1,0);
 	this.building = false;
-	this.blocksLeft = 5;
+	this.blocksLeft = buildingNumber;
 	this.markerMaterial = new THREE.MeshBasicMaterial(
 	{
 	    color: 0x2222EE
@@ -80,7 +80,7 @@ function Day(position)
 	this.mode = "build";
 	this.type = "wall"
 	this.target = new Builder_Target(this.position);
-	
+	this.doneBuilding = false;
 	//this.builderBar = new Builder_Bar();
 	
 	this.zoom = function(zoomKey)
@@ -99,6 +99,9 @@ function Day(position)
 	this.key_down = function(keyEvent)
 	{
 		switch (event.keyCode){		
+			case 13:
+				this.doneBuilding = true;	
+				break;
 			case 65:
 				this.keys[LEFT] = true;		
 				break;
@@ -155,7 +158,8 @@ function Day(position)
         this.target.setPosition(PLAYER.position.x, this.target.position().y, PLAYER.position.z);
         this.playerMarker.visible = true;
         THE_GRID.showLines();
-		this.blocksLeft = 5;
+		this.blocksLeft = buildingNumber;
+		this.doneBuilding = false;
     }
 
     this.switchOut = function () {
@@ -212,7 +216,7 @@ function Day(position)
 	};
 	this.finished = function()
 	{
-		if(this.blocksLeft==0)
+		if(this.doneBuilding)
 			return true;
 		else
 			return false;
