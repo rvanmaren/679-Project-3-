@@ -1,6 +1,3 @@
-/*This will just be a wrapper around the 2dD grid. Planning on adding methods like
-handle_click(x,y) which will add a block to the place clicked*/
-
 //Green lines are parrallel to the z axis. its flipped so the "Y" axis is really the X axis...
 
 //define stuff for grid spot returns
@@ -11,8 +8,6 @@ var gridLines = new Array();
 var gridVisible = false;
 
 var EMPTY = 0;
-var WALL_TYPE = 1;
-var HOUSE_TYPE = 1;
 
 function Grid(width, height, blocks)
 {
@@ -45,15 +40,13 @@ function Grid(width, height, blocks)
 	}
 	this.isOccupied = function(x,y)
 	{
-		if(this.grid_spots[x][y] == EMPTY)
+        if(x < 0 || x > this.grid_spots.length || y < 0 || y > this.grid_spots[0].length){
+            return true;
+        }
+		if(this.grid_spots[x][y] == EMPTY || this.grid_spots[x][y] instanceof Array)
 			return false;
 		else
 			return true;
-	}
-	this.handle_click = function(clickX,clickY)
-	{
-		//Do some sort of look up what there
-		//return the set of options.
 	}
 	this.handle_command = function(buildCMD)
 	{
@@ -67,10 +60,12 @@ function Grid(width, height, blocks)
 					if(buildCMD.type == "house")
 					{
 						this.grid_spots[spot[0]][spot[1]] = new HousePiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2));
+						return true;
 					}
 					if(buildCMD.type == "wall")
 					{
 						this.grid_spots[spot[0]][spot[1]] = new WallPiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2));
+						return true;
 					}
 				}
 			}
@@ -83,8 +78,76 @@ function Grid(width, height, blocks)
 				}
 			}
 		}
+		return false;
 	}
+
+    /**
+    * This is used for objects that are not static (Zombies)
+    */
+    this.requestPlacement = function(entity, x, y){
+        if(this.isOccupied(x,y)){
+            return false;
+        } else {
+            var spot = this.grid_spot(x,y);
+            if(grid_spots[spot[0]][spot[1]] == EMPTY){
+               grid_spots[spot[0]][spot[1]] = new Array();
+            }
+            grid_spots[spot[0]][spot[1]].push(entity);
+        }
+
+    }
    
+    this.requestMoveTo = function(entity,prevX,prevY,x,y){
+        var nextSpot = this.grid_spot(x,y);
+        if(this.isOccupied(nextSpot[0],nextSpot[1])){
+            return false;
+        } else {
+            var prevSpot = this.grid_spot(prevX,prevY);
+          
+            if(prevSpot[0] == nextSpot[0] && prevSpot[1] == prevSpot[1]){
+                return true;
+            }
+            if(this.grid_spots[prevSpot[0]][prevSpot[1]] instanceof Array){
+                    var index = this.grid_spots[prevSpot[0]][prevSpot[1]].indexOf(entity);
+                    if (index >= 0) {
+                        this.grid_spots[prevSpot[0]][prevSpot[1]].splice(index, 1);
+                    }
+            } 
+            
+            if(!(this.grid_spots[nextSpot[0]][nextSpot[1]] instanceof Array)){
+                this.grid_spots[nextSpot[0]][nextSpot[1]] = new Array();
+            }
+            this.grid_spots[nextSpot[0]][nextSpot[1]].push(entity);
+
+            return true;
+        }
+    }
+
+    this.getNearbyObjects = function(x,y) {
+         var spot = this.grid_spot(x,y);
+         var objectsNearby = new Array();
+         spot[0] --;
+         spot[1] --;
+         
+         for (var x = 0; x < 3; x ++) {
+            for (var y = 0; y < 3; y ++) {
+                if(!(spot[0] < 0 || spot[0] > this.grid_spots.length || spot[1] < 0 || spot[1] > this.grid_spots[0].length)){
+                    if (this.grid_spots[spot[0]][spot[1]] instanceof Array) {
+                     var currentArray = this.grid_spots[spot[0]][spot[1]];
+                        for(var i = 0; i < currentArray.length; i++) {
+                            objectsNearby.push(currentArray[i]);
+                        }
+                    }
+                }
+                spot[0]++;
+            }
+            spot[1]++;
+            spot[0]-=3;
+         }
+
+         return objectsNearby;
+    }
+
     this.hideLines = function() {
         for (var index = 0; index < gridLines.length; index++) {
             gridLines[index].visible = false;
@@ -130,17 +193,18 @@ function Grid(width, height, blocks)
     
     var texture = THREE.ImageUtils.loadTexture('Resources/Textures/grass03_0.jpg');
     var material = new THREE.MeshBasicMaterial({map: texture});
-    var plane = new THREE.PlaneGeometry(width/blocks, width/blocks);
+	var eas = 10;
+    var plane = new THREE.PlaneGeometry((width/blocks)*eas, (width/blocks)*eas);
     
-    for (var i = 0; i < blocks; i++) {
-        for (var j = 0; j < blocks; j++) {
+    for (var i = 0; i < blocks/eas; i++) {
+        for (var j = 0; j < blocks/eas; j++) {
             
             var mesh = new THREE.Mesh(plane, material);
             SCENE.add(mesh);
             this.grid_objects[j][i] = mesh;
             mesh.rotation.x = -(Math.PI/2);
-            mesh.translateZ((i*(width/blocks))+(width/blocks/2));
-            mesh.translateX((j*(width/blocks))+(width/blocks/2));
+            mesh.translateZ((i*(width/blocks)*eas)+(width/blocks)*eas/2);
+            mesh.translateX((j*(width/blocks)*eas)+(width/blocks)*eas/2);
         }
     }
 }
