@@ -17,10 +17,12 @@ function Zombie(position)
 	this.mesh.position.x = position.x;
 	this.mesh.position.y = zombie_height/2;
 	this.mesh.position.z = position.z;
+
     this.boundRadius = zombie_width;
 	SCENE.add(this.mesh);
 	
     THE_GRID.requestPlacement(this,this.position.x, this.position.y);
+
 	
 	// I would like to change damage to weapon that way we can have different zombies be vulnerable to 
 	// different types of weapons
@@ -61,6 +63,7 @@ function Zombie(position)
             return false;
         }
     }
+
 	
 	this.update = function(time) {
 		this.computeNextMove();
@@ -68,6 +71,7 @@ function Zombie(position)
 		//Compute movement based on key press
 		//	var directionPerp = new THREE.Vector3(this.direction.x*Math.cos(Math.PI/2)- this.direction.z*Math.sin(Math.PI/2),
 		//								0, this.direction.x*Math.sin(Math.PI/2)+this.direction.z*Math.cos(Math.PI/2));//just rotate by 90 degrees same direction every time
+
 		//Do y direction with a jump
 		//sideways motion
 		//var nextX = this.position.x + directionPerp.x*this.speed + this.direction.x*this.speed;
@@ -76,13 +80,13 @@ function Zombie(position)
 		var nextX = this.position.x + this.direction.x*this.speed + this.direction.x*this.speed;
 		var nextY = this.position.z + this.direction.z*this.speed + this.direction.z*this.speed;
 		
-		
-		
+
 		if(THE_GRID.requestMoveTo(this,this.position.x,this.position.z,nextX,nextY))
 		{
 			this.position.x = nextX;
 			this.position.z = nextY;
 		} 
+
 		this.draw();
 	};
 	

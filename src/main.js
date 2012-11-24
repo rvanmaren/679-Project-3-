@@ -1,5 +1,18 @@
 //Should do this on onWindowLoad?
 webGL_intialize();
+//Add the crossHair
+    var img = new THREE.MeshBasicMaterial({ //CHANGED to MeshBasicMaterial
+        map:THREE.ImageUtils.loadTexture('./resources/Textures/crosshair.png')
+    });
+    img.map.needsUpdate = true; //ADDED
+
+    // plane
+    var plane = new THREE.Mesh(new THREE.PlaneGeometry(2, 2),img);
+	plane.position.x = 2000;
+	plane.position.z = 2000;
+	plane.position.y = 23;
+    plane.overdraw = true;
+    SCENE.add(plane);
 //Initialize the mesh loader
 LOADER = new THREE.JSONLoader();
 //loadEverything

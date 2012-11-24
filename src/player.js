@@ -70,6 +70,7 @@ function Player(position)
 	    this.direction = this.direction.normalize();
 
 	}
+
 	this.update = function(time) {
 
 		if(this.level){

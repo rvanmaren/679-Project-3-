@@ -21,6 +21,8 @@ function Bullet(position, dir) {
 
     this.damage = 10;
 
+	SCENE.add(this.mesh);
+
     this.update = function (time) {
 
     	var directionPerp = new THREE.Vector3(this.direction.x*Math.cos(Math.PI/2)- this.direction.z*Math.sin(Math.PI/2),
@@ -32,18 +34,21 @@ function Bullet(position, dir) {
 	
 
         var nextX = this.mesh.position.x + this.direction.x * this.speed;
-        var nextY = this.mesh.position.z + this.direction.z *  this.speed;
-        var temp = THE_GRID.grid_spot(nextX, nextY);
+        var nextZ = this.mesh.position.z + this.direction.z *  this.speed;
+		var nextY = this.mesh.position.y + this.direction.y * this.speed;
+        var temp = THE_GRID.grid_spot(nextX, nextZ);
 
         if (!THE_GRID.isOccupied(temp[0], temp[1])) {
             this.mesh.position.x = nextX;
-            this.mesh.position.z = nextY;
+            this.mesh.position.z = nextZ;
+			this.mesh.position.y = nextY;
         } else {
-            this.destroy();
+			//check for height!
+           this.destroy();
         }
     };
 
-    this.destroy = function() {
+     this.destroy = function() {
         SCENE.remove(this.mesh);
         BULLETS.splice(BULLETS.indexOf(this),1);
     }
