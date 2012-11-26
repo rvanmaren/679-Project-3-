@@ -5,35 +5,41 @@ LOADER = new THREE.JSONLoader();
 //loadEverything
 loadGeometry('./resources/rifle/rifle_0.js', "gun");
 //loadGeometry('./resources/fence/fence.js', "fence");
-function show_image(src, width, height, id, posX, posY) {
+function add_image(src, id, posX, posY, visible) {
     var img = document.createElement("img");
     img.src = src;
-    img.width = width;
-    img.height = height;
     img.setAttribute("id", id);
-    
 	img.style.cssText = 'position: absolute; left: '+posX+'px; top: '+posY+'px;';
+	img.style.visibility = visible;
     // This next line will just add it to the <body> tag
     document.body.appendChild(img);
 }
-show_image('./resources/Textures/crosshair.png',95,95,'crossHair',WINDOW_WIDTH/2-95/2,WINDOW_HEIGHT/2-95/2);
+add_image('./resources/intro.png', 'intro', WINDOW_WIDTH/2-200,WINDOW_HEIGHT/2-100, 'hidden');
+add_image('./resources/Textures/crosshair.png','crossHair',WINDOW_WIDTH/2-95/2,WINDOW_HEIGHT/2-95/2, 'hidden');
+add_image('./resources/loading.png','loading',WINDOW_WIDTH/2-95/2,WINDOW_HEIGHT/2-95/2, '');
+
+function add_text(text, id, posX, posY, visible) {
+    var ele = document.createElement("p");
+	ele.innerHTML = text;
+    ele.setAttribute("id", id);
+	ele.style.cssText = 'position: absolute; left: '+posX+'px; top: '+posY+'px;';
+	ele.style.visibility = visible;
+    // This next line will just add it to the <body> tag
+    document.body.appendChild(ele);
+}
+//Add game score text and tags
+add_text("Score:100",'score',20,20, 'hidden');
 
 var havePointerLock;
-function initalize_game()
-{
-    GAME = new Game();
-	havePointerLock = 'pointerLockElement' in document;
-	
-	// Hook pointer lock state change events
-	document.body.addEventListener('pointerlockchange', mouseLockChange, false);
+document.body.addEventListener("mousemove", this.moveCallback, false);
+window.addEventListener("mousedown", this.mouse_down, false);
+window.addEventListener("mouseup", this.mouse_up, false);
+havePointerLock = 'pointerLockElement' in document;
+// Hook pointer lock state change events
+document.body.addEventListener('pointerlockchange', mouseLockChange, false);
+window.addEventListener( 'keyup', key_up, false );
+window.addEventListener( 'keydown', key_down, false );
 
-	// Hook mouse move events
-	document.body.addEventListener("mousemove", this.moveCallback, false);
-	window.addEventListener("mousedown", this.mouse_down, false);
-	window.addEventListener("mouseup", this.mouse_up, false);
-	window.addEventListener( 'keyup', key_up, false );
-	window.addEventListener( 'keydown', key_down, false );
-}
 function render() {
 	RENDERER.render( SCENE, CAMERA );
 }
@@ -45,49 +51,61 @@ function animloop(){
 };
 function loadLoop()
 {
-	if(GEOMETRIES.length ==1 )
+	if(GEOMETRIES.length == NUM_GEOMETRIES )
 	{
-		initalize_game();
-		animloop();
+	    document.getElementById("loading").style.visibility= 'hidden';
+		//Display Intro Screen
+		document.getElementById("intro").style.visibility= '';
+		GAME_LOADED = true;
 	}
 	else
 	{
+	    //keep waiting till everythings loaded
 		window.requestAnimFrame(loadLoop);
 	}
 }
 loadLoop();
-	
-function goFullScreen() {
-    var	el = document.documentElement
-        , rfs =el.requestFullScreen;
-    rfs.call(el);	
-}
 function key_down(keyEvt)
 {
 	switch (event.keyCode){	
-		case 70:
-			goFullScreen();		
-			break;
 		case 71:
 			// Ask the browser to lock the pointer
 			document.body.requestPointerLock();
 			break;
 		default:
-			GAME.key_down(keyEvt);
+		    if(GAME_STARTED)
+				GAME.key_down(keyEvt);
 			break;
 	}
 }
 function key_up(keyEvt)
 {
+    if(GAME_STARTED)
 	GAME.key_up(keyEvt);
 }
 function mouse_down(event)
 {
-	GAME.mouse_down();
+    if(GAME_STARTED)
+	{
+	    GAME.mouse_down();
+	}
+	else
+	{
+	    if(GAME_LOADED)
+		{
+		    GAME_STARTED = true;
+			document.getElementById("intro").style.visibility= 'hidden';
+			GAME = new Game();
+			animloop();
+		}
+	}
 }
 function mouse_up(event)
 {
-	GAME.mouse_up();
+    if(GAME_STARTED)
+	{
+	    GAME.mouse_up();
+	}
 }
 document.body.requestPointerLock = document.body.requestPointerLock ||
 	document.body.mozRequestPointerLock ||
@@ -116,7 +134,10 @@ function moveCallback(e) {
   MOUSE_Y = e.movementY ||
       e.webkitMovementY   ||
       0;
-   	GAME.mouseMovement(MOUSE_X,MOUSE_Y);
+	if(GAME_STARTED)
+	{
+   	    GAME.mouseMovement(MOUSE_X,MOUSE_Y);
+    }
 	MOUSE_X = 0;
 	MOUSE_Y = 0;
 }

@@ -5,6 +5,9 @@ var MOUSE_X = 0;
 var MOUSE_Y = 0;
 var LOADER;
 
+var GAME_STARTED = false;
+var GAME_LOADED = false;
+
 var THE_GRID;
 var GAME;
 /*WEBGL GLOBALS*/
@@ -24,6 +27,7 @@ var ZOMBIES = new Array();
 var GUN_MESH = 0;
 var FENCE_MESH = 1;
 var GEOMETRIES = new Array();
+var NUM_GEOMETRIES  = 1;
 function load( geometry,id) {  
 		//var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial({overdraw: true}));   
 		GEOMETRIES.push(geometry);
