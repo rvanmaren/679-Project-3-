@@ -30,15 +30,17 @@ function Night()
 	}
 	
 	this.initLevel = function(){
-			this.level = new Level();
+		this.level = new Level();
 	}
 	
 	this.switchInto = function(){
 		this.initLevel();
+		document.getElementById("crossHair").style.visibility= '';
 	}
 
 	this.switchOut = function(){
 		this.level.exitLevel();
+		document.getElementById("crossHair").style.visibility= 'hidden';
 	}
 
 	this.update = function (time) {

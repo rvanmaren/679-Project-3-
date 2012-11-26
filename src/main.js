@@ -1,23 +1,23 @@
 //Should do this on onWindowLoad?
 webGL_intialize();
-//Add the crossHair
-    var img = new THREE.MeshBasicMaterial({ //CHANGED to MeshBasicMaterial
-        map:THREE.ImageUtils.loadTexture('./resources/Textures/crosshair.png')
-    });
-    img.map.needsUpdate = true; //ADDED
-
-    // plane
-    var plane = new THREE.Mesh(new THREE.PlaneGeometry(2, 2),img);
-	plane.position.x = 2000;
-	plane.position.z = 2000;
-	plane.position.y = 23;
-    plane.overdraw = true;
-    SCENE.add(plane);
 //Initialize the mesh loader
 LOADER = new THREE.JSONLoader();
 //loadEverything
 loadGeometry('./resources/rifle/rifle_0.js', "gun");
 //loadGeometry('./resources/fence/fence.js', "fence");
+function show_image(src, width, height, id, posX, posY) {
+    var img = document.createElement("img");
+    img.src = src;
+    img.width = width;
+    img.height = height;
+    img.setAttribute("id", id);
+    
+	img.style.cssText = 'position: absolute; left: '+posX+'px; top: '+posY+'px;';
+    // This next line will just add it to the <body> tag
+    document.body.appendChild(img);
+}
+show_image('./resources/Textures/crosshair.png',95,95,'crossHair',WINDOW_WIDTH/2-95/2,WINDOW_HEIGHT/2-95/2);
+
 var havePointerLock;
 function initalize_game()
 {

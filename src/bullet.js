@@ -14,7 +14,7 @@ function Bullet(position, dir) {
     });
 	this.mesh = new THREE.Mesh( new THREE.CubeGeometry( 2,2,2, 2, 2, 2), material);
 	this.mesh.position.x = position.x;
-	this.mesh.position.y = 20;
+	this.mesh.position.y = position.y;
 	this.mesh.position.z = position.z;
     this.boundRadius = 2;
 	SCENE.add(this.mesh);
