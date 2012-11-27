@@ -1,7 +1,3 @@
-function length(vec)
-{
-	return Math.sqrt(vec.x*vec.x+vec.z*vec.z);
-}
 
 function Gun(position, direction)
 {
