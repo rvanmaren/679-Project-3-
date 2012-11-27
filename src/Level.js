@@ -3,7 +3,7 @@ function Level(levelNum)
 {
     ZOMBIES = new Array();
 	var totalZombies = levelNum*2; //for now
-	for(var i=0; i<totalZombies; i++)
+	for(var i=0; i<100; i++)
 	{
 	    ZOMBIES.push(new Zombie(new THREE.Vector3(Math.random()*GRID_WIDTH, 30, Math.random()*GRID_WIDTH)));
 	}
