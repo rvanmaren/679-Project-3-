@@ -153,33 +153,61 @@ function Zombie(position)
             return false;
         }
     }
-var clock = new THREE.Clock();
-	this.animOffset       = 6  // starting frame of animation
-	duration        = 1000, // milliseconds to complete animation
-	keyframes       = 6,   // total number of animation frames
-	interpolation   = duration / keyframes; // milliseconds per frame
-	this.lastKeyframe    = 0;  // previous keyframe
-	this.currentKeyframe = 0;
-	this.animRandom = Math.round(Math.random()*4);
+    var clock = new THREE.Clock();
+	/*ANIMATION VARIABLES*/
+	/*WALKING*/
+	this.walkingOffset       = 6  // starting frame of animation
+	this.waklingDuration        = 1000, // milliseconds to complete animation
+	this.walkingKeyframes       = 6,   // total number of animation frames
+	this.walkingInterpolation   = this.waklingDuration / this.walkingKeyframes; // milliseconds per frame
+	this.walkingLastKeyframe    = 0;  // previous keyframe
+	this.walkingcurrentKeyframe = 0;
+	this.WalkingRandom = Math.round(Math.random()*4);
+	/*ATTACK*/
+	this.attackOffset       = 12  // starting frame of animation
+	this.attackDuration        = 1000, // milliseconds to complete animation
+	this.attackKeyframes       = 6,   // total number of animation frames
+	this.attackInterpolation   = this.attackDuration  / this.attackKeyframes; // milliseconds per frame
+	this.attackLastKeyframe    = 0;  // previous keyframe
+	this.attackcurrentKeyframe = 0;
+	/*DEATH (coming soon)*/
+	/***********************************************************************************************/
 	
 	this.update = function(time) {
 		this.computeNextMove();
 	    // Alternate morph targets
-		time = (new Date().getTime()+interpolation*this.animRandom) % duration;
 		if(this.state == WALKING) {
-		keyframe = Math.floor( time / interpolation ) + this.animOffset;
-		if ( keyframe != this.currentKeyframe ) 
-		{
-			this.mesh.morphTargetInfluences[ this.lastKeyframe ] = 0;
-			this.mesh.morphTargetInfluences[ this.currentKeyframe ] = 1;
-			this.mesh.morphTargetInfluences[ keyframe ] = 0;
-			this.lastKeyframe = this.currentKeyframe;
-			this.currentKeyframe = keyframe;
+			time = (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.waklingDuration;
+			keyframe = Math.floor( time / this.walkingInterpolation ) + this.walkingOffset;
+			if ( keyframe != this.walkingcurrentKeyframe ) 
+			{
+				this.mesh.morphTargetInfluences[ this.walkingLastKeyframe ] = 0;
+				this.mesh.morphTargetInfluences[ this.walkingcurrentKeyframe ] = 1;
+				this.mesh.morphTargetInfluences[ keyframe ] = 0;
+				this.walkingLastKeyframe = this.walkingcurrentKeyframe;
+				this.walkingcurrentKeyframe = keyframe;
+			}
+			this.mesh.morphTargetInfluences[ keyframe ] = 
+				( time % this.walkingInterpolation ) / this.walkingInterpolation;
+			this.mesh.morphTargetInfluences[ this.walkingLastKeyframe ] = 
+				1 - this.mesh.morphTargetInfluences[ keyframe ];
 		}
-		this.mesh.morphTargetInfluences[ keyframe ] = 
-			( time % interpolation ) / interpolation;
-		this.mesh.morphTargetInfluences[ this.lastKeyframe ] = 
-			1 - this.mesh.morphTargetInfluences[ keyframe ];
+		if(this.state == ATTACKING)
+		{
+		    time = (new Date().getTime()+this.attackInterpolation) % this.attackDuration;
+		    keyframe = Math.floor( time / this.attackInterpolation ) + this.attackOffset;
+			if ( keyframe != this.attackcurrentKeyframe ) 
+			{
+				this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 0;
+				this.mesh.morphTargetInfluences[ this.attackcurrentKeyframe ] = 1;
+				this.mesh.morphTargetInfluences[ keyframe ] = 0;
+				this.attackLastKeyframe = this.attackcurrentKeyframe;
+				this.attackcurrentKeyframe = keyframe;
+			}
+			this.mesh.morphTargetInfluences[ keyframe ] = 
+				( time % this.attackInterpolation ) / this.attackInterpolation;
+			this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 
+				1 - this.mesh.morphTargetInfluences[ keyframe ];
 		}
 		this.mesh.rotation.y = this.ang;
 		//Rotate to face direction 
@@ -198,9 +226,11 @@ var clock = new THREE.Clock();
 		
 		if(distance < attack_distance){
 			this.state = ATTACKING;
+			this.mesh.morphTargetInfluences[ this.walkingcurrentKeyframe ] = 0;
 		}
 		else {
 			this.state = WALKING;
+			this.mesh.morphTargetInfluences[ this.attackcurrentKeyframe ] = 0;
 			var nextX = this.position.x + this.direction.x*this.speed + this.direction.x*this.speed;
 			var nextY = this.position.z + this.direction.z*this.speed + this.direction.z*this.speed;
 		
