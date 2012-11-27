@@ -171,7 +171,7 @@ var clock = new THREE.Clock();
 		if ( keyframe != this.currentKeyframe ) 
 		{
 			this.mesh.morphTargetInfluences[ this.lastKeyframe ] = 0;
-			this.mesh.morphTargetInfluences[ this.currentKeyframe ] = 1;ssssss
+			this.mesh.morphTargetInfluences[ this.currentKeyframe ] = 1;
 			this.mesh.morphTargetInfluences[ keyframe ] = 0;
 			this.lastKeyframe = this.currentKeyframe;
 			this.currentKeyframe = keyframe;
