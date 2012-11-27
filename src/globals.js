@@ -19,7 +19,7 @@ var FOV = 40;
 /*PLAYER GLOBALS*/
 var PLAYER;
 var P_ROTATE = .5;
-var P_SPEED = 2;
+var P_SPEED = 4;
 /*ZOMBIE GLOBALS*/
 var ZOMBIES = new Array();
 
@@ -52,3 +52,16 @@ var NUM_BOXES = 1000;
 /*BULLET GLOBALS*/
 var BULLET_SPEED = 10;
 var BULLETS = new Array();
+
+function length(vec)
+{
+	return Math.sqrt(vec.x*vec.x+vec.z*vec.z);
+}
+
+function dotProduct(vec1,vec2)
+{
+     var l1 = length(vec1);
+	 var l2 = length(vec2);
+	 
+	 return Math.acos((vec1.x*vec2.x+vec1.z*vec2.z)/(l1*l2))
+}
