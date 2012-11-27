@@ -4,7 +4,7 @@ var LEFT = 2;
 var RIGHT = 3;
 var builderSpeed = 2;
 var zoomSpeed = 10;
-var buildingNumber = 500;
+var buildingNumber = 0;
 function Builder_Target(position)
 {
 	this.targetMaterial = new THREE.MeshLambertMaterial(
@@ -150,7 +150,7 @@ function Day(position)
 				break;
         }
     };
-    this.switchInto = function () {
+    this.switchInto = function (buildAmount) {
         this.position.x = PLAYER.position.x;
         this.position.z = PLAYER.position.z;
         this.playerMarker.position.set(PLAYER.position.x, 1, PLAYER.position.z);
@@ -158,8 +158,9 @@ function Day(position)
         this.target.setPosition(PLAYER.position.x, this.target.position().y, PLAYER.position.z);
         this.playerMarker.visible = true;
         THE_GRID.showLines();
-		this.blocksLeft = buildingNumber;
+		this.blocksLeft += buildAmount;
 		this.doneBuilding = false;
+		document.getElementById("bUnits").style.visibility= '';
     }
 
     this.switchOut = function () {
@@ -167,6 +168,7 @@ function Day(position)
 		this.target.hide();
 		this.building = false;
         THE_GRID.hideLines();
+		document.getElementById("bUnits").style.visibility= 'hidden';
     }
 
 	this.mouseMovement = function(mouseMoveX, mouseMoveY)
@@ -174,22 +176,34 @@ function Day(position)
 		this.target.mouseMove(mouseMoveX, mouseMoveY);
 		if(this.building)
 		{
-			if(this.blocksLeft)
+			if(this.blocksLeft ||this.mode == "remove" )
 			{
 				var built = THE_GRID.handle_command(new Build_Command(this.mode,this.type,this.target.position().x,this.target.position().z));
-				if(built)
+				if(built && this.mode != "remove" )
+				{
 					this.blocksLeft--;
+				}
+				if(built && this.mode == "remove")
+				{
+				    this.blocksLeft++;
+				}
 			}
 		}
 	}
 	this.mouse_down = function()
 	{
 		this.building=true;
-		if(this.blocksLeft)
+		if(this.blocksLeft ||this.mode == 'remove')
 		{
 			var built = THE_GRID.handle_command(new Build_Command(this.mode,this.type,this.target.position().x,this.target.position().z));
-			if(built)
+			if(built && this.mode != 'remove' )
+			{
 				this.blocksLeft--;
+			}
+			if(built && this.mode == 'remove')
+			{
+			    this.blocksLeft++;
+			}
 		}				
 	}
 	this.mouse_up = function()
@@ -198,6 +212,7 @@ function Day(position)
 	}
 	this.update = function(time)
 	{
+	    document.getElementById("bUnits").innerHTML = 'Build Units: '+this.blocksLeft;
 		var forward = this.keys[UP] ? (this.keys[DOWN] ? 0 : 1) : (this.keys[DOWN] ? -1 : 0); //1,0,-1
 		var sideways = this.keys[RIGHT] ? (this.keys[LEFT] ? 0 : 1) : (this.keys[LEFT] ? -1 : 0);
 		

@@ -60,7 +60,7 @@ function Game()
 					this.gameState = this.night;
 				}
 				else {
-					this.day.switchInto();
+					this.day.switchInto(THE_GRID.computeBuildBlocks());
 					this.night.switchOut();
 					this.gameState = this.day;
 				}

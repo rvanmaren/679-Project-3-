@@ -45,6 +45,9 @@ function Night()
 	this.switchOut = function(){
 		this.level.exitLevel();
 		document.getElementById("crossHair").style.visibility= 'hidden';
+		document.getElementById("score").style.visibility= 'hidden';
+		document.getElementById("health").style.visibility= 'hidden';
+		document.getElementById("bullets").style.visibility= 'hidden';
 	}
 
 	this.update = function (time) {
