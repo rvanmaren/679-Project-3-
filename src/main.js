@@ -2,7 +2,8 @@
 webGL_intialize();
 //Initialize the mesh loader
 LOADER = new THREE.JSONLoader();
-//LOADERC = new THREE.ColladaLoader();
+LOADERC = new THREE.ColladaLoader();
+//LOADERC.load ('./resources/monster.dae',function(collada){COLLADAS.push(collada.scene);});
 //loadEverything
 //loadGeometryCollada('./resources/LongHouse.dae')
 loadGeometry('./resources/rifle/rifle_0.js', "gun");
@@ -58,12 +59,17 @@ function animloop(){
 };
 function loadLoop()
 {
-	if(GEOMETRIES.length == NUM_GEOMETRIES )
+	if(GEOMETRIES.length == NUM_GEOMETRIES && COLLADAS.length == 0)
 	{
 	    document.getElementById("loading").style.visibility= 'hidden';
 		//Display Intro Screen
 		document.getElementById("intro").style.visibility= '';
 		GAME_LOADED = true;
+		//COLLADAS[0].position.x = 2300;
+//COLLADAS[0].position.y = 20;
+//COLLADAS[0].position.z = 2300;
+//console.log(COLLADAS[0]);
+//SCENE.add(COLLADAS[0]);
 	}
 	else
 	{

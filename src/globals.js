@@ -27,10 +27,15 @@ var ZOMBIES = new Array();
 var GUN_MESH = 0;
 var ZOMBIE_MESH = 1;
 var GEOMETRIES = new Array();
+var COLLADAS = new Array();
 var NUM_GEOMETRIES  = 2;
 function load( geometry,id) {  
 		//var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial({overdraw: true}));   
 		GEOMETRIES.push(geometry);
+};
+function loadC(collada) {  
+		//var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial({overdraw: true}));   
+		COLLADAS.push(collada.scene);
 };
 function load_anim( geometry,id) {  
 		//var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial({overdraw: true}));   
@@ -46,6 +51,7 @@ function loadGeometry_anim(meshToLoad, id) {
 }
 function loadGeometryCollada(meshToLoad)
 {
+    LOADERC.load (meshToLoad,function(collada){loadC(collada)});
 }
 /*GRID GLOBALS*/
 var GRID_HEIGHT = 10000;
