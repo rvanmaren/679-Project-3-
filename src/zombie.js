@@ -13,10 +13,11 @@ function Zombie(position)
 	var material = new THREE.MeshNormalMaterial({
         color: 0x00FF00,
     });
-	this.mesh = new THREE.Mesh( new THREE.CubeGeometry( zombie_width, zombie_height, zombie_width, 2, 2, 2), material);
+	this.mesh = new THREE.Mesh(GEOMETRIES[ZOMBIE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.position.x = position.x;
-	this.mesh.position.y = zombie_height/2;
+	this.mesh.position.y = -.1;
 	this.mesh.position.z = position.z;
+	this.mesh.scale.set(20,20,20);
 
     this.boundRadius = zombie_width;
 	SCENE.add(this.mesh);
@@ -39,7 +40,7 @@ function Zombie(position)
 	
 	this.draw = function(){
 		this.mesh.position.x = position.x;
-		this.mesh.position.y = position.y;
+		this.mesh.position.y = -.1;
 		this.mesh.position.z = position.z;
 	}
 	
@@ -62,10 +63,31 @@ function Zombie(position)
             return false;
         }
     }
-
-	
+var clock = new THREE.Clock();
+	var animOffset       = 6,   // starting frame of animation
+	duration        = 1000, // milliseconds to complete animation
+	keyframes       = 6,   // total number of animation frames
+	interpolation   = duration / keyframes, // milliseconds per frame
+	lastKeyframe    = 0,    // previous keyframe
+	currentKeyframe = 0;
 	this.update = function(time) {
 		this.computeNextMove();
+		
+	    // Alternate morph targets
+		time = new Date().getTime() % duration;
+		keyframe = Math.floor( time / interpolation ) + animOffset;
+		if ( keyframe != currentKeyframe ) 
+		{
+			this.mesh.morphTargetInfluences[ lastKeyframe ] = 0;
+			this.mesh.morphTargetInfluences[ currentKeyframe ] = 1;
+			this.mesh.morphTargetInfluences[ keyframe ] = 0;
+			lastKeyframe = currentKeyframe;
+			currentKeyframe = keyframe;
+		}
+		this.mesh.morphTargetInfluences[ keyframe ] = 
+			( time % interpolation ) / interpolation;
+		this.mesh.morphTargetInfluences[ lastKeyframe ] = 
+			1 - this.mesh.morphTargetInfluences[ keyframe ];
 		//Move in the direction of looking.
 		//Compute movement based on key press
 		//	var directionPerp = new THREE.Vector3(this.direction.x*Math.cos(Math.PI/2)- this.direction.z*Math.sin(Math.PI/2),

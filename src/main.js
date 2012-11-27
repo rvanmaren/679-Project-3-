@@ -4,6 +4,7 @@ webGL_intialize();
 LOADER = new THREE.JSONLoader();
 //loadEverything
 loadGeometry('./resources/rifle/rifle_0.js', "gun");
+loadGeometry_anim('./resources/skeleton_0.js', "zombie");
 //loadGeometry('./resources/fence/fence.js', "fence");
 function add_image(src, id, posX, posY, visible) {
     var img = document.createElement("img");
