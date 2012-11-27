@@ -3,27 +3,19 @@ var zombie_width = 10;
 function Zombie(position)
 {
 	this.position = position;
-	
-<<<<<<< HEAD
-	this.direction = new THREE.Vector3(0,0,1);
-	this.speed = 3;
+	this.speed = 1;
     this.rotationSpeed = .5;
 	this.health = 100;
 	this.target = PLAYER;
 	this.targetForMove = new THREE.Vector3(0,0,0);
 	this.frame = 0;
-=======
-	this.speed = 1.5;
-    this.rotationSpeed = .5;
-	this.health = 100;
-	this.target = PLAYER;
+
 	this.direction =new THREE.Vector3(this.target.position.x - this.position.x
 										,this.target.position.y - this.position.y,
 										 this.target.position.z - this.position.z);
     this.ang  = dotProduct(this.direction, new THREE.Vector3(0,0,1));
 	if(this.direction.z<0)
 	 this.ang = -1*this.ang;
->>>>>>> 5225cb07b84f7fc00ef3a0650ec81ecd37aecfcb
 	var material = new THREE.MeshNormalMaterial({
         color: 0x00FF00,
     });
@@ -43,12 +35,7 @@ function Zombie(position)
 		this.health -= damage;
 	};
 	this.computeNextMove = function(){
-<<<<<<< HEAD
-		
-		this.direction.x = PLAYER.position.x - this.position.x
-		this.direction.y = PLAYER.position.y - this.position.y
-		this.direction.z = PLAYER.position.z - this.position.z
-=======
+
 		var newDirX = this.target.position.x - this.position.x;
 		var newDirZ = this.target.position.Z - this.position.Z;
 		var newDir = new THREE.Vector3(this.target.position.x - this.position.x
@@ -68,7 +55,6 @@ function Zombie(position)
 		this.direction.x = newDir.x
 		this.direction.y = newDir.y;
 		this.direction.z = newDir.z
->>>>>>> 5225cb07b84f7fc00ef3a0650ec81ecd37aecfcb
 		this.direction.normalize();
 		var nextX = this.position.x + this.direction.x*zombie_width/2 + this.direction.x*zombie_width/2;
 		var nextY = this.position.z + this.direction.z*zombie_width/2 + this.direction.z*zombie_width/2;
@@ -165,15 +151,6 @@ var clock = new THREE.Clock();
 	currentKeyframe = 0;
 	this.update = function(time) {
 		this.computeNextMove();
-<<<<<<< HEAD
-	
-	/*	if(this.frame > 60){
-			this.frame = 0;
-			this.computeNextMove();
-		}
-		this.frame++;*/
-=======
-		
 	    // Alternate morph targets
 		time = new Date().getTime() % duration;
 		keyframe = Math.floor( time / interpolation ) + animOffset;
@@ -193,8 +170,7 @@ var clock = new THREE.Clock();
 		this.mesh.rotation.y = this.ang;
 		//Rotate to face direction 
 		//this.mesh.rotation.y = Math.atan((PLAYER.position.x-this.position.x),(PLAYER.position.z-this.position.z))*(180/Math.PI);
->>>>>>> 5225cb07b84f7fc00ef3a0650ec81ecd37aecfcb
-		//Move in the direction of looking.
+	//Move in the direction of looking.
 		//Compute movement based on key press
 		//	var directionPerp = new THREE.Vector3(this.direction.x*Math.cos(Math.PI/2)- this.direction.z*Math.sin(Math.PI/2),
 		//								0, this.direction.x*Math.sin(Math.PI/2)+this.direction.z*Math.cos(Math.PI/2));//just rotate by 90 degrees same direction every time
