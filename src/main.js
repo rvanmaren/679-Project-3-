@@ -107,7 +107,8 @@ function mouse_down(event)
 	    if(GAME_LOADED)
 		{
 		    GAME_STARTED = true;
-			document.getElementById("intro").style.visibility= 'hidden';
+		    document.getElementById("intro").style.visibility = 'hidden';
+		    document.body.requestPointerLock();
 			GAME = new Game();
 			animloop();
 		}

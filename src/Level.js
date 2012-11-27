@@ -19,7 +19,7 @@ function Level(levelNum)
 	
 	this.exitLevel = function(){
 		for(var i = 0; i < ZOMBIES.length; i++){
-			ZOMBIES[i].kill();
+			SCENE.remove(ZOMBIES[i].mesh);
 		}
 		ZOMBIES = new Array();
 	}
