@@ -28,7 +28,11 @@ function add_text(text, id, posX, posY, visible) {
     document.body.appendChild(ele);
 }
 //Add game score text and tags
-add_text("Score:100",'score',20,20, 'hidden');
+add_text("Score:",'score',20,20, 'hidden');
+add_text("Health:",'health',20,40, 'hidden');
+add_text("Bullets:",'bullets',20,60, 'hidden');
+add_text("Level:",'level',80,20, 'hidden');
+add_text("Build Units:",'bUnits',20,100, 'hidden');
 
 var havePointerLock;
 document.body.addEventListener("mousemove", this.moveCallback, false);

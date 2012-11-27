@@ -20,8 +20,7 @@ function Zombie(position)
 
     this.boundRadius = zombie_width;
 	SCENE.add(this.mesh);
-	
-    THE_GRID.requestPlacement(this,this.position.x, this.position.y);
+    THE_GRID.requestPlacement(this,this.position.x, this.position.z);
 
 	
 	// I would like to change damage to weapon that way we can have different zombies be vulnerable to 
@@ -47,7 +46,7 @@ function Zombie(position)
 	this.kill = function(){
         index = ZOMBIES.indexOf(this);
         if (index >= 0 && index < ZOMBIES.length) {
-            ZOMBIES.splice(index);
+            ZOMBIES.splice(index,1);
         }
 
 		SCENE.remove(this.mesh);

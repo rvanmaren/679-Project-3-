@@ -1,8 +1,8 @@
 
 function Night()
 {
-	this.level = new Level();
-	this.keys  = [false,false,false,false];
+	this.level;
+	
 	this.mouse_down = function(keyEvent)
 	{
 		PLAYER.mouse_down(keyEvent);
@@ -30,12 +30,16 @@ function Night()
 	}
 	
 	this.initLevel = function(){
-		this.level = new Level();
+		this.level = new Level(2);
 	}
 	
 	this.switchInto = function(){
-		this.initLevel();
+		this.initLevel(2);
+		PLAYER.keys  = [false,false,false,false];
 		document.getElementById("crossHair").style.visibility= '';
+		document.getElementById("score").style.visibility= '';
+		document.getElementById("health").style.visibility= '';
+		document.getElementById("bullets").style.visibility= '';
 	}
 
 	this.switchOut = function(){
@@ -54,7 +58,7 @@ function Night()
 	};
 	this.finished = function()
 	{
-		if(this.level.zombies.length == 0)
+		if(ZOMBIES.length == 0)
 		{
 			return true;
 		}

@@ -85,14 +85,14 @@ function Grid(width, height, blocks)
     * This is used for objects that are not static (Zombies)
     */
     this.requestPlacement = function(entity, x, y){
-        if(this.isOccupied(x,y)){
+	    var spot = this.grid_spot(x,y);
+        if(this.isOccupied(spot[0],spot[1])){
             return false;
         } else {
-            var spot = this.grid_spot(x,y);
-            if(grid_spots[spot[0]][spot[1]] == EMPTY){
-               grid_spots[spot[0]][spot[1]] = new Array();
+            if(this.grid_spots[spot[0]][spot[1]] == EMPTY){
+               this.grid_spots[spot[0]][spot[1]] = new Array();
             }
-            grid_spots[spot[0]][spot[1]].push(entity);
+            this.grid_spots[spot[0]][spot[1]].push(entity);
         }
 
     }

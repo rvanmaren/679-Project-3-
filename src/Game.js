@@ -10,7 +10,16 @@ function Game()
 	this.skybox = new Skybox();
 	this.night = new Night();
 	this.day = new Day(new THREE.Vector3(2000, 400, 2000));
-	this.gameState = this.night;
+	this.currentLevel=1;
+	
+	//Start in the night
+    this.gameState = this.night;
+	this.night.switchInto(this.currentLevel);
+	
+	this.score = 0;
+	
+	//Display level
+	document.getElementById("level").style.visibility= '';
 	//timing for state switching. We will wait until there are no more zombies
 	//And have a variable for the amount you can build in a round
 	this.key_down = function(keyEvt)
@@ -19,7 +28,7 @@ function Game()
 			case 84: //toggle debug
 				if (this.gameState == this.day) {
 					this.day.switchOut();
-					this.night.switchInto();
+					this.night.switchInto(this.currentLevel);
 					this.gameState = this.night;
 				}
 				else {
@@ -41,11 +50,13 @@ function Game()
 	{
 		this.gameState.update(10);
 		//Check if we need to toggle
+		document.getElementById("level").innerHTML = 'Level: '+this.currentLevel;
 		if(this.gameState.finished())
 		{
 				if (this.gameState == this.day) {
+				    this.currentLevel++;
 					this.day.switchOut();
-					this.night.switchInto();
+					this.night.switchInto(this.currentLevel);
 					this.gameState = this.night;
 				}
 				else {
