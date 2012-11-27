@@ -59,7 +59,7 @@ function animloop(){
 };
 function loadLoop()
 {
-	if(GEOMETRIES.length == NUM_GEOMETRIES && COLLADAS.length == 1)
+	if(GEOMETRIES.length == NUM_GEOMETRIES && COLLADAS.length == 0)
 	{
 	    document.getElementById("loading").style.visibility= 'hidden';
 		//Display Intro Screen
