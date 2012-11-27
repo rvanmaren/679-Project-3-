@@ -39,9 +39,20 @@ function Grid(width, height, blocks)
 		arry.push(xSpot);
 		return arry;
 	}
+	
+	
+	this.coordinatesFromSpot = function(xSpot,ySpot)
+	{
+		var arry = new Array();	
+		var x = ySpot*(this.height/ this.blocks)
+		var y = xSpot*(this.height/ this.blocks)
+		arry.push(y);
+		arry.push(x);
+		return arry;
+	}
 	this.isOccupied = function(x,y)
 	{
-        if(x < 0 || x > this.grid_spots.length || y < 0 || y > this.grid_spots[0].length){
+        if(x < 0 || x >= this.grid_spots.length || y < 0 || y >= this.grid_spots[0].length){
             return true;
         }
 		if(this.grid_spots[x][y] == EMPTY || this.grid_spots[x][y] instanceof Array)
@@ -51,7 +62,7 @@ function Grid(width, height, blocks)
 	}
 	this.computeBuildBlocks = function()
 	{
-	    return 5;
+	    return 50;
 	}
 	this.handle_command = function(buildCMD)
 	{
