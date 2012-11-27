@@ -78,7 +78,7 @@ function Night()
             curBullet = BULLETS[bulletIndex];
             for (var zombieIndex = 0; zombieIndex < ZOMBIES.length; zombieIndex++) {
 
-                if (curBullet.mesh.position.clone().subSelf(ZOMBIES[zombieIndex].mesh.position).length() < curBullet.boundRadius + ZOMBIES[zombieIndex].boundRadius) {
+                if (curBullet.mesh.position.clone().subSelf(ZOMBIES[zombieIndex].position).length() < curBullet.boundRadius + ZOMBIES[zombieIndex].boundRadius) {
                     //We need to be concious of whether the damage taken results in removal of the zombie 
                     // from the array and adjust our index accordingly
                     if (ZOMBIES[zombieIndex].takeDamage(curBullet.damage)) {

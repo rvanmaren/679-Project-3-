@@ -213,7 +213,7 @@ function Grid(width, height, blocks)
         gridLines.push(line);
 	}
     
-    var texture = THREE.ImageUtils.loadTexture('Resources/Textures/grass03_0.jpg');
+    var texture = THREE.ImageUtils.loadTexture('Resources/Textures/dirt1.png');
     var material = new THREE.MeshBasicMaterial({map: texture});
 	var eas = 10;
     var plane = new THREE.PlaneGeometry((width/blocks)*eas, (width/blocks)*eas);
