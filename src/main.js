@@ -2,7 +2,9 @@
 webGL_intialize();
 //Initialize the mesh loader
 LOADER = new THREE.JSONLoader();
+//LOADERC = new THREE.ColladaLoader();
 //loadEverything
+//loadGeometryCollada('./resources/LongHouse.dae')
 loadGeometry('./resources/rifle/rifle_0.js', "gun");
 loadGeometry_anim('./resources/skeleton_0.js', "zombie");
 //loadGeometry('./resources/fence/fence.js', "fence");

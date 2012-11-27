@@ -4,7 +4,7 @@ var WINDOW_WIDTH = window.innerWidth;
 var MOUSE_X = 0;
 var MOUSE_Y = 0;
 var LOADER;
-
+var LOADERC;
 var GAME_STARTED = false;
 var GAME_LOADED = false;
 
@@ -43,6 +43,9 @@ function loadGeometry(meshToLoad, id) {
 }
 function loadGeometry_anim(meshToLoad, id) {
 	LOADER.load( meshToLoad ,function(geometry){load_anim(geometry,id)});
+}
+function loadGeometryCollada(meshToLoad)
+{
 }
 /*GRID GLOBALS*/
 var GRID_HEIGHT = 10000;
