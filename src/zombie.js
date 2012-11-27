@@ -19,7 +19,7 @@ function Zombie(position)
     });
 	this.mesh = new THREE.Mesh(GEOMETRIES[ZOMBIE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.position.x = position.x;
-	this.mesh.position.y = -.1;
+	this.mesh.position.y = -.2;
 	this.mesh.position.z = position.z;
 	this.mesh.scale.set(20,20,20);
     this.boundRadius = zombie_width;
@@ -58,7 +58,7 @@ function Zombie(position)
 	
 	this.draw = function(){
 		this.mesh.position.x = position.x;
-		this.mesh.position.y = -.1;
+		this.mesh.position.y = -.2;
 		this.mesh.position.z = position.z;
 	}
 	
@@ -82,29 +82,30 @@ function Zombie(position)
         }
     }
 var clock = new THREE.Clock();
-	var animOffset       = 6,   // starting frame of animation
+	this.animOffset       = 6  // starting frame of animation
 	duration        = 1000, // milliseconds to complete animation
 	keyframes       = 6,   // total number of animation frames
-	interpolation   = duration / keyframes, // milliseconds per frame
-	lastKeyframe    = 0,    // previous keyframe
-	currentKeyframe = 0;
+	interpolation   = duration / keyframes; // milliseconds per frame
+	this.lastKeyframe    = 0;  // previous keyframe
+	this.currentKeyframe = 0;
+	this.animRandom = Math.round(Math.random()*4);
 	this.update = function(time) {
 		this.computeNextMove();
 		
 	    // Alternate morph targets
-		time = new Date().getTime() % duration;
-		keyframe = Math.floor( time / interpolation ) + animOffset;
-		if ( keyframe != currentKeyframe ) 
+		time = (new Date().getTime()+interpolation*this.animRandom) % duration;
+		keyframe = Math.floor( time / interpolation ) + this.animOffset;
+		if ( keyframe != this.currentKeyframe ) 
 		{
-			this.mesh.morphTargetInfluences[ lastKeyframe ] = 0;
-			this.mesh.morphTargetInfluences[ currentKeyframe ] = 1;
+			this.mesh.morphTargetInfluences[ this.lastKeyframe ] = 0;
+			this.mesh.morphTargetInfluences[ this.currentKeyframe ] = 1;
 			this.mesh.morphTargetInfluences[ keyframe ] = 0;
-			lastKeyframe = currentKeyframe;
-			currentKeyframe = keyframe;
+			this.lastKeyframe = this.currentKeyframe;
+			this.currentKeyframe = keyframe;
 		}
 		this.mesh.morphTargetInfluences[ keyframe ] = 
 			( time % interpolation ) / interpolation;
-		this.mesh.morphTargetInfluences[ lastKeyframe ] = 
+		this.mesh.morphTargetInfluences[ this.lastKeyframe ] = 
 			1 - this.mesh.morphTargetInfluences[ keyframe ];
 		
 		this.mesh.rotation.y = this.ang;
