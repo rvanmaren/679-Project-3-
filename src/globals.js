@@ -53,7 +53,7 @@ var GRID_WIDTH = 10000;
 var NUM_BOXES = 1000;
 
 /*BULLET GLOBALS*/
-var BULLET_SPEED = 10;
+var BULLET_SPEED = 30;
 var BULLETS = new Array();
 
 function length(vec)

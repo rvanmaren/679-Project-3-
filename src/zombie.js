@@ -1,5 +1,10 @@
 var zombie_height = 40;
 var zombie_width = 10;
+var attack_distance = 450;
+var WALKING = 0;
+var ATTACKING = 1;
+var DYING = 2;
+var STANDING = 3;
 function Zombie(position)
 {
 	this.position = position;
@@ -9,7 +14,9 @@ function Zombie(position)
 	this.target = PLAYER;
 	this.targetForMove = new THREE.Vector3(0,0,0);
 	this.frame = 0;
-
+	this.state = WALKING;
+	
+	
 	this.direction =new THREE.Vector3(this.target.position.x - this.position.x
 										,this.target.position.y - this.position.y,
 										 this.target.position.z - this.position.z);
@@ -69,7 +76,11 @@ function Zombie(position)
 			 spot[1] --;
 			 var bestDistance = 50000000;
 			 var bestSpot = new Array();
-			 for (var x = 0; x < 3; x ++) {
+			
+			
+			
+			 
+			for (var x = 0; x < 3; x ++) {
 				for (var y = 0; y < 3; y ++) {
 					if((x + y)% 2 != 0) { // this eliminates diagonal moves
 						if(!(spot[0] < 0 || spot[0] >= THE_GRID.grid_spots.length || spot[1] < 0 || spot[1] >= THE_GRID.grid_spots[0].length)){
@@ -149,10 +160,12 @@ var clock = new THREE.Clock();
 	interpolation   = duration / keyframes, // milliseconds per frame
 	lastKeyframe    = 0,    // previous keyframe
 	currentKeyframe = 0;
+	
 	this.update = function(time) {
 		this.computeNextMove();
 	    // Alternate morph targets
 		time = new Date().getTime() % duration;
+		if(this.state == WALKING){
 		keyframe = Math.floor( time / interpolation ) + animOffset;
 		if ( keyframe != currentKeyframe ) 
 		{
@@ -166,7 +179,7 @@ var clock = new THREE.Clock();
 			( time % interpolation ) / interpolation;
 		this.mesh.morphTargetInfluences[ lastKeyframe ] = 
 			1 - this.mesh.morphTargetInfluences[ keyframe ];
-		
+		}
 		this.mesh.rotation.y = this.ang;
 		//Rotate to face direction 
 		//this.mesh.rotation.y = Math.atan((PLAYER.position.x-this.position.x),(PLAYER.position.z-this.position.z))*(180/Math.PI);
@@ -180,16 +193,26 @@ var clock = new THREE.Clock();
 		//var nextX = this.position.x + directionPerp.x*this.speed + this.direction.x*this.speed;
 		//var nextY = this.position.z + directionPerp.z*this.speed + this.direction.z*this.speed;
 		
-		var nextX = this.position.x + this.direction.x*this.speed + this.direction.x*this.speed;
-		var nextY = this.position.z + this.direction.z*this.speed + this.direction.z*this.speed;
+		var distance = Math.sqrt(this.position.x  - this.target.position.x,2) + Math.pow(this.position.z - this.target.position.z,2);
 		
-
-		if(THE_GRID.requestMoveTo(this,this.position.x,this.position.z,nextX,nextY))
-		{
-			this.position.x = nextX;
-			this.position.z = nextY;
-		} 
-
+		if(distance < attack_distance){
+			this.state = ATTACKING;
+		}
+		else {
+			this.state = WALKING;
+			var nextX = this.position.x + this.direction.x*this.speed + this.direction.x*this.speed;
+			var nextY = this.position.z + this.direction.z*this.speed + this.direction.z*this.speed;
+		
+				
+			if(THE_GRID.requestMoveTo(this,this.position.x,this.position.z,nextX,nextY))
+			{
+				this.position.x = nextX;
+				this.position.z = nextY;
+			} else {
+				this.state = STANDING;
+			
+			}
+		}
 		this.draw();
 	};
 	
