@@ -1,5 +1,10 @@
 var zombie_height = 40;
 var zombie_width = 10;
+var attack_distance = 450;
+var WALKING = 0;
+var ATTACKING = 1;
+var DYING = 2;
+var STANDING = 3;
 function Zombie(position)
 {
 	this.position = position;
@@ -9,7 +14,9 @@ function Zombie(position)
 	this.target = PLAYER;
 	this.targetForMove = new THREE.Vector3(0,0,0);
 	this.frame = 0;
-
+	this.state = WALKING;
+	
+	
 	this.direction =new THREE.Vector3(this.target.position.x - this.position.x
 										,this.target.position.y - this.position.y,
 										 this.target.position.z - this.position.z);
@@ -69,7 +76,11 @@ function Zombie(position)
 			 spot[1] --;
 			 var bestDistance = 50000000;
 			 var bestSpot = new Array();
-			 for (var x = 0; x < 3; x ++) {
+			
+			
+			
+			 
+			for (var x = 0; x < 3; x ++) {
 				for (var y = 0; y < 3; y ++) {
 					if((x + y)% 2 != 0) { // this eliminates diagonal moves
 						if(!(spot[0] < 0 || spot[0] >= THE_GRID.grid_spots.length || spot[1] < 0 || spot[1] >= THE_GRID.grid_spots[0].length)){
@@ -143,13 +154,6 @@ function Zombie(position)
         }
     }
     var clock = new THREE.Clock();
-	this.animOffset       = 6  // starting frame of animation
-	duration        = 1000, // milliseconds to complete animation
-	keyframes       = 6,   // total number of animation frames
-	interpolation   = duration / keyframes; // milliseconds per frame
-	this.lastKeyframe    = 0;  // previous keyframe
-	this.currentKeyframe = 0;
-	this.animRandom = Math.round(Math.random()*4);
 	/*ANIMATION VARIABLES*/
 	/*WALKING*/
 	this.walkingOffset       = 6  // starting frame of animation
@@ -168,24 +172,43 @@ function Zombie(position)
 	this.attackcurrentKeyframe = 0;
 	/*DEATH (coming soon)*/
 	/***********************************************************************************************/
+	
 	this.update = function(time) {
 		this.computeNextMove();
 	    // Alternate morph targets
-		time = (new Date().getTime()+interpolation*this.animRandom) % duration;
-		keyframe = Math.floor( time / interpolation ) + this.animOffset;
-		if ( keyframe != this.currentKeyframe ) 
-		{
-			this.mesh.morphTargetInfluences[ this.lastKeyframe ] = 0;
-			this.mesh.morphTargetInfluences[ this.currentKeyframe ] = 1;
-			this.mesh.morphTargetInfluences[ keyframe ] = 0;
-			this.lastKeyframe = this.currentKeyframe;
-			this.currentKeyframe = keyframe;
+		if(this.state == WALKING) {
+			time = (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.waklingDuration;
+			keyframe = Math.floor( time / this.walkingInterpolation ) + this.walkingOffset;
+			if ( keyframe != this.walkingcurrentKeyframe ) 
+			{
+				this.mesh.morphTargetInfluences[ this.walkingLastKeyframe ] = 0;
+				this.mesh.morphTargetInfluences[ this.walkingcurrentKeyframe ] = 1;
+				this.mesh.morphTargetInfluences[ keyframe ] = 0;
+				this.walkingLastKeyframe = this.walkingcurrentKeyframe;
+				this.walkingcurrentKeyframe = keyframe;
+			}
+			this.mesh.morphTargetInfluences[ keyframe ] = 
+				( time % this.walkingInterpolation ) / this.walkingInterpolation;
+			this.mesh.morphTargetInfluences[ this.walkingLastKeyframe ] = 
+				1 - this.mesh.morphTargetInfluences[ keyframe ];
 		}
-		this.mesh.morphTargetInfluences[ keyframe ] = 
-			( time % interpolation ) / interpolation;
-		this.mesh.morphTargetInfluences[ this.lastKeyframe ] = 
-			1 - this.mesh.morphTargetInfluences[ keyframe ];
-		
+		if(this.state == ATTACKING)
+		{
+		    time = (new Date().getTime()+this.attackInterpolation) % this.attackDuration;
+		    keyframe = Math.floor( time / this.attackInterpolation ) + this.attackOffset;
+			if ( keyframe != this.attackcurrentKeyframe ) 
+			{
+				this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 0;
+				this.mesh.morphTargetInfluences[ this.attackcurrentKeyframe ] = 1;
+				this.mesh.morphTargetInfluences[ keyframe ] = 0;
+				this.attackLastKeyframe = this.attackcurrentKeyframe;
+				this.attackcurrentKeyframe = keyframe;
+			}
+			this.mesh.morphTargetInfluences[ keyframe ] = 
+				( time % this.attackInterpolation ) / this.attackInterpolation;
+			this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 
+				1 - this.mesh.morphTargetInfluences[ keyframe ];
+		}
 		this.mesh.rotation.y = this.ang;
 		//Rotate to face direction 
 		//this.mesh.rotation.y = Math.atan((PLAYER.position.x-this.position.x),(PLAYER.position.z-this.position.z))*(180/Math.PI);
@@ -199,16 +222,28 @@ function Zombie(position)
 		//var nextX = this.position.x + directionPerp.x*this.speed + this.direction.x*this.speed;
 		//var nextY = this.position.z + directionPerp.z*this.speed + this.direction.z*this.speed;
 		
-		var nextX = this.position.x + this.direction.x*this.speed + this.direction.x*this.speed;
-		var nextY = this.position.z + this.direction.z*this.speed + this.direction.z*this.speed;
+		var distance = Math.sqrt(this.position.x  - this.target.position.x,2) + Math.pow(this.position.z - this.target.position.z,2);
 		
-
-		if(THE_GRID.requestMoveTo(this,this.position.x,this.position.z,nextX,nextY))
-		{
-			this.position.x = nextX;
-			this.position.z = nextY;
-		} 
-
+		if(distance < attack_distance){
+			this.state = ATTACKING;
+			this.mesh.morphTargetInfluences[ this.walkingcurrentKeyframe ] = 0;
+		}
+		else {
+			this.state = WALKING;
+			this.mesh.morphTargetInfluences[ this.attackcurrentKeyframe ] = 0;
+			var nextX = this.position.x + this.direction.x*this.speed + this.direction.x*this.speed;
+			var nextY = this.position.z + this.direction.z*this.speed + this.direction.z*this.speed;
+		
+				
+			if(THE_GRID.requestMoveTo(this,this.position.x,this.position.z,nextX,nextY))
+			{
+				this.position.x = nextX;
+				this.position.z = nextY;
+			} else {
+				this.state = STANDING;
+			
+			}
+		}
 		this.draw();
 	};
 	
