@@ -142,7 +142,7 @@ function Zombie(position)
             return false;
         }
     }
-var clock = new THREE.Clock();
+    var clock = new THREE.Clock();
 	this.animOffset       = 6  // starting frame of animation
 	duration        = 1000, // milliseconds to complete animation
 	keyframes       = 6,   // total number of animation frames
@@ -150,6 +150,24 @@ var clock = new THREE.Clock();
 	this.lastKeyframe    = 0;  // previous keyframe
 	this.currentKeyframe = 0;
 	this.animRandom = Math.round(Math.random()*4);
+	/*ANIMATION VARIABLES*/
+	/*WALKING*/
+	this.walkingOffset       = 6  // starting frame of animation
+	this.waklingDuration        = 1000, // milliseconds to complete animation
+	this.walkingKeyframes       = 6,   // total number of animation frames
+	this.walkingInterpolation   = this.waklingDuration / this.walkingKeyframes; // milliseconds per frame
+	this.walkingLastKeyframe    = 0;  // previous keyframe
+	this.walkingcurrentKeyframe = 0;
+	this.WalkingRandom = Math.round(Math.random()*4);
+	/*ATTACK*/
+	this.attackOffset       = 12  // starting frame of animation
+	this.attackDuration        = 1000, // milliseconds to complete animation
+	this.attackKeyframes       = 6,   // total number of animation frames
+	this.attackInterpolation   = this.attackDuration  / this.attackKeyframes; // milliseconds per frame
+	this.attackLastKeyframe    = 0;  // previous keyframe
+	this.attackcurrentKeyframe = 0;
+	/*DEATH (coming soon)*/
+	/***********************************************************************************************/
 	this.update = function(time) {
 		this.computeNextMove();
 	    // Alternate morph targets
