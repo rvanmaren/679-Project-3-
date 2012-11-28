@@ -226,7 +226,7 @@ function Zombie(position)
 		
 		if(distance < attack_distance){
 			this.state = ATTACKING;
-			this.mesh.morphTargetInfluences[ this.walkingcurrentKeyframe ] = 0;
+			this.mesh.morphTargetInfluences[ this.walkingcurrentKeyframe ] = 1;
 		}
 		else {
 			this.state = WALKING;

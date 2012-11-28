@@ -6,8 +6,16 @@ LOADERC = new THREE.ColladaLoader();
 //LOADERC.load ('./resources/monster.dae',function(collada){COLLADAS.push(collada.scene);});
 //loadEverything
 //loadGeometryCollada('./resources/LongHouse.dae')
-loadGeometry('./resources/rifle/rifle_0.js', "gun");
-loadGeometry_anim('./resources/skeleton_0.js', "zombie");
+//loadGeometry('./resources/housemodel.js', "gun");	    for (var i = 0; i < geometry.materials.length; i++)
+
+LOADER.load( './resources/rifle/rifle_0.js' ,function(geometry){GEOMETRIES.push(geometry);});
+LOADER.load( './resources/housemodel.js' ,function(geometry){GEOMETRIES.push(geometry);});
+LOADER.load( './resources/skeleton_0.js', function(geometry){	    
+	for (var i = 0; i < geometry.materials.length; i++)
+		geometry.materials[i].morphTargets = true;
+		GEOMETRIES.push(geometry);});
+//LOADER.load( './resources/housemodel.js' ,function(geometry){GEOMETRIES.push(geometry);});
+//loadGeometry('./resources/housemodel.js', "gun");
 //loadGeometry('./resources/fence/fence.js', "fence");
 function add_image(src, id, posX, posY, visible) {
     var img = document.createElement("img");
@@ -65,11 +73,7 @@ function loadLoop()
 		//Display Intro Screen
 		document.getElementById("intro").style.visibility= '';
 		GAME_LOADED = true;
-		//COLLADAS[0].position.x = 2300;
-//COLLADAS[0].position.y = 20;
-//COLLADAS[0].position.z = 2300;
-//console.log(COLLADAS[0]);
-//SCENE.add(COLLADAS[0]);
+		console.log(GEOMETRIES);
 	}
 	else
 	{
