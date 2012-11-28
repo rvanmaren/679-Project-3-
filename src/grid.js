@@ -80,6 +80,54 @@ function Grid(width, height, blocks)
 	{
 	    return NUM_HOUSES * 10;
 	}
+	
+	var housePreview = new THREE.Mesh(GEOMETRIES[HOUSE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
+	housePreview.scale.set(3,3,3);
+	housePreview.position.y = -1;
+	var wallPreview = new THREE.Mesh(GEOMETRIES[FENCE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
+	wallPreview.scale.set(20,45,20);
+	wallPreview.position.y = -1;
+	var currentPreview = wallPreview;
+	this.setPreview = function(x,y,z)
+	{
+	    housePreview.position.x = x;
+		housePreview.position.z = z;
+		wallPreview.position.x = x;
+		wallPreview.position.z = z;
+		SCENE.add(currentPreview);
+	}
+	this.hidePreview = function()
+	{
+	    SCENE.remove(currentPreview);
+	}
+	this.preview = function(mode,type)
+	{
+	    if(mode == 'build' && type == 'house')
+		{
+		    if(currentPreview != housePreview)
+			{
+			    SCENE.remove(wallPreview);
+				currentPreview = housePreview;
+				SCENE.add(housePreview);
+			}
+		}
+		if(mode == 'build' && type == 'wall')
+		{
+		    if(currentPreview != wallPreview)
+			{
+			    SCENE.remove(housePreview);
+				currentPreview = wallPreview;
+				SCENE.add(wallPreview);
+			}
+		}
+	}
+	this.update_preview = function(mouseX,mouseY)
+	{
+	    housePreview.position.x -= mouseY;
+		housePreview.position.z += mouseX;
+	    wallPreview.position.x -= mouseY;
+		wallPreview.position.z += mouseX;
+	}
 	this.handle_command = function(buildCMD, mouseX,mouseY)
 	{
         var playerSpot = this.grid_spot(PLAYER.position.x, PLAYER.position.z);

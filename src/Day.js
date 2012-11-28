@@ -7,55 +7,26 @@ var zoomSpeed = 10;
 var buildingNumber = 0;
 function Builder_Target(position)
 {
-	this.targetMaterial = new THREE.MeshLambertMaterial(
-	{
-	    color: 0xCC0000
-	});
-	this.size = 2;
-	this.mesh = new THREE.Mesh( new THREE.SphereGeometry(this.size, 8, 8), this.targetMaterial);
-	
-	this.mesh.position.x = position.x; 
-	this.mesh.position.z = position.z;
-	this.mesh.position.y = 0;
-	
-	this.show = function()
-	{
-		SCENE.add(this.mesh);
-	}
-	this.hide = function()
-	{
-		SCENE.remove(this.mesh);
-	}
+    this.posistion = position;
 	this.mouseMove = function(mouseX,mouseY)
 	{
-		this.mesh.position.x -= mouseY;
-		this.mesh.position.z += mouseX;
+		this.position.x -= mouseY;
+		this.position.z += mouseX;
 	}
 	this.position = function()
 	{
-		return this.mesh.position;
+		return this.position;
     }
     this.setPosition = function(x, y, z) 
     {
-        this.mesh.position.set(x, y, z);
+        this.position.x = x;
+		this.position.y = y;
+		this.position.z = z;
     }
 	this.move = function(deltaX,deltaY)
 	{
-		this.mesh.position.x += deltaX;
-		this.mesh.position.z += deltaY;
-	}
-	this.grow = function()
-	{
-		this.size+=.1;
-		this.mesh.scale.set(this.size,this.size,this.size);
-	}
-	this.shrink = function()
-	{
-		if(this.size-1>0)
-		{
-			this.size-=.1;
-			this.mesh.scale.set(this.size,this.size,this.size);
-		}
+		this.position.x += deltaX;
+		this.position.z += deltaY;
 	}
 }
 
@@ -69,6 +40,7 @@ function Day(position)
 	this.direction = new THREE.Vector3(0,-1,0);
 	this.building = false;
 	this.blocksLeft = buildingNumber;
+	
 	this.markerMaterial = new THREE.MeshBasicMaterial(
 	{
 	    color: 0x2222EE
@@ -132,6 +104,7 @@ function Day(position)
 				this.zoom("in");
 				break;
 		}
+		THE_GRID.preview(this.mode,this.type);
 	};
 	this.key_up = function(keyEvent)
 	{
@@ -154,10 +127,10 @@ function Day(position)
         this.position.x = PLAYER.position.x;
         this.position.z = PLAYER.position.z;
         this.playerMarker.position.set(PLAYER.position.x, 1, PLAYER.position.z);
-        this.target.show();
         this.target.setPosition(PLAYER.position.x, this.target.position().y, PLAYER.position.z);
         this.playerMarker.visible = true;
         THE_GRID.showLines();
+		THE_GRID.setPreview(PLAYER.position.x, -1, PLAYER.position.z);
 		this.blocksLeft += buildAmount;
 		this.doneBuilding = false;
 		document.getElementById("bUnits").style.visibility= '';
@@ -165,14 +138,15 @@ function Day(position)
 
     this.switchOut = function () {
         this.playerMarker.visible = false;
-		this.target.hide();
 		this.building = false;
         THE_GRID.hideLines();
+		THE_GRID.hidePreview();
 		document.getElementById("bUnits").style.visibility= 'hidden';
     }
 
     this.mouseMovement = function (mouseMoveX, mouseMoveY) {
         this.target.mouseMove(mouseMoveX, mouseMoveY);
+		THE_GRID.update_preview(mouseMoveX, mouseMoveY);
         if (this.building) {
             if (this.blocksLeft || this.mode == "remove") {
                 if (!(this.type == 'house' && this.blocksLeft < HOUSE_COST)) {
