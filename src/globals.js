@@ -57,7 +57,8 @@ function loadGeometryCollada(meshToLoad)
 var GRID_HEIGHT = 10000;
 var GRID_WIDTH = 10000;
 var NUM_BOXES = 1000;
-
+var NUM_HOUSES = 0;
+var HOUSE_COST = 5;
 /*BULLET GLOBALS*/
 var BULLET_SPEED = 30;
 var BULLETS = new Array();

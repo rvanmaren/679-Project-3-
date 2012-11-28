@@ -7,6 +7,10 @@ function Game()
 {
 	THE_GRID = new Grid(GRID_WIDTH,GRID_HEIGHT,NUM_BOXES);
 	PLAYER = new Player(new THREE.Vector3(2000, 30, 2000));
+
+	//Build the first house near the player
+	THE_GRID.handle_command(new Build_Command('build', 'house', PLAYER.position.x + 150, PLAYER.position.z + 150));
+
 	this.skybox = new Skybox();
 	this.night = new Night();
 	this.day = new Day(new THREE.Vector3(2000, 400, 2000));

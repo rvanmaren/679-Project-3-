@@ -13,7 +13,7 @@ function Grid(width, height, blocks)
 {
 	this.grid_spots = new Array(blocks);
     this.grid_objects = new Array(blocks);
-	this.numHouses = 0;
+	
 	//this makes the array 2D;
 
 	for (var i = 0; i < blocks; i++) {
@@ -29,6 +29,8 @@ function Grid(width, height, blocks)
 	this.width = width;
 	this.height = height;
 	this.blocks = blocks;
+
+    
 	this.grid_spot = function(clickX,clickY)
 	{
 		var arry = new Array();
@@ -62,11 +64,17 @@ function Grid(width, height, blocks)
 	}
 	this.computeBuildBlocks = function()
 	{
-	    return 50;
+	    return NUM_HOUSES * 10;
 	}
 	this.handle_command = function(buildCMD)
 	{
+        var playerSpot = this.grid_spot(PLAYER.position.x, PLAYER.position.z);
 		var spot = this.grid_spot(buildCMD.x,buildCMD.y);
+        
+        if (Math.abs(playerSpot[0] - spot[0]) < 2 && Math.abs(playerSpot[1] - spot[1]) < 2) {
+            return false;
+        }
+         
 		if(spot[0] >=0 && spot[1] >=0)//check for bounds
 		{
 			if(buildCMD.command == "build")
@@ -76,7 +84,7 @@ function Grid(width, height, blocks)
 					if(buildCMD.type == "house")
 					{
 						this.grid_spots[spot[0]][spot[1]] = new HousePiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2));
-						this.numHouses++;
+                        NUM_HOUSES++;
 						return true;
 					}
 					if(buildCMD.type == "wall")
@@ -92,7 +100,7 @@ function Grid(width, height, blocks)
 				{
 				    if(this.grid_spots[spot[0]][spot[1]] instanceof HousePiece)
 					{
-					    this.numHouses--;
+					    NUM_HOUSES--;
 					}
 					remove(this.grid_spots[spot[0]][spot[1]]);
 					this.grid_spots[spot[0]][spot[1]] = EMPTY;
