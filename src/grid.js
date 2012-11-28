@@ -109,8 +109,11 @@ function Grid(width, height, blocks)
 						    this.removeHouse(this.grid_spots[spot[0]][spot[1]]);
 						}
 					}
-					remove(this.grid_spots[spot[0]][spot[1]]);
-					this.grid_spots[spot[0]][spot[1]] = EMPTY;
+					else //Wall or something
+					{
+					    remove(this.grid_spots[spot[0]][spot[1]]);
+					    this.grid_spots[spot[0]][spot[1]] = EMPTY;
+					}
 					return true;
 				}
 			}
@@ -202,6 +205,8 @@ function Grid(width, height, blocks)
 	{
 		var bottomSpotX = housePiece.grid_spot[0]-6;
 		var bottomSpotY = housePiece.grid_spot[1]-3;
+		
+		console.log((this.grid_spots[housePiece.grid_spot[0]][housePiece.grid_spot[1]]));
 		SCENE.remove(this.grid_spots[housePiece.grid_spot[0]][housePiece.grid_spot[1]].mesh);
 		/*check around us*/
 		for(var i = bottomSpotX; i < bottomSpotX+13 ; i++)
@@ -268,8 +273,11 @@ function Grid(width, height, blocks)
 		{
 		    for(var j = bottomSpotY; j < bottomSpotY+8; j++)
 			{
-		        this.grid_spots[i][j] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[i,j]);
-				unit_spots.push(this.grid_spots[i][j]);
+			    if(i!= spotClick[0] && j != spotClick[1])
+				{
+		            this.grid_spots[i][j] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[i,j]);
+				    unit_spots.push(this.grid_spots[i][j]);
+				}
 			}
 		}
 		for(var i = bottomSpotX+4; i < bottomSpotX+5+4 ; i++)
