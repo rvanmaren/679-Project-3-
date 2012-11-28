@@ -183,9 +183,9 @@ function Zombie(position)
 	/*ANIMATION VARIABLES*/
 	/*WALKING*/
 	this.walkingOffset       = 6  // starting frame of animation
-	this.waklingDuration        = 1000, // milliseconds to complete animation
+	this.walkingDuration        = 1000, // milliseconds to complete animation
 	this.walkingKeyframes       = 6,   // total number of animation frames
-	this.walkingInterpolation   = this.waklingDuration / this.walkingKeyframes; // milliseconds per frame
+	this.walkingInterpolation   = this.walkingDuration / this.walkingKeyframes; // milliseconds per frame
 	this.walkingLastKeyframe    = 0;  // previous keyframe
 	this.walkingcurrentKeyframe = 0;
 	this.WalkingRandom = Math.round(Math.random()*4);
@@ -203,7 +203,7 @@ function Zombie(position)
 		this.computeNextMove();
 	    // Alternate morph targets
 		if(this.state == WALKING) {
-			time = (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.waklingDuration;
+			time = (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.walkingDuration;
 			keyframe = Math.floor( time / this.walkingInterpolation ) + this.walkingOffset;
 			if ( keyframe != this.walkingcurrentKeyframe ) 
 			{
@@ -252,11 +252,11 @@ function Zombie(position)
 		
 		if(distance < attack_distance){
 			this.state = ATTACKING;
-			this.mesh.morphTargetInfluences[ this.walkingcurrentKeyframe ] = 1;
+			this.mesh.morphTargetInfluences[ (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.walkingDuration ] = 1;
 		}
 		else {
 			this.state = WALKING;
-			this.mesh.morphTargetInfluences[ this.attackcurrentKeyframe ] = 0;
+			this.mesh.morphTargetInfluences[ Math.floor( time / this.attackInterpolation ) + this.attackOffset ] = 0;
 			var nextX = this.position.x + this.direction.x*this.speed + this.direction.x*this.speed;
 			var nextY = this.position.z + this.direction.z*this.speed + this.direction.z*this.speed;
 		
