@@ -8,12 +8,18 @@ LOADERC = new THREE.ColladaLoader();
 //loadGeometryCollada('./resources/LongHouse.dae')
 //loadGeometry('./resources/housemodel.js', "gun");	    for (var i = 0; i < geometry.materials.length; i++)
 
+var loaded = false;
+var count = 0;
+
 LOADER.load( './resources/rifle/rifle_0.js' ,function(geometry){GEOMETRIES.push(geometry);});
+//LOADER.load( './resources/fence/fence.js' ,function(geometry){GEOMETRIES.push(geometry);});
 LOADER.load( './resources/housemodel.js' ,function(geometry){GEOMETRIES.push(geometry);});
 LOADER.load( './resources/skeleton_0.js', function(geometry){	    
 	for (var i = 0; i < geometry.materials.length; i++)
 		geometry.materials[i].morphTargets = true;
 		GEOMETRIES.push(geometry);});
+		
+LOADER.load( './resources/fence/fence.js' ,function(geometry){GEOMETRIES.push(geometry);});
 //LOADER.load( './resources/housemodel.js' ,function(geometry){GEOMETRIES.push(geometry);});
 //loadGeometry('./resources/housemodel.js', "gun");
 //loadGeometry('./resources/fence/fence.js', "fence");
@@ -67,7 +73,7 @@ function animloop(){
 };
 function loadLoop()
 {
-	if(GEOMETRIES.length == NUM_GEOMETRIES && COLLADAS.length == 0)
+	if(GEOMETRIES.length == NUM_GEOMETRIES && COLLADAS.length == NUM_COLLADAS)
 	{
 	    document.getElementById("loading").style.visibility= 'hidden';
 		//Display Intro Screen

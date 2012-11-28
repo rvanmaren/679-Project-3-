@@ -80,7 +80,7 @@ function Grid(width, height, blocks)
 	{
 	    return NUM_HOUSES * 10;
 	}
-	this.handle_command = function(buildCMD)
+	this.handle_command = function(buildCMD, mouseX,mouseY)
 	{
         var playerSpot = this.grid_spot(PLAYER.position.x, PLAYER.position.z);
 		var spot = this.grid_spot(buildCMD.x,buildCMD.y);
@@ -97,12 +97,11 @@ function Grid(width, height, blocks)
 				{
 					if(buildCMD.type == "house")
 					{
-						return this.buildHouse(spot);
+						return this.buildHouse(spot, new THREE.Vector3(-1,0,0));
 					}
 					if(buildCMD.type == "wall")
 					{
-						this.grid_spots[spot[0]][spot[1]] = new WallPiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2));
-						return true;
+						return this.buildWall(spot,new THREE.Vector3(mouseX,0,mouseY));
 					}
 				}
 			}
@@ -121,6 +120,18 @@ function Grid(width, height, blocks)
 						else
 						{
 						    this.removeHouse(this.grid_spots[spot[0]][spot[1]]);
+						}
+					}
+					else if(this.grid_spots[spot[0]][spot[1]] instanceof WallPiece || this.grid_spots[spot[0]][spot[1]] instanceof HousePieceUnit)
+					{
+					    if(this.grid_spots[spot[0]][spot[1]] instanceof HousePieceUnit)
+						{
+						    //look up the house and tell to remove
+							this.removeWall(this.grid_spots[spot[0]][spot[1]].myOwner);
+						}
+						else
+						{
+						    this.removeWall(this.grid_spots[spot[0]][spot[1]]);
 						}
 					}
 					else //Wall or something
@@ -220,7 +231,6 @@ function Grid(width, height, blocks)
 		var bottomSpotX = housePiece.grid_spot[0]-6;
 		var bottomSpotY = housePiece.grid_spot[1]-3;
 		
-		console.log((this.grid_spots[housePiece.grid_spot[0]][housePiece.grid_spot[1]]));
 		SCENE.remove(this.grid_spots[housePiece.grid_spot[0]][housePiece.grid_spot[1]].mesh);
 		/*check around us*/
 		for(var i = bottomSpotX; i < bottomSpotX+13 ; i++)
@@ -305,6 +315,60 @@ function Grid(width, height, blocks)
 		this.grid_spots[spotClick[0]][spotClick[1]].units = unit_spots;
 		NUM_HOUSES++;
         return true;
+	}
+	this.buildWall = function (spotClick, pullVec)
+	{
+	    //determine if horizontal or vertical
+		console.log(pullVec.x+","+pullVec.z);
+		if(Math.abs(pullVec.x) > Math.abs(pullVec.z))//Horizontal
+		{
+			//Check up and down
+			if(this.grid_spots[spotClick[0]][spotClick[1]-1] != EMPTY || this.grid_spots[spotClick[0]][spotClick[1]+1] != EMPTY
+			|| this.grid_spots[spotClick[0]][spotClick[1]-2] != EMPTY || this.grid_spots[spotClick[0]][spotClick[1]+2] != EMPTY)
+			{
+			    return false;
+			}
+			this.grid_spots[spotClick[0]][spotClick[1]] = new WallPiece(new THREE.Vector3(spotClick[0]*width/blocks+width/blocks/2,0,spotClick[1]*height/blocks+height/blocks/2),[spotClick[0],spotClick[1]]);
+			this.grid_spots[spotClick[0]][spotClick[1]].mesh.rotation.y = Math.PI/2;
+			var units = new Array();
+			units.push(this.grid_spots[spotClick[0]][spotClick[1]-1] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0],spotClick[1]-1]));
+			units.push(this.grid_spots[spotClick[0]][spotClick[1]+1] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0],spotClick[1]+1]));
+			units.push(this.grid_spots[spotClick[0]][spotClick[1]-2] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0],spotClick[1]-2]));
+			units.push(this.grid_spots[spotClick[0]][spotClick[1]+2] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0],spotClick[1]+2]));
+			this.grid_spots[spotClick[0]][spotClick[1]].units = units;
+			return true;
+		}
+		else
+		{
+			//Check left and right
+			if(this.grid_spots[spotClick[0]-1][spotClick[1]] != EMPTY || this.grid_spots[spotClick[0]+1][spotClick[1]] != EMPTY)
+			{
+			    return false;
+			}
+			
+			this.grid_spots[spotClick[0]][spotClick[1]] = new WallPiece(new THREE.Vector3(spotClick[0]*width/blocks+width/blocks/2,0,spotClick[1]*height/blocks+height/blocks/2),[spotClick[0],spotClick[1]]);
+			//Set up units
+			var units = new Array();
+			units.push(this.grid_spots[spotClick[0]-1][spotClick[1]] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]-1,spotClick[1]]));
+			units.push(this.grid_spots[spotClick[0]+1][spotClick[1]] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]+1,spotClick[1]]));
+			units.push(this.grid_spots[spotClick[0]-2][spotClick[1]] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]-2,spotClick[1]]));
+			units.push(this.grid_spots[spotClick[0]+2][spotClick[1]] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]+1,spotClick[1]]));
+			this.grid_spots[spotClick[0]][spotClick[1]].units = units
+			return true;
+		}
+	}
+	this.removeWall = function(fencePiece)
+	{
+	    console.log(fencePiece);
+	    SCENE.remove(fencePiece.mesh);
+		
+		var units = fencePiece.units;
+		this.grid_spots[fencePiece.grid_spot[0]][fencePiece.grid_spot[1]] = EMPTY;
+		for(c = 0; c < units.length; c++)
+		{
+		    var pos = units[c].position;
+		    this.grid_spots[pos[0]][pos[1]] = EMPTY;
+		}
 	}
 	/*draw some lines*/
 	var material = new THREE.LineBasicMaterial({

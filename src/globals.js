@@ -25,12 +25,13 @@ var ZOMBIES = new Array();
 
 /*BUILDER GLOBALS*/
 var GUN_MESH = 0;
-var ZOMBIE_MESH = 2;
+var ZOMBIE_MESH = 3;
 var HOUSE_MESH = 1;
+var FENCE_MESH = 2;
 var GEOMETRIES = new Array();
 var COLLADAS = new Array();
-var NUM_GEOMETRIES  = 3;
-
+var NUM_GEOMETRIES  = 4;
+var NUM_COLLADAS = 0;
 function load( geometry,id) {  
 		//var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial({overdraw: true}));   
 		GEOMETRIES.push(geometry);

@@ -176,17 +176,20 @@ function Day(position)
         if (this.building) {
             if (this.blocksLeft || this.mode == "remove") {
                 if (!(this.type == 'house' && this.blocksLeft < HOUSE_COST)) {
-                    var built = THE_GRID.handle_command(new Build_Command(this.mode, this.type, this.target.position().x, this.target.position().z));
-                    if (built && this.mode != "remove") {
-                        if (this.type == 'house') {
-                            this.blocksLeft -= HOUSE_COST;
-                        } else {
-                            this.blocksLeft--;
-                        }
-                    }
-                    if (built && this.mode == "remove") {
-                        this.blocksLeft++;
-                    }
+				    if(mouseMoveX !=0 || mouseMoveY != 0)
+					{
+						var built = THE_GRID.handle_command(new Build_Command(this.mode, this.type, this.target.position().x, this.target.position().z),mouseMoveX,mouseMoveY);
+						if (built && this.mode != "remove") {
+							if (this.type == 'house') {
+								this.blocksLeft -= HOUSE_COST;
+							} else {
+								this.blocksLeft--;
+							}
+						}
+						if (built && this.mode == "remove") {
+							this.blocksLeft++;
+						}
+					}
                 }
             }
         }
@@ -194,7 +197,7 @@ function Day(position)
 	this.mouse_down = function () {
 	    this.building = true;
 	    if (this.blocksLeft || this.mode == 'remove') {
-	        if (!(this.type == 'house' && this.blocksLeft < HOUSE_COST)) {
+	        if (!(this.type == 'house' && this.blocksLeft < HOUSE_COST)&& this.type!='wall') {
 	            var built = THE_GRID.handle_command(new Build_Command(this.mode, this.type, this.target.position().x, this.target.position().z));
 	            if (built && this.mode != 'remove') {
 	                if (this.type == 'house') {

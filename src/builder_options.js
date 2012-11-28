@@ -13,22 +13,24 @@ function remove(piece)
 {
 	SCENE.remove(piece.mesh);
 }
-function WallPiece(position)
+function WallPiece(position, grid)
 {
-	/*LOADER.load( 'resources/fence/fence.js', makeHandler("a"));
-	MESHES["a"].scale.set(10,30,10);
-	MESHES["a"].position.x = position.x;
-	MESHES["a"].position.y = wall_height/2-20;
-	MESHES["a"].position.z = position.z;
-	SCENE.add(MESHES["a"]);*/
-	var material = new THREE.MeshBasicMaterial({
+    this.units;
+	this.grid_spot = grid;
+	this.mesh = new THREE.Mesh(GEOMETRIES[FENCE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
+	this.mesh.scale.set(20,45,20);
+	this.mesh.position.x = position.x;
+	this.mesh.position.y = -1;
+	this.mesh.position.z = position.z;
+	SCENE.add(this.mesh );
+	/*var material = new THREE.MeshBasicMaterial({
         color: 0x00FF00,
     });
 	this.mesh = new THREE.Mesh( new THREE.CubeGeometry( wall_width, wall_height, wall_width, 2, 2, 2), material);
 	this.mesh.position.x = position.x;
 	this.mesh.position.y = wall_height/2;
 	this.mesh.position.z = position.z;
-	SCENE.add(this.mesh);
+	SCENE.add(this.mesh);*/
 }
 var house_width = 10;
 var house_height = 20;
