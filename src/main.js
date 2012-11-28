@@ -11,18 +11,22 @@ LOADERC = new THREE.ColladaLoader();
 var loaded = false;
 var count = 0;
 
-LOADER.load( './resources/rifle/rifle_0.js' ,function(geometry){GEOMETRIES.push(geometry);});
+LOADER.load( './resources/rifle/rifle_0.js' ,function(geometry){    geometry.id = 'gun';    GEOMETRIES.push(geometry);});
 //LOADER.load( './resources/fence/fence.js' ,function(geometry){GEOMETRIES.push(geometry);});
-LOADER.load( './resources/housemodel.js' ,function(geometry){GEOMETRIES.push(geometry);});
-LOADER.load( './resources/skeleton_0.js', function(geometry){	    
+LOADER.load( './resources/housemodel.js' ,function(geometry){    geometry.id = 'house';    GEOMETRIES.push(geometry);});
+LOADER.load( './resources/skeleton_0.js', function(geometry){
+    geometry.id = 'skeleton';    
 	for (var i = 0; i < geometry.materials.length; i++)
 		geometry.materials[i].morphTargets = true;
 		GEOMETRIES.push(geometry);});
-		
-LOADER.load( './resources/fence/fence.js' ,function(geometry){GEOMETRIES.push(geometry);});
-//LOADER.load( './resources/housemodel.js' ,function(geometry){GEOMETRIES.push(geometry);});
-//loadGeometry('./resources/housemodel.js', "gun");
-//loadGeometry('./resources/fence/fence.js', "fence");
+LOADER.load( './resources/fence/fence.js' ,function(geometry){    geometry.id = 'fence';    GEOMETRIES.push(geometry);});
+
+for(var index = 0; index < 4; index++)
+{
+    //console.log(GEOMETRIES[index].id);
+}
+
+//Need to check the order of stuff 
 function add_image(src, id, posX, posY, visible) {
     var img = document.createElement("img");
     img.src = src;
