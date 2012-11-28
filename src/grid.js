@@ -219,6 +219,20 @@ function Grid(width, height, blocks)
         }
         gridVisible = false;
     }
+    
+    this.hideSomeLines = function(num) {
+    	if (num <= 0) {
+    		this.showLines();
+    	} else {
+	    	for (var index = 0; index < gridLines.length; index++) {
+	            if (index % num == 0) {
+	            	gridLines[index].visible = true;
+	            } else {
+	            	gridLines[index].visible = false;
+	            }
+	        } 
+       	}
+    }
 
     this.showLines = function() {
         for (var index = 0; index < gridLines.length; index++) {
