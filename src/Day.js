@@ -200,6 +200,7 @@ function Day(position)
 		this.position.z += sideways*this.speed;
 		//Move the crosshair with the camera
 		this.target.move(forward*this.speed,sideways*this.speed);
+		THE_GRID.movePreview(forward*this.speed,sideways*this.speed);
 		//this.position.z += this.direction.z*forward;
 		CAMERA.position.set(this.position.x, this.position.y, this.position.z);
 		//this.builderBar.update(CAMERA.position);

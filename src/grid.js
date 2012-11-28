@@ -96,6 +96,13 @@ function Grid(width, height, blocks)
 		wallPreview.position.z = z;
 		SCENE.add(currentPreview);
 	}
+	this.movePreview = function(x,y)
+	{
+	    housePreview.position.x += x;
+		housePreview.position.z += y;
+	    wallPreview.position.x += x;
+		wallPreview.position.z += y;
+	}
 	this.hidePreview = function()
 	{
 	    SCENE.remove(currentPreview);
@@ -116,7 +123,7 @@ function Grid(width, height, blocks)
 		    if(currentPreview != wallPreview)
 			{
 			    SCENE.remove(housePreview);
-				currentPreview = wallPreview;
+				curentPreview = wallPreview;
 				SCENE.add(wallPreview);
 			}
 		}
