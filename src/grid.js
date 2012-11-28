@@ -80,6 +80,61 @@ function Grid(width, height, blocks)
 	{
 	    return NUM_HOUSES * 10;
 	}
+	
+	var housePreview = new THREE.Mesh(GEOMETRIES[HOUSE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
+	housePreview.scale.set(3,3,3);
+	housePreview.position.y = -1;
+	var wallPreview = new THREE.Mesh(GEOMETRIES[FENCE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
+	wallPreview.scale.set(20,45,20);
+	wallPreview.position.y = -1;
+	var currentPreview = wallPreview;
+	this.setPreview = function(x,y,z)
+	{
+	    housePreview.position.x = x;
+		housePreview.position.z = z;
+		wallPreview.position.x = x;
+		wallPreview.position.z = z;
+		SCENE.add(currentPreview);
+	}
+	this.movePreview = function(x,y)
+	{
+	    housePreview.position.x += x;
+		housePreview.position.z += y;
+	    wallPreview.position.x += x;
+		wallPreview.position.z += y;
+	}
+	this.hidePreview = function()
+	{
+	    SCENE.remove(currentPreview);
+	}
+	this.preview = function(mode,type)
+	{
+	    if(mode == 'build' && type == 'house')
+		{
+		    if(currentPreview != housePreview)
+			{
+			    SCENE.remove(wallPreview);
+				currentPreview = housePreview;
+				SCENE.add(housePreview);
+			}
+		}
+		if(mode == 'build' && type == 'wall')
+		{
+		    if(currentPreview != wallPreview)
+			{
+			    SCENE.remove(housePreview);
+				curentPreview = wallPreview;
+				SCENE.add(wallPreview);
+			}
+		}
+	}
+	this.update_preview = function(mouseX,mouseY)
+	{
+	    housePreview.position.x -= mouseY;
+		housePreview.position.z += mouseX;
+	    wallPreview.position.x -= mouseY;
+		wallPreview.position.z += mouseX;
+	}
 	this.handle_command = function(buildCMD, mouseX,mouseY)
 	{
         var playerSpot = this.grid_spot(PLAYER.position.x, PLAYER.position.z);
@@ -333,7 +388,6 @@ function Grid(width, height, blocks)
 	this.buildWall = function (spotClick, pullVec)
 	{
 	    //determine if horizontal or vertical
-		console.log(pullVec.x+","+pullVec.z);
 		if(Math.abs(pullVec.x) > Math.abs(pullVec.z))//Horizontal
 		{
 			//Check up and down
@@ -373,7 +427,6 @@ function Grid(width, height, blocks)
 	}
 	this.removeWall = function(fencePiece)
 	{
-	    console.log(fencePiece);
 	    SCENE.remove(fencePiece.mesh);
 		
 		var units = fencePiece.units;
@@ -386,7 +439,7 @@ function Grid(width, height, blocks)
 	}
 	/*draw some lines*/
 	var material = new THREE.LineBasicMaterial({
-        color: 0x00FF00,
+        color: 0xFFFFFF,
     });
 	for(var x = 0; x < width; x+=width/blocks)
 	{
@@ -399,7 +452,7 @@ function Grid(width, height, blocks)
         gridLines.push(line);
 	}
 	material = new THREE.LineBasicMaterial({
-        color: 0x555555,
+        color: 0xFFFFFF,
     });
 	for(var y = 0; y < width; y+=height/blocks)
 	{
@@ -413,7 +466,7 @@ function Grid(width, height, blocks)
 	}
     
     var texture = THREE.ImageUtils.loadTexture('Resources/Textures/dirt1.png');
-    var material = new THREE.MeshBasicMaterial({map: texture});
+    material = new THREE.MeshBasicMaterial({map: texture});
 	var eas = 10;
     var plane = new THREE.PlaneGeometry((width/blocks)*eas, (width/blocks)*eas);
     
