@@ -32,14 +32,23 @@ function WallPiece(position)
 }
 var house_width = 10;
 var house_height = 20;
-function HousePiece(position)
+function HousePiece(position, grid)
 {
+    this.grid_spot = grid;
 	var material = new THREE.MeshBasicMaterial({
         color: 0x0000FF,
     });
-	this.mesh = new THREE.Mesh( new THREE.CubeGeometry( house_width, house_height, house_width, 2, 2, 2), material);
+	this.mesh = new THREE.Mesh(GEOMETRIES[HOUSE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
+	this.mesh.scale.set(3,3,3);
 	this.mesh.position.x = position.x;
-	this.mesh.position.y = house_height/2;
+	this.mesh.position.y = -.7;
 	this.mesh.position.z = position.z;
 	SCENE.add(this.mesh);
+	
+	this.units;
+}
+function HousePieceUnit(housePiece, position)
+{
+	this.myOwner = housePiece;
+	this.position = position;
 }
