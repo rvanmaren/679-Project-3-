@@ -53,20 +53,25 @@ function Day(position)
 	this.type = "wall"
 	this.target = new Builder_Target(this.position);
 	this.doneBuilding = false;
+	
+	this.numLinesSkipped = 0;
+	
 	//this.builderBar = new Builder_Bar();
 	
 	this.zoom = function(zoomKey)
 	{
 		if(zoomKey == "in")
 		{
-			this.position.y-=zoomSpeed;
-			this.speed-=2;
+			this.position.y = Math.max(this.position.y-zoomSpeed, 100);
+			//this.speed-=2;
 		}
 		else
 		{
-			this.position.y+=zoomSpeed;
-			this.speed+=2;
+			this.position.y = Math.min(this.position.y+zoomSpeed, 3000);
+			//this.speed+=2;
 		}
+		
+		this.speed = Math.sqrt(this.position.y);
 	}
 	this.key_down = function(keyEvent)
 	{
@@ -130,6 +135,7 @@ function Day(position)
         this.target.setPosition(PLAYER.position.x, this.target.position().y, PLAYER.position.z);
         this.playerMarker.visible = true;
         THE_GRID.showLines();
+        THE_GRID.hideSomeLines(this.numLinesSkipped);
 		THE_GRID.setPreview(PLAYER.position.x, -1, PLAYER.position.z);
 		this.blocksLeft += buildAmount;
 		this.doneBuilding = false;
@@ -210,6 +216,11 @@ function Day(position)
 											this.position.z + this.direction.z);
 		CAMERA.lookAt(camTarget);
 		CAMERA.rotation.z = -90 * Math.PI/180;
+		
+		if (Math.floor(this.position.y / 250) != this.numLinesSkipped) {
+			this.numLinesSkipped = Math.floor(this.position.y / 250);
+			THE_GRID.hideSomeLines(this.numLinesSkipped);
+		}
 	};
 	this.finished = function()
 	{
