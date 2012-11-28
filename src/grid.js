@@ -60,6 +60,20 @@ function Grid(width, height, blocks)
 		else
 			return true;
 	}
+	
+		this.isSpotOccupied = function(spot)
+	{
+		var x = spot[0];
+		var y = spot[1];
+        if(x < 0 || x >= this.grid_spots.length || y < 0 || y >= this.grid_spots[0].length){
+            return true;
+        }
+		if(this.grid_spots[x][y] == EMPTY || this.grid_spots[x][y] instanceof Array)
+			return false;
+		else
+			return true;
+	}
+	
 	this.computeBuildBlocks = function()
 	{
 	    return 50;
