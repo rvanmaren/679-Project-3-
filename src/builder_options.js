@@ -35,9 +35,6 @@ var house_height = 20;
 function HousePiece(position, grid)
 {
     this.grid_spot = grid;
-	var material = new THREE.MeshBasicMaterial({
-        color: 0x0000FF,
-    });
 	this.mesh = new THREE.Mesh(GEOMETRIES[HOUSE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.scale.set(3,3,3);
 	this.mesh.position.x = position.x;
