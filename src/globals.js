@@ -25,10 +25,12 @@ var ZOMBIES = new Array();
 
 /*BUILDER GLOBALS*/
 var GUN_MESH = 0;
-var ZOMBIE_MESH = 1;
+var ZOMBIE_MESH = 2;
+var HOUSE_MESH = 1;
 var GEOMETRIES = new Array();
 var COLLADAS = new Array();
-var NUM_GEOMETRIES  = 2;
+var NUM_GEOMETRIES  = 3;
+
 function load( geometry,id) {  
 		//var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial({overdraw: true}));   
 		GEOMETRIES.push(geometry);
@@ -44,7 +46,7 @@ function load_anim( geometry,id) {
 		GEOMETRIES.push(geometry);
 };
 function loadGeometry(meshToLoad, id) {
-	LOADER.load( meshToLoad ,function(geometry){load(geometry,id)});
+	LOADER.load( meshToLoad ,function(geometry){GEOMETRIES.push(geometry);});
 }
 function loadGeometry_anim(meshToLoad, id) {
 	LOADER.load( meshToLoad ,function(geometry){load_anim(geometry,id)});
@@ -57,7 +59,8 @@ function loadGeometryCollada(meshToLoad)
 var GRID_HEIGHT = 10000;
 var GRID_WIDTH = 10000;
 var NUM_BOXES = 1000;
-
+var NUM_HOUSES = 0;
+var HOUSE_COST = 5;
 /*BULLET GLOBALS*/
 var BULLET_SPEED = 30;
 var BULLETS = new Array();

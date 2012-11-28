@@ -16,11 +16,16 @@ function Level(levelNum)
 			ZOMBIES[i].update(time);
 		} 
 	};
-	
-	this.exitLevel = function(){
-		for(var i = 0; i < ZOMBIES.length; i++){
-			ZOMBIES[i].kill();
-		}
-		ZOMBIES = new Array();
+
+	this.exitLevel = function () {
+	    for (var i = 0; i < ZOMBIES.length; i++) {
+	        SCENE.remove(ZOMBIES[i].mesh);
+	    }
+	    ZOMBIES = new Array();
+
+	    for (var i = 0; i < BULLETS.length; i++) {
+	        SCENE.remove(BULLETS[i].mesh);
+	    }
+	    BULLETS = new Array();
 	}
 }

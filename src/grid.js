@@ -13,7 +13,7 @@ function Grid(width, height, blocks)
 {
 	this.grid_spots = new Array(blocks);
     this.grid_objects = new Array(blocks);
-	this.numHouses = 0;
+	
 	//this makes the array 2D;
 
 	for (var i = 0; i < blocks; i++) {
@@ -29,6 +29,8 @@ function Grid(width, height, blocks)
 	this.width = width;
 	this.height = height;
 	this.blocks = blocks;
+
+    
 	this.grid_spot = function(clickX,clickY)
 	{
 		var arry = new Array();
@@ -76,11 +78,17 @@ function Grid(width, height, blocks)
 	
 	this.computeBuildBlocks = function()
 	{
-	    return 50;
+	    return NUM_HOUSES * 10;
 	}
 	this.handle_command = function(buildCMD)
 	{
+        var playerSpot = this.grid_spot(PLAYER.position.x, PLAYER.position.z);
 		var spot = this.grid_spot(buildCMD.x,buildCMD.y);
+        
+        if (Math.abs(playerSpot[0] - spot[0]) < 2 && Math.abs(playerSpot[1] - spot[1]) < 2) {
+            return false;
+        }
+         
 		if(spot[0] >=0 && spot[1] >=0)//check for bounds
 		{
 			if(buildCMD.command == "build")
@@ -89,9 +97,7 @@ function Grid(width, height, blocks)
 				{
 					if(buildCMD.type == "house")
 					{
-						this.grid_spots[spot[0]][spot[1]] = new HousePiece(new THREE.Vector3(spot[0]*width/blocks+width/blocks/2,0,spot[1]*height/blocks+height/blocks/2));
-						this.numHouses++;
-						return true;
+						return this.buildHouse(spot);
 					}
 					if(buildCMD.type == "wall")
 					{
@@ -104,12 +110,24 @@ function Grid(width, height, blocks)
 			{
 				if(this.grid_spots[spot[0]][spot[1]] != EMPTY)
 				{
-				    if(this.grid_spots[spot[0]][spot[1]] instanceof HousePiece)
+				    if(this.grid_spots[spot[0]][spot[1]] instanceof HousePiece || this.grid_spots[spot[0]][spot[1]] instanceof HousePieceUnit)
 					{
-					    this.numHouses--;
+					    NUM_HOUSES--;
+						if(this.grid_spots[spot[0]][spot[1]] instanceof HousePieceUnit)
+						{
+						    //look up the house and tell to remove
+							this.removeHouse(this.grid_spots[spot[0]][spot[1]].myOwner);
+						}
+						else
+						{
+						    this.removeHouse(this.grid_spots[spot[0]][spot[1]]);
+						}
 					}
-					remove(this.grid_spots[spot[0]][spot[1]]);
-					this.grid_spots[spot[0]][spot[1]] = EMPTY;
+					else //Wall or something
+					{
+					    remove(this.grid_spots[spot[0]][spot[1]]);
+					    this.grid_spots[spot[0]][spot[1]] = EMPTY;
+					}
 					return true;
 				}
 			}
@@ -197,8 +215,97 @@ function Grid(width, height, blocks)
         }
         gridVisible = true;
     }
-	
-  
+	this.removeHouse = function (housePiece)
+	{
+		var bottomSpotX = housePiece.grid_spot[0]-6;
+		var bottomSpotY = housePiece.grid_spot[1]-3;
+		
+		console.log((this.grid_spots[housePiece.grid_spot[0]][housePiece.grid_spot[1]]));
+		SCENE.remove(this.grid_spots[housePiece.grid_spot[0]][housePiece.grid_spot[1]].mesh);
+		/*check around us*/
+		for(var i = bottomSpotX; i < bottomSpotX+13 ; i++)
+		{
+		    for(var j = bottomSpotY; j < bottomSpotY+8; j++)
+			{
+				this.grid_spots[i][j] = EMPTY;
+			}
+		}
+		for(var i = bottomSpotX+4; i < bottomSpotX+5+4 ; i++)
+		{
+		    for(var j = bottomSpotY+7; j < bottomSpotY+8+4; j++)
+			{
+				this.grid_spots[i][j] = EMPTY;
+			}
+		}
+	}
+    this.buildHouse = function(spotClick)
+	{
+		/*FIRST CHECK ALL PLACES THE HOUSE WILL GO TO*/
+		var allGood = false;
+		var bottomSpotX = spotClick[0]-6;
+		var bottomSpotY = spotClick[1]-3;
+		
+		if(bottomSpotX < 0 || bottomSpotY < 0 || bottomSpotX+11 > this.grid_spots.length || bottomSpotY+12 > this.grid_spots[0].length)
+			return false;
+		
+		/*check around us*/
+        var playerSpot = this.grid_spot(PLAYER.position.x, PLAYER.position.z);
+		for(var i = bottomSpotX; i < bottomSpotX+13 ; i++)
+		{
+		    for(var j = bottomSpotY; j < bottomSpotY+8; j++)
+			{
+		        if(this.grid_spots[i][j] != EMPTY)
+				{
+					return false
+				}
+
+                //If we are too close to the player
+                if (Math.abs(playerSpot[0] - i) < 2 && Math.abs(playerSpot[1] - j) < 2) {
+                    return false;
+                }
+			}
+		}
+		for(var i = bottomSpotX+4; i < bottomSpotX+5+4 ; i++)
+		{
+		    for(var j = bottomSpotY+7; j < bottomSpotY+8+4; j++)
+			{
+		        if(this.grid_spots[i][j] != EMPTY)
+				{
+					return false
+				}
+                
+                 //If we are too close to the player
+                if (Math.abs(playerSpot[0] - i) < 2 && Math.abs(playerSpot[1] - j) < 2) {
+                    return false;
+                }
+			}
+		}
+		//ALL GOOD
+		this.grid_spots[spotClick[0]][spotClick[1]] = new HousePiece(new THREE.Vector3(spotClick[0]*width/blocks+width/blocks/2,0,spotClick[1]*height/blocks+height/blocks/2),spotClick);
+		var unit_spots = new Array();
+		for(var i = bottomSpotX; i < bottomSpotX+13 ; i++)
+		{
+		    for(var j = bottomSpotY; j < bottomSpotY+8; j++)
+			{
+			    if(i!= spotClick[0] && j != spotClick[1])
+				{
+		            this.grid_spots[i][j] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[i,j]);
+				    unit_spots.push(this.grid_spots[i][j]);
+				}
+			}
+		}
+		for(var i = bottomSpotX+4; i < bottomSpotX+5+4 ; i++)
+		{
+		    for(var j = bottomSpotY+7; j < bottomSpotY+8+4; j++)
+			{
+		        this.grid_spots[i][j] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[i,j]);
+				unit_spots.push(this.grid_spots[i][j]);
+			}
+		}
+		this.grid_spots[spotClick[0]][spotClick[1]].units = unit_spots;
+		NUM_HOUSES++;
+        return true;
+	}
 	/*draw some lines*/
 	var material = new THREE.LineBasicMaterial({
         color: 0x00FF00,
