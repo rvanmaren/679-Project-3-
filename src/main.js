@@ -21,10 +21,6 @@ LOADER.load( './resources/skeleton_0.js', function(geometry){
 		GEOMETRIES.push(geometry);});
 LOADER.load( './resources/fence/fence.js' ,function(geometry){    geometry.id = 'fence';    GEOMETRIES.push(geometry);});
 
-for(var index = 0; index < 4; index++)
-{
-    //console.log(GEOMETRIES[index].id);
-}
 
 //Need to check the order of stuff 
 function add_image(src, id, posX, posY, visible) {
@@ -84,6 +80,23 @@ function loadLoop()
 		document.getElementById("intro").style.visibility= '';
 		GAME_LOADED = true;
 		console.log(GEOMETRIES);
+		for(var index = 0; index < GEOMETRIES.length; index++)
+		{
+		  if(GEOMETRIES[index].id != ORDER[index])
+		  {
+		       //look up where to swap
+			   for(var c = index; c < GEOMETRIES.length; c++)
+			   {
+			       if(GEOMETRIES[c].id == ORDER[index])
+				   {
+				       var temp = GEOMETRIES[index];
+					   GEOMETRIES[index] = GEOMETRIES[c];
+					   GEOMETRIES[c] = temp;
+				   }
+				 
+			   }
+		  }
+		}
 	}
 	else
 	{

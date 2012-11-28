@@ -25,9 +25,10 @@ var ZOMBIES = new Array();
 
 /*BUILDER GLOBALS*/
 var GUN_MESH = 0;
-var ZOMBIE_MESH = 3;
 var HOUSE_MESH = 1;
 var FENCE_MESH = 2;
+var ZOMBIE_MESH = 3;
+var ORDER =['gun','house','fence', 'zombie'];
 var GEOMETRIES = new Array();
 var COLLADAS = new Array();
 var NUM_GEOMETRIES  = 4;
