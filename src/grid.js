@@ -49,7 +49,7 @@ function Grid(width, height, blocks)
 		var x = ySpot*(this.height/ this.blocks)
 		var y = xSpot*(this.height/ this.blocks)
 		arry.push(y);
-		arry.push(x);
+		arry.push(x);	
 		return arry;
 	}
 	this.isOccupied = function(x,y)

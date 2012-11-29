@@ -1,12 +1,12 @@
 var zombie_height = 40;
 var zombie_width = 10;
-var attack_distance = 450;
 var WALKING = 0;
 var ATTACKING = 1;
 var DYING = 2;
 var STANDING = 3;
 function Zombie(position)
 {
+	this.attack_distance = 75;
 	this.position = position;
 	this.speed = 1;
     this.rotationSpeed = .5;
@@ -14,8 +14,9 @@ function Zombie(position)
 	this.target = PLAYER;
 	this.targetForMove = new THREE.Vector3(0,0,0);
 	this.frame = 0;
+	this.computeFrame = 61;
 	this.state = WALKING;
-	
+	this.drawPathArray = new Array();
 	
 	this.direction =new THREE.Vector3(this.target.position.x - this.position.x
 										,this.target.position.y - this.position.y,
@@ -32,6 +33,7 @@ function Zombie(position)
 	this.mesh.position.z = position.z;
 	this.mesh.scale.set(20,20,20);
     this.boundRadius = zombie_width;
+	this.pathArray = new Array();
 	SCENE.add(this.mesh);
     THE_GRID.requestPlacement(this,this.position.x, this.position.z);
 
@@ -59,7 +61,7 @@ function Zombie(position)
 		//if(deg)
 		//this.rotation += (deg-Math.PI/2);
 		//console.log(this.rotation);
-		this.direction.x = newDir.x
+	/*	this.direction.x = newDir.x
 		this.direction.y = newDir.y;
 		this.direction.z = newDir.z
 		this.direction.normalize();
@@ -67,73 +69,34 @@ function Zombie(position)
 		var nextY = this.position.z + this.direction.z*zombie_width + this.direction.z*zombie_width;
 		
 		var newSpot = THE_GRID.grid_spot(nextX, nextY);
-		 if(THE_GRID.isOccupied(newSpot[0],newSpot[1]))
-		{
-		
-
-				var spot = THE_GRID.grid_spot(this.position.x, this.position.z);
-				var playerSpot = THE_GRID.grid_spot(PLAYER.position.x,  PLAYER.position.z);
-				
-				var pathArray = new Array();
-				pathArray.push(new Array(spot[0],spot[1]));
-				var xDistance = spot[0] - playerSpot[0];
-				var yDistance = spot[1] - playerSpot[1];
-				
-				while(xDistance != 0){
-					if(xDistance > 0){
-						pathArray.push(new Array(pathArray[pathArray.length - 1][0] - 1, pathArray[pathArray.length - 1][1]));
-						xDistance--;
-					} else if ( xDistance < 0){
-						pathArray.push(new Array(pathArray[pathArray.length - 1][0] + 1, pathArray[pathArray.length - 1][1]));
-						xDistance++;
-					}
-				}
-		
-				while(yDistance != 0){
-					if(yDistance > 0){
-								pathArray.push(new Array(pathArray[pathArray.length - 1][0], pathArray[pathArray.length - 1][1] - 1));
-								yDistance--;
-					} else if ( yDistance < 0){
-								pathArray.push(new Array(pathArray[pathArray.length - 1][0], pathArray[pathArray.length - 1][1] + 1));
-								yDistance++;
-					}
-				}
-						
-				var pathClear = false;
-				var count = 0;
-				while(!pathClear && count < 100){
-					pathClear = true;
-					for(var i = 1; i < pathArray.length - 1; i++){
-						if(THE_GRID.isSpotOccupied(pathArray[i])){
-							var badSpot = pathArray[i];
-							var prevSpot = pathArray[i-1];
-							var nextSpot = pathArray[i+1];
-							
-							if(badSpot[0] == prevSpot[0]){
-								badSpot[0] = badSpot[0] + 1;
-								pathArray.splice(i,0,new Array(prevSpot[0] + 1,prevSpot[1]))
-								pathArray.splice(i+2,0,new Array(nextSpot[0] + 1,nextSpot[1]))
-							} else {
-								badSpot[1] = badSpot[1] + 1;
-								pathArray.splice(i,0,new Array(prevSpot[0],prevSpot[1] + 1))
-								pathArray.splice(i+2,0,new Array(nextSpot[0],nextSpot[1] + 1))
-							
-							}
-							pathClear = false;
-							break;
-						}
-					}
-					count++;
-				}
-			if(pathArray.length > 3){
-				bestSpot = pathArray[2];
-			} else
-			{
-				bestSpot = pathArray[1];
-			
+		*/		
+		if(!this.hasDirectPath())
+		{	
+			this.computeFrame++;
+			if(this.computeFrame > 60){
+				this.computePath();
+				this.computeFrame = 0;
 			}
 			
-			this.moveTowardsGridSpot(bestSpot[0], bestSpot[1]);
+			var spot = THE_GRID.grid_spot(this.position.x, this.position.z);
+			var nextSpot;
+			
+			if(this.pathArray.length > 2){
+				nextSpot = this.pathArray[1];
+				if(nextSpot[0] == spot[0] && nextSpot[1] == spot[1]){
+				//	this.frame ++;
+				//	if(this.frame > 5){	
+							this.pathArray.splice(0,1);
+							nextSpot = this.pathArray[1];
+						//	this.frame = 0;
+					//	}
+				}
+				
+ 			} else{
+				this.computePath();
+			}
+			
+			this.moveTowardsGridSpot(nextSpot[0], nextSpot[1]);
 			this.direction.x = this.targetForMove.x - this.position.x
 			this.direction.y = this.targetForMove.y - this.position.y
 			this.direction.z = this.targetForMove.z - this.position.z
@@ -144,15 +107,90 @@ function Zombie(position)
 	
 	
 	
-	this.isDirectPath = function() {
+	this.computePath =  function(){
+				var spot = THE_GRID.grid_spot(this.position.x, this.position.z);
+				var playerSpot = THE_GRID.grid_spot(PLAYER.position.x,  PLAYER.position.z);
+				
+				this.pathArray = new Array();
+				this.pathArray.push(new Array(spot[0],spot[1]));
+				var xDistance = spot[0] - playerSpot[0];
+				var yDistance = spot[1] - playerSpot[1];
+				
+				while(xDistance != 0){
+					if(xDistance > 0){
+						this.pathArray.push(new Array(this.pathArray[this.pathArray.length - 1][0] - 1, this.pathArray[this.pathArray.length - 1][1]));
+						xDistance--;
+					} else if ( xDistance < 0){
+						this.pathArray.push(new Array(this.pathArray[this.pathArray.length - 1][0] + 1, this.pathArray[this.pathArray.length - 1][1]));
+						xDistance++;
+					}
+				}
 		
-		var reachedTarget = false;
+				while(yDistance != 0){
+					if(yDistance > 0){
+								this.pathArray.push(new Array(this.pathArray[this.pathArray.length - 1][0], this.pathArray[this.pathArray.length - 1][1] - 1));
+								yDistance--;
+					} else if ( yDistance < 0){
+								this.pathArray.push(new Array(this.pathArray[this.pathArray.length - 1][0], this.pathArray[this.pathArray.length - 1][1] + 1));
+								yDistance++;
+					}
+				}
+						
+				var pathClear = false;
+				var count = 0;
+				while(!pathClear && count < 100){
+					pathClear = true;
+					for(var i = 1; i < this.pathArray.length - 1; i++){
+						if(THE_GRID.isSpotOccupied(this.pathArray[i])){
+							var badSpot = this.pathArray[i];
+							var prevSpot = this.pathArray[i-1];
+							var nextSpot = this.pathArray[i+1];
+							
+							if(badSpot[0] == prevSpot[0]){
+								badSpot[0] = badSpot[0] + 1;
+								this.pathArray.splice(i,0,new Array(prevSpot[0] + 1,prevSpot[1]))
+								this.pathArray.splice(i+2,0,new Array(nextSpot[0] + 1,nextSpot[1]))
+							} else {
+								badSpot[1] = badSpot[1] + 1;
+								this.pathArray.splice(i,0,new Array(prevSpot[0],prevSpot[1] + 1))
+								this.pathArray.splice(i+2,0,new Array(nextSpot[0],nextSpot[1] + 1))
+							
+							}
+							pathClear = false;
+							break;
+						}
+					}
+					count++;
+				}
+			
+			for(var i = 0; i < this.drawPathArray.length; i++){
+				SCENE.remove(this.drawPathArray[i]);
+			}
+			
+			this.drawPathArray = new Array();
+			for(var i = 0; i < this.pathArray.length; i++){
+				var pathMesh = new THREE.Mesh( new THREE.CubeGeometry( 4,4,4, 2, 2, 2), material);
+				var coordArray = THE_GRID.coordinatesFromSpot(this.pathArray[i][0],this.pathArray[i][1]);
+				pathMesh.position.x = coordArray[0];
+				pathMesh.position.y = 10;
+				pathMesh.position.z = coordArray[1];
+				SCENE.add(pathMesh);
+				this.drawPathArray.push(pathMesh);
+			
+			}
+	
+	}
+	
+	this.hasDirectPath = function() {
+		return false;
+	/*	var reachedTarget = false;
 		var tmpX = this.position.x;
 		var tmpY = this.position.z;
 		
 		while(!reachedTarget){
 			
 		}
+		*/
 	
 	}
 	
@@ -174,6 +212,10 @@ function Zombie(position)
         if (index >= 0 && index < ZOMBIES.length) {
             ZOMBIES.splice(index,1);
         }
+		
+		for(var i = 0; i < this.drawPathArray.length; i++){
+				SCENE.remove(this.drawPathArray[i]);
+			}
 
 		SCENE.remove(this.mesh);
 	}
@@ -257,9 +299,9 @@ function Zombie(position)
 		//var nextX = this.position.x + directionPerp.x*this.speed + this.direction.x*this.speed;
 		//var nextY = this.position.z + directionPerp.z*this.speed + this.direction.z*this.speed;
 		
-		var distance = Math.sqrt(this.position.x  - this.target.position.x,2) + Math.pow(this.position.z - this.target.position.z,2);
+		var distance = Math.sqrt(Math.pow(this.position.x  - this.target.position.x,2) + Math.pow(this.position.z - this.target.position.z,2));
 		
-		if(distance < attack_distance){
+		if(distance < this.attack_distance){
 			this.state = ATTACKING;
 			this.mesh.morphTargetInfluences[ (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.walkingDuration ] = 1;
 		}
