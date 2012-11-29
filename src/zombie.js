@@ -63,8 +63,8 @@ function Zombie(position)
 		this.direction.y = newDir.y;
 		this.direction.z = newDir.z
 		this.direction.normalize();
-		var nextX = this.position.x + this.direction.x*zombie_width/2 + this.direction.x*zombie_width/2;
-		var nextY = this.position.z + this.direction.z*zombie_width/2 + this.direction.z*zombie_width/2;
+		var nextX = this.position.x + this.direction.x*zombie_width + this.direction.x*zombie_width;
+		var nextY = this.position.z + this.direction.z*zombie_width + this.direction.z*zombie_width;
 		
 		var newSpot = THE_GRID.grid_spot(nextX, nextY);
 		 if(THE_GRID.isOccupied(newSpot[0],newSpot[1]))
@@ -100,7 +100,8 @@ function Zombie(position)
 				}
 						
 				var pathClear = false;
-				while(!pathClear){
+				var count = 0;
+				while(!pathClear && count < 100){
 					pathClear = true;
 					for(var i = 1; i < pathArray.length - 1; i++){
 						if(THE_GRID.isSpotOccupied(pathArray[i])){
@@ -109,20 +110,28 @@ function Zombie(position)
 							var nextSpot = pathArray[i+1];
 							
 							if(badSpot[0] == prevSpot[0]){
-								badSpot[1] = badSpot[1] + 1;
-								pathArray.splice(i-1,0,new Array(prevSpot[0],prevSpot[1] + 1))
-								pathArray.splice(i+1,0,new Array(nextSpot[0],nextSpot[1] + 1))
-							} else {
 								badSpot[0] = badSpot[0] + 1;
-								pathArray.splice(i-1,0,new Array(prevSpot[0] + 1,prevSpot[1]))
-								pathArray.splice(i+1,0,new Array(nextSpot[0] + 1,nextSpot[1]))
+								pathArray.splice(i,0,new Array(prevSpot[0] + 1,prevSpot[1]))
+								pathArray.splice(i+2,0,new Array(nextSpot[0] + 1,nextSpot[1]))
+							} else {
+								badSpot[1] = badSpot[1] + 1;
+								pathArray.splice(i,0,new Array(prevSpot[0],prevSpot[1] + 1))
+								pathArray.splice(i+2,0,new Array(nextSpot[0],nextSpot[1] + 1))
 							
 							}
 							pathClear = false;
+							break;
 						}
 					}
+					count++;
 				}
-			bestSpot = pathArray[1];
+			if(pathArray.length > 3){
+				bestSpot = pathArray[2];
+			} else
+			{
+				bestSpot = pathArray[1];
+			
+			}
 			
 			this.moveTowardsGridSpot(bestSpot[0], bestSpot[1]);
 			this.direction.x = this.targetForMove.x - this.position.x
