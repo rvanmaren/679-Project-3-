@@ -11,6 +11,7 @@ function Player(position)
 	this.direction = new THREE.Vector3(0,0,1);
 	this.speed = P_SPEED;
     this.rotationSpeed = P_ROTATE;
+	this.health = 100;
 	this.gun = new Gun(this.position,this.direction);
 	this.mouse_down = function(keyEvent) {
         BULLETS.push(new Bullet(this.position, this.direction.clone()));
@@ -69,6 +70,13 @@ function Player(position)
 	    this.direction.y = yTheta;
 	    this.direction = this.direction.normalize();
 
+	}
+	
+	this.doDamage = function(damage){
+		this.health-=damage;
+		if(this.health <= 0){
+			//TODO Player dead
+		}
 	}
 
 	this.update = function(time) {

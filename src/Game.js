@@ -24,6 +24,8 @@ function Game()
 	
 	//Display level
 	document.getElementById("level").style.visibility= '';
+	document.getElementById("health").style.visibility= '';
+
 	//timing for state switching. We will wait until there are no more zombies
 	//And have a variable for the amount you can build in a round
 	this.key_down = function(keyEvt)
@@ -55,6 +57,8 @@ function Game()
 		this.gameState.update(10);
 		//Check if we need to toggle
 		document.getElementById("level").innerHTML = 'Level: '+this.currentLevel;
+		document.getElementById("health").innerHTML = 'Health: ' + PLAYER.health;
+		
 		if(this.gameState.finished())
 		{
 				if (this.gameState == this.day) {
