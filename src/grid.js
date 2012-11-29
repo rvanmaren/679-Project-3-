@@ -87,11 +87,17 @@ function Grid(width, height, blocks)
 	var wallPreview = new THREE.Mesh(GEOMETRIES[FENCE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	wallPreview.scale.set(20,45,20);
 	wallPreview.position.y = -1;
+	var removePreview = new THREE.Mesh(new THREE.SphereGeometry(8, 10, 10),new THREE.MeshBasicMaterial({color: 0xFF0000}));
+	removePreview.scale.set(.5,.5,.5);
+	removePreview.position.y = 1;
+	
 	var currentPreview = wallPreview;
 	this.setPreview = function(x,y,z)
 	{
 	    housePreview.position.x = x;
 		housePreview.position.z = z;
+		removePreview.position.x = x;
+		removePreview.position.z = z;
 		wallPreview.position.x = x;
 		wallPreview.position.z = z;
 		SCENE.add(currentPreview);
@@ -100,12 +106,14 @@ function Grid(width, height, blocks)
 	{
 	    housePreview.position.x += x;
 		housePreview.position.z += y;
+	    removePreview.position.x += x;
+		removePreview.position.z += y;
 	    wallPreview.position.x += x;
 		wallPreview.position.z += y;
 	}
-	this.hidePreview = function()
+	this.hidePreview = function(mode)
 	{
-	    SCENE.remove(currentPreview);
+		SCENE.remove(currentPreview);
 	}
 	this.preview = function(mode,type)
 	{
@@ -113,7 +121,15 @@ function Grid(width, height, blocks)
 		{
 		    if(currentPreview != housePreview)
 			{
-			    SCENE.remove(wallPreview);
+			    if(currentPreview == wallPreview)
+				{
+					SCENE.remove(wallPreview);
+				}
+				else
+				{
+					SCENE.remove(removePreview);
+				}
+				
 				currentPreview = housePreview;
 				SCENE.add(housePreview);
 			}
@@ -122,9 +138,33 @@ function Grid(width, height, blocks)
 		{
 		    if(currentPreview != wallPreview)
 			{
-			    SCENE.remove(housePreview);
-				curentPreview = wallPreview;
+			    if(currentPreview == housePreview)
+				{
+					SCENE.remove(housePreview);
+				}
+				else
+				{
+					SCENE.remove(removePreview);
+				}
+				
+				currentPreview = wallPreview;
 				SCENE.add(wallPreview);
+			}
+		}
+		if(mode == 'remove')
+		{
+		    if(currentPreview != removePreview)
+			{ 
+				if(currentPreview == housePreview)
+				{
+					SCENE.remove(housePreview);
+				}
+				if(currentPreview == wallPreview)
+				{
+					SCENE.remove(wallPreview);
+				}
+				SCENE.add(removePreview);	
+				currentPreview = removePreview;
 			}
 		}
 	}
@@ -132,6 +172,8 @@ function Grid(width, height, blocks)
 	{
 	    housePreview.position.x -= mouseY;
 		housePreview.position.z += mouseX;
+		removePreview.position.x -= mouseY;
+		removePreview.position.z += mouseX;
 	    wallPreview.position.x -= mouseY;
 		wallPreview.position.z += mouseX;
 	}
@@ -190,7 +232,7 @@ function Grid(width, height, blocks)
 						}
 					}
 					else //Wall or something
-					{
+					{console.log("uuhh");
 					    remove(this.grid_spots[spot[0]][spot[1]]);
 					    this.grid_spots[spot[0]][spot[1]] = EMPTY;
 					}
@@ -409,7 +451,8 @@ function Grid(width, height, blocks)
 		else
 		{
 			//Check left and right
-			if(this.grid_spots[spotClick[0]-1][spotClick[1]] != EMPTY || this.grid_spots[spotClick[0]+1][spotClick[1]] != EMPTY)
+			if(this.grid_spots[spotClick[0]-1][spotClick[1]] != EMPTY || this.grid_spots[spotClick[0]+1][spotClick[1]] != EMPTY
+			|| this.grid_spots[spotClick[0]-2][spotClick[1]] != EMPTY || this.grid_spots[spotClick[0]+2][spotClick[1]] != EMPTY)
 			{
 			    return false;
 			}

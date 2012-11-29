@@ -146,7 +146,7 @@ function Day(position)
         this.playerMarker.visible = false;
 		this.building = false;
         THE_GRID.hideLines();
-		THE_GRID.hidePreview();
+		THE_GRID.hidePreview(this.mode);
 		document.getElementById("bUnits").style.visibility= 'hidden';
     }
 
