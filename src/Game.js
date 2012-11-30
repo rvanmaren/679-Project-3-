@@ -30,18 +30,6 @@ function Game()
 	this.key_down = function(keyEvt)
 	{
 		switch (event.keyCode){	
-			case 84: //toggle debug
-				if (this.gameState == this.day) {
-					this.day.switchOut();
-					this.night.switchInto(this.currentLevel);
-					this.gameState = this.night;
-				}
-				else {
-					this.day.switchInto();
-					this.night.switchOut();
-					this.gameState = this.day;
-				}
-				break;
 			default:
 				this.gameState.key_down(keyEvt);
 				break;

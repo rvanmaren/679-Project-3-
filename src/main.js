@@ -24,6 +24,7 @@ LOADERC = new THREE.ColladaLoader();
 var loaded = false;
 var count = 0;
 
+
 LOADER.load( './resources/rifle/rifle_0.js' ,function(geometry){    geometry.id = 'gun';    GEOMETRIES.push(geometry);});
 //LOADER.load( './resources/fence/fence.js' ,function(geometry){GEOMETRIES.push(geometry);});
 LOADER.load( './resources/housemodel.js' ,function(geometry){    geometry.id = 'house';    GEOMETRIES.push(geometry);});
@@ -89,7 +90,7 @@ function render() {
 	RENDERER.render( SCENE, CAMERA );
 }
 function animloop(){
-	//console.log(GEOMETRIES.length);
+    //console.log(GEOMETRIES.length);
 	window.requestAnimFrame(animloop);
 	GAME.update(10);
     render(); 
@@ -174,6 +175,10 @@ function mouse_up(event)
 document.body.requestPointerLock = document.body.requestPointerLock ||
 	document.body.mozRequestPointerLock ||
 	document.body.webkitRequestPointerLock;
+
+document.exitPointerLock = document.exitPointerLock ||
+                           document.mozExitPointerLock ||
+                           document.webkitExitPointerLock;
 	
 function mouseLockChange()
 {
@@ -205,6 +210,8 @@ function moveCallback(e) {
 	MOUSE_X = 0;
 	MOUSE_Y = 0;
 }
+
+
 
 
 

@@ -37,15 +37,17 @@ function Night()
 	this.initLevel = function(){
 		this.level = new Level(2);
 	}
-	
-	this.switchInto = function(){
-		this.initLevel(2);
-		PLAYER.keys  = [false,false,false,false];
-		document.getElementById("crossHair").style.visibility= '';
-		document.getElementById("night-info").style.visibility= '';
-		//document.getElementById("health").style.visibility= '';
-		//document.getElementById("bullets").style.visibility= '';
-        this.isFinished = false;
+
+	this.switchInto = function () {
+	    this.initLevel(2);
+	    document.body.requestPointerLock();
+	    PLAYER.keys = [false, false, false, false];
+	    PLAYER.health = 100;
+	    document.getElementById("crossHair").style.visibility = '';
+	    document.getElementById("night-info").style.visibility = '';
+	    //document.getElementById("health").style.visibility= '';
+	    //document.getElementById("bullets").style.visibility= '';
+	    this.isFinished = false;
 	}
 
 	this.switchOut = function(){

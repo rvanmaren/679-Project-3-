@@ -40,7 +40,9 @@ function Day(position)
 	this.direction = new THREE.Vector3(0,-1,0);
 	this.building = false;
 	this.blocksLeft = buildingNumber;
-	
+
+	this.awaitConfirmation = false;
+
 	this.markerMaterial = new THREE.MeshBasicMaterial(
 	{
 	    color: 0xFFF5C3
@@ -73,43 +75,51 @@ function Day(position)
 		
 		this.speed = Math.sqrt(this.position.y);
 	}
-	this.key_down = function(keyEvent)
-	{
-		switch (event.keyCode){		
-			case 13:
-				this.doneBuilding = true;	
-				break;
-			case 65:
-				this.keys[LEFT] = true;		
-				break;
-			case 87:
-				this.keys[UP] = true;
-				break;
-			case 68:
-				this.keys[RIGHT] = true;
-				break;
-			case 83:
-				this.keys[DOWN] = true;
-				break;
-			case 49:
-				this.mode = "build";
-				this.type = "wall";	
-				break;
-			case 50:
-				this.mode = "build";
-				this.type = "house";	
-				break;
-			case 51:
-				this.mode = "remove";	
-				break;
-			case 81:
-				this.zoom("out");
-				break;
-			case 69:
-				this.zoom("in");
-				break;
-		}
-		THE_GRID.preview(this.mode,this.type);
+	this.key_down = function (keyEvent) {
+	    if (!this.awaitConfirmation) {
+	        switch (event.keyCode) {
+	            case 32:
+	                this.awaitConfirmation = true;
+	                break;
+	            case 65:
+	                this.keys[LEFT] = true;
+	                break;
+	            case 87:
+	                this.keys[UP] = true;
+	                break;
+	            case 68:
+	                this.keys[RIGHT] = true;
+	                break;
+	            case 83:
+	                this.keys[DOWN] = true;
+	                break;
+	            case 49:
+	                this.mode = "build";
+	                this.type = "wall";
+	                break;
+	            case 50:
+	                this.mode = "build";
+	                this.type = "house";
+	                break;
+	            case 51:
+	                this.mode = "remove";
+	                break;
+	            case 81:
+	                this.zoom("out");
+	                break;
+	            case 69:
+	                this.zoom("in");
+	                break;
+	        }
+	    } else {
+	        if (event.keyCode != 32) {
+	            document.getElementById("exit-confirmation").style.visibility = 'hidden';
+	            this.awaitConfirmation = false;
+	        } else {
+	            this.doneBuilding = true;
+	        }
+	    }
+	    THE_GRID.preview(this.mode, this.type);
 	};
 	this.key_up = function(keyEvent)
 	{
@@ -136,10 +146,13 @@ function Day(position)
         this.playerMarker.visible = true;
         THE_GRID.showLines();
         THE_GRID.hideSomeLines(this.numLinesSkipped);
-		THE_GRID.setPreview(PLAYER.position.x, -1, PLAYER.position.z);
-		this.blocksLeft += buildAmount;
-		this.doneBuilding = false;
-		document.getElementById("day-info").style.visibility= '';
+        THE_GRID.setPreview(PLAYER.position.x, -1, PLAYER.position.z);
+        this.blocksLeft += buildAmount;
+        this.doneBuilding = false;
+        document.getElementById("day-info").style.visibility = '';
+        document.getElementById("build-images").style.visibility = '';
+        document.getElementById("exit-day").style.visibility = '';
+        this.awaitConfirmation = false;
     }
 
     this.switchOut = function () {
@@ -148,34 +161,42 @@ function Day(position)
         THE_GRID.hideLines();
         THE_GRID.hidePreview(this.mode);
         document.getElementById("day-info").style.visibility = 'hidden';
+        document.getElementById("build-images").style.visibility = 'hidden';
+        document.getElementById("exit-day").style.visibility = 'hidden';
         PLAYER.score += (this.blocksLeft * 10);
+        document.getElementById("exit-confirmation").style.visibility = 'hidden';
     }
 
     this.mouseMovement = function (mouseMoveX, mouseMoveY) {
+        if (this.awaitConfirmation) {
+            return;
+        }
         this.target.mouseMove(mouseMoveX, mouseMoveY);
-		THE_GRID.update_preview(mouseMoveX, mouseMoveY);
+        THE_GRID.update_preview(mouseMoveX, mouseMoveY);
         if (this.building) {
             if (this.blocksLeft || this.mode == "remove") {
                 if (!(this.type == 'house' && this.blocksLeft < HOUSE_COST)) {
-				    if(mouseMoveX !=0 || mouseMoveY != 0)
-					{
-						var built = THE_GRID.handle_command(new Build_Command(this.mode, this.type, this.target.position().x, this.target.position().z),mouseMoveX,mouseMoveY);
-						if (built && this.mode != "remove") {
-							if (this.type == 'house') {
-								this.blocksLeft -= HOUSE_COST;
-							} else {
-								this.blocksLeft--;
-							}
-						}
-						if (built && this.mode == "remove") {
-							this.blocksLeft++;
-						}
-					}
+                    if (mouseMoveX != 0 || mouseMoveY != 0) {
+                        var built = THE_GRID.handle_command(new Build_Command(this.mode, this.type, this.target.position().x, this.target.position().z), mouseMoveX, mouseMoveY);
+                        if (built && this.mode != "remove") {
+                            if (this.type == 'house') {
+                                this.blocksLeft -= HOUSE_COST;
+                            } else {
+                                this.blocksLeft--;
+                            }
+                        }
+                        if (built && this.mode == "remove") {
+                            this.blocksLeft++;
+                        }
+                    }
                 }
             }
         }
     }
-	this.mouse_down = function () {
+    this.mouse_down = function () {
+        if (this.awaitConfirmation) {
+            return;
+        }
 	    this.building = true;
 	    if (this.blocksLeft || this.mode == 'remove') {
 	        if (!(this.type == 'house' && this.blocksLeft < HOUSE_COST)&& this.type!='wall') {
@@ -195,33 +216,40 @@ function Day(position)
 	}
 	this.mouse_up = function()
 	{
+	    if (this.awaitConfirmation) {
+	        return;
+	    }
 		this.building=false;
 	}
-	this.update = function(time)
-	{
+	this.update = function (time) {
+
+	    if (this.awaitConfirmation) {
+	        document.getElementById("exit-confirmation").style.visibility = '';
+	    }
+
 	    document.getElementById("build-units").innerHTML = this.blocksLeft;
-		var forward = this.keys[UP] ? (this.keys[DOWN] ? 0 : 1) : (this.keys[DOWN] ? -1 : 0); //1,0,-1
-		var sideways = this.keys[RIGHT] ? (this.keys[LEFT] ? 0 : 1) : (this.keys[LEFT] ? -1 : 0);
-		
-		this.position.x += forward*this.speed;
-		this.position.z += sideways*this.speed;
-		//Move the crosshair with the camera
-		this.target.move(forward*this.speed,sideways*this.speed);
-		THE_GRID.movePreview(forward*this.speed,sideways*this.speed);
-		//this.position.z += this.direction.z*forward;
-		CAMERA.position.set(this.position.x, this.position.y, this.position.z);
-		//this.builderBar.update(CAMERA.position);
-		//this.camera.lookAt(this.position.x + dir.x, this.position.y + dir.y, this.position.z + dir.x);
-		var camTarget = new THREE.Vector3(this.position.x + this.direction.x,
+	    var forward = this.keys[UP] ? (this.keys[DOWN] ? 0 : 1) : (this.keys[DOWN] ? -1 : 0); //1,0,-1
+	    var sideways = this.keys[RIGHT] ? (this.keys[LEFT] ? 0 : 1) : (this.keys[LEFT] ? -1 : 0);
+
+	    this.position.x += forward * this.speed;
+	    this.position.z += sideways * this.speed;
+	    //Move the crosshair with the camera
+	    this.target.move(forward * this.speed, sideways * this.speed);
+	    THE_GRID.movePreview(forward * this.speed, sideways * this.speed);
+	    //this.position.z += this.direction.z*forward;
+	    CAMERA.position.set(this.position.x, this.position.y, this.position.z);
+	    //this.builderBar.update(CAMERA.position);
+	    //this.camera.lookAt(this.position.x + dir.x, this.position.y + dir.y, this.position.z + dir.x);
+	    var camTarget = new THREE.Vector3(this.position.x + this.direction.x,
 											this.position.y + this.direction.y,
 											this.position.z + this.direction.z);
-		CAMERA.lookAt(camTarget);
-		CAMERA.rotation.z = -90 * Math.PI/180;
-		
-		if (Math.floor(this.position.y / 250) != this.numLinesSkipped) {
-			this.numLinesSkipped = Math.floor(this.position.y / 250);
-			THE_GRID.hideSomeLines(this.numLinesSkipped);
-		}
+	    CAMERA.lookAt(camTarget);
+	    CAMERA.rotation.z = -90 * Math.PI / 180;
+
+	    if (Math.floor(this.position.y / 250) != this.numLinesSkipped) {
+	        this.numLinesSkipped = Math.floor(this.position.y / 250);
+	        THE_GRID.hideSomeLines(this.numLinesSkipped);
+	    }
 	};
 	this.finished = function()
 	{

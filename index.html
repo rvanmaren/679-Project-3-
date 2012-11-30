@@ -11,6 +11,22 @@
         <div class = "day-night-info" id ="day-info" style ="visibility:hidden"><h3>Building Units: </h3> <h3 id = "build-units">0</h3></div>
         <span class = "day-night-info" id ="night-info" style ="visibility: hidden"><h3>Health:</h3> <h3 id = "health">100</h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <h3 id ="bullets">Bullets: Infinite</h3></span>
         <div class = "general-info"   id ="gen-info" style ="visibility: hidden"><h3>Score:</h3> <h3 id = "score">0</h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <h3>Level: </h3> <h3 id = "level">1</h3></h3></div>
+        <div class = "build-images" id = "build-images" style ="visibility: hidden">
+        <div class = "build-info" >
+            <img class = "build-image" id = "fence-image" src="Resources/Textures/fence.png" />
+            <h1 style = "float: right; position: relative; top: 45px">&nbsp;1</h1>
+        </div>
+        <div class = "build-info">
+            <img class = "build-image" id = "house-image" src="Resources/Textures/house.png" />
+            <h1 style = "float: right; position: relative; top: 45px">&nbsp;2</h1>
+        </div>
+        <div class = "build-info">
+            <img class = "build-image" id = "bulldozer-image" src="Resources/Textures/bulldozer.png" />
+            <h1 style = "float: right; position: relative; top: 45px">&nbsp;3</h1>
+        </div>
+        </div>
+        <div id = "exit-day" style ="visibility: hidden"><h1>Press space bar when you are finished building.</h1></div>
+        <div class = "message"id = "exit-confirmation" style ="visibility: hidden"><h1>Are you sure you want to exit?</h1><h1>Press space bar to confirm,</h1> <h1>or any other key for return.</h1></div>
 	</body>
 	<script type="text/javascript" src="./src/three.js" ></script>
 	<script type="text/javascript" src="./src/ColladaLoader.js" ></script>
@@ -29,7 +45,7 @@
 	<script type="text/javascript" src="./src/Game.js" ></script>
 	<script type="text/javascript" src="./src/gl_initialize.js" ></script>
 	<script type="text/javascript" src="./src/main.js"></script>
-		<p>Press f for full screen(breaks wasd?). <b>G to lock mouse.</b> WASD to move. t to toggle view 
+		<p style ="visibility:hidden">Press f for full screen(breaks wasd?). <b>G to lock mouse.</b> WASD to move. t to toggle view 
 		if you get a  Cross origin requests are only supported for HTTP. error run chrome with the following option "--allow-file-access-from-files"
 		now with toggle between build type(press 1 or 2 while building) -remove by switching to 3 and clicking</p>
 

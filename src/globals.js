@@ -14,8 +14,8 @@ var GAME;
 var RENDERER;
 var SCENE;
 var CAMERA;
+var FOV = 60;
 var LIGHT;
-var FOV = 40;
 /*PLAYER GLOBALS*/
 var PLAYER;
 var P_ROTATE = .5;

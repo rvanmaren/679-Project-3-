@@ -14,6 +14,13 @@ function Player(position)
     this.health = 100;
     this.dead = false;
     this.score = 0;
+
+    //Used for camera shake effect
+    this.cameraShakeStart = 0;
+    this.cameraShakeDuration = 0;
+    this.cameraShakeIntesity = 0;
+    this.cameraShakeDirection = 0;
+
 	this.gun = new Gun(this.position,this.direction);
 	this.mouse_down = function(keyEvent) {
         BULLETS.push(new Bullet(this.position, this.direction.clone()));
@@ -73,12 +80,13 @@ function Player(position)
 	    this.direction = this.direction.normalize();
 
 	}
-	
-	this.doDamage = function(damage){
-		this.health-=damage;
-		if(this.health <= 0){
-		    this.dead = true;
-		}
+
+	this.doDamage = function (damage) {
+	    this.health -= damage;
+	    this.cameraShake(400, .05);
+	    if (this.health <= 0) {
+	        this.dead = true;
+	    }
 	}
 
 	this.update = function (time) {
@@ -93,6 +101,7 @@ function Player(position)
 	    var sideways = this.keys[RIGHT] ? (this.keys[LEFT] ? 0 : 1) : (this.keys[LEFT] ? -1 : 0);
 	    var directionPerp = new THREE.Vector3(this.direction.x * Math.cos(Math.PI / 2) - this.direction.z * Math.sin(Math.PI / 2),
 											0, this.direction.x * Math.sin(Math.PI / 2) + this.direction.z * Math.cos(Math.PI / 2)); //just rotate by 90 degrees same direction every time
+	    directionPerp.normalize();
 	    //Do y direction with a jump
 	    //sideways motion
 	    var nextX = this.position.x + directionPerp.x * sideways * this.speed + this.direction.x * forward * this.speed;
@@ -111,5 +120,28 @@ function Player(position)
 											this.position.y + this.direction.y,
 											this.position.z + this.direction.z);
 	    CAMERA.lookAt(camTarget);
+
+	    //Camera shake effect
+	    if (this.cameraShakeDuration > new Date().getTime() - this.cameraShakeStart) {
+	        //	        this.direction.x += (Math.random() - .5) * this.cameraShakeIntesity;
+	        //	        this.direction.z += (Math.random() - .5) * this.cameraShakeIntesity; 
+	        //            this.direction.y += (Math.random() - .5) * this.cameraShakeIntesity;
+	        if (this.cameraShakeDuration / 3 > new Date().getTime() - this.cameraShakeStart) {
+	            this.direction.x += (Math.random()*this.cameraShakeDirection) * this.cameraShakeIntesity;
+	        } else if (2 * this.cameraShakeDuration / 3 > new Date().getTime() - this.cameraShakeStart) {
+	            this.direction.y += (Math.random() * this.cameraShakeDirection) * this.cameraShakeIntesity;
+	        } else {
+	            this.direction.z += (Math.random() * this.cameraShakeDirection) * this.cameraShakeIntesity;
+	        }
+	        this.direction = this.direction.normalize();
+	    }
 	};
+
+	this.cameraShake = function (duration, intensity) {
+	    this.cameraShakeStart = new Date().getTime();
+	    this.cameraShakeDuration = duration;
+	    this.cameraShakeIntesity = intensity;
+	    this.cameraShakeDirection = Math.random() - .5;
+	    this.cameraShakeDirection = this.cameraShakeDirection / Math.abs(this.cameraShakeDirection);
+	}
 }
