@@ -227,6 +227,20 @@ function Day(position)
 	        document.getElementById("exit-confirmation").style.visibility = '';
 	    }
 
+	    document.getElementById("build-1").style.backgroundColor = "";
+	    document.getElementById("build-2").style.backgroundColor = "";
+	    document.getElementById("build-3").style.backgroundColor = "";
+	    if (this.mode == "build") {
+	        if (this.type == "house") {
+	            document.getElementById("build-2").style.backgroundColor = "#D3E397";
+	        } else if (this.type == "wall") {
+	            document.getElementById("build-1").style.backgroundColor = "#D3E397";
+	        }
+	    } else {
+
+	        document.getElementById("build-3").style.backgroundColor = "#D3E397";
+	    }
+
 	    document.getElementById("build-units").innerHTML = this.blocksLeft;
 	    var forward = this.keys[UP] ? (this.keys[DOWN] ? 0 : 1) : (this.keys[DOWN] ? -1 : 0); //1,0,-1
 	    var sideways = this.keys[RIGHT] ? (this.keys[LEFT] ? 0 : 1) : (this.keys[LEFT] ? -1 : 0);
