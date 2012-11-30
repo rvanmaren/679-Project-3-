@@ -152,6 +152,7 @@ function Day(position)
         document.getElementById("day-info").style.visibility = '';
         document.getElementById("build-images").style.visibility = '';
         document.getElementById("exit-day").style.visibility = '';
+        this.speed = Math.sqrt(this.position.y);
         this.awaitConfirmation = false;
     }
 

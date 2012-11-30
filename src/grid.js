@@ -78,7 +78,7 @@ function Grid(width, height, blocks)
 	
 	this.computeBuildBlocks = function()
 	{
-	    return NUM_HOUSES * 10;
+	    return NUM_HOUSES * HOUSE_INCOME;
 	}
 	
 	var housePreview = new THREE.Mesh(GEOMETRIES[HOUSE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));

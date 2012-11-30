@@ -45,8 +45,8 @@ h3
 
 .build-image 
 {
-    width: 150px;
-    height: 150px;  
+    width: 75px;
+    height: 75px;  
 }
 
 .build-images
@@ -63,7 +63,7 @@ h3
     padding: 10px;
     margin: 10px;
     text-align: center;
-    width: 200px;
+    width: 150px;
     border-radius:10px;
 }
 
