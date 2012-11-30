@@ -12,7 +12,8 @@ function Bullet(position, dir) {
     var material = new THREE.MeshNormalMaterial({
         color: 0x00FF00,
     });
-	this.mesh = new THREE.Mesh( new THREE.CubeGeometry( 2,2,2, 2, 2, 2), material);
+	this.mesh = new THREE.Mesh( new THREE.CubeGeometry( 1,1,1, 2, 2, 2), material);
+    //this.mesh = new THREE.Mesh(GEOMETRIES[GUN_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.position.x = position.x;
 	this.mesh.position.y = position.y;
 	this.mesh.position.z = position.z;

@@ -40,7 +40,7 @@ function HousePiece(position, grid)
 	this.mesh = new THREE.Mesh(GEOMETRIES[HOUSE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.scale.set(3,3,3);
 	this.mesh.position.x = position.x;
-	this.mesh.position.y = -1;
+	this.mesh.position.y = -5;
 	this.mesh.position.z = position.z;
 	SCENE.add(this.mesh);
 	

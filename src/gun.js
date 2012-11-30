@@ -14,7 +14,7 @@ function Gun(position, direction)
 	this.mesh.matrix.setRotationFromEuler(this.mesh.rotation);
 	//rotateAroundWorldAxis(this.mesh, new THREE.Vector3(1,0,0),Math.PI/2);
 	//rotateAroundObjectAxis(this.mesh, new THREE.Vector3(0,0,1),Math.PI/2);
-	SCENE.add( this.mesh );
+	//SCENE.add( this.mesh );
 
 	this.upRotate = 0;
 	this.sideRotate = 0;

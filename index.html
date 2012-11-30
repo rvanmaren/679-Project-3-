@@ -2,9 +2,15 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
+        <link rel="stylesheet" type="text/css" href="style.css">
 		<title>Survive the Night</title>
 	</head>
 	<body>
+        <div class = "night-finished message" id = "nightFinished" style ="visibility:hidden"><h1>You have killed all the zombies! Press Space to continue to Daytime.</h1></div>
+        <div class = "message" id = "dead" style ="visibility:hidden"><h1>You Died!</h1></div>
+        <div class = "day-night-info" id ="day-info" style ="visibility:hidden"><h3>Building Units: </h3> <h3 id = "build-units">0</h3></div>
+        <span class = "day-night-info" id ="night-info" style ="visibility: hidden"><h3>Health:</h3> <h3 id = "health">100</h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <h3 id ="bullets">Bullets: Infinite</h3></span>
+        <div class = "general-info"   id ="gen-info" style ="visibility: hidden"><h3>Score:</h3> <h3 id = "score">0</h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <h3>Level: </h3> <h3 id = "level">1</h3></h3></div>
 	</body>
 	<script type="text/javascript" src="./src/three.js" ></script>
 	<script type="text/javascript" src="./src/ColladaLoader.js" ></script>
@@ -26,4 +32,6 @@
 		<p>Press f for full screen(breaks wasd?). <b>G to lock mouse.</b> WASD to move. t to toggle view 
 		if you get a  Cross origin requests are only supported for HTTP. error run chrome with the following option "--allow-file-access-from-files"
 		now with toggle between build type(press 1 or 2 while building) -remove by switching to 3 and clicking</p>
+
+    
 </html>

@@ -2,23 +2,28 @@
 function Night()
 {
 	this.level;
+	this.isFinished = false;
+	this.waitingToFinish = false;
 	
 	this.mouse_down = function(keyEvent)
 	{
 		PLAYER.mouse_down(keyEvent);
 	}
 
-	this.mouse_up = function(keyEvent) {
-		PLAYER.mouse_up(keyEvent);
+	this.mouse_up = function (keyEvent) {
+	    
+	    PLAYER.mouse_up(keyEvent);
 	}
-	
-	this.key_down = function(keyEvent)
-	{
-		if(keyEvent.keyCode == 75)
-		{
-			this.level.exitLevel();
-		}
-		PLAYER.key_down(keyEvent);
+
+	this.key_down = function (keyEvent) {
+	    if (this.waitingToFinish && keyEvent.keyCode == 32) {
+	        this.waitingToFinish = false;
+	        this.isFinished = true;
+	    }
+	    if (keyEvent.keyCode == 75) {
+	        this.level.exitLevel();
+	    }
+	    PLAYER.key_down(keyEvent);
 	};
 	this.key_up = function(keyEvent)
 	{
@@ -37,36 +42,39 @@ function Night()
 		this.initLevel(2);
 		PLAYER.keys  = [false,false,false,false];
 		document.getElementById("crossHair").style.visibility= '';
-		document.getElementById("score").style.visibility= '';
-		document.getElementById("health").style.visibility= '';
-		document.getElementById("bullets").style.visibility= '';
+		document.getElementById("night-info").style.visibility= '';
+		//document.getElementById("health").style.visibility= '';
+		//document.getElementById("bullets").style.visibility= '';
+        this.isFinished = false;
 	}
 
 	this.switchOut = function(){
 		this.level.exitLevel();
 		document.getElementById("crossHair").style.visibility= 'hidden';
-		document.getElementById("score").style.visibility= 'hidden';
-		document.getElementById("health").style.visibility= 'hidden';
-		document.getElementById("bullets").style.visibility= 'hidden';
+		document.getElementById("night-info").style.visibility= 'hidden';
+		//document.getElementById("health").style.visibility= 'hidden';
+		//document.getElementById("bullets").style.visibility = 'hidden';
+		document.getElementById("nightFinished").style.visibility = 'hidden';
 	}
 
 	this.update = function (time) {
+
+	    if (ZOMBIES.length == 0) {
+	        document.getElementById("nightFinished").style.visibility = '';
+	        this.waitingToFinish = true;
+	        return;
+	    }
+
 	    PLAYER.update(time);
 	    for (var i = 0; i < BULLETS.length; i++) {
 	        BULLETS[i].update(time);
 	    }
 	    this.level.update(time);
 	    this.checkProjectiles();
-
 	};
 	this.finished = function()
 	{
-		if(ZOMBIES.length == 0)
-		{
-			return true;
-		}
-		else
-			return false;
+		return this.isFinished;
     }
 
     this.checkProjectiles = function () {

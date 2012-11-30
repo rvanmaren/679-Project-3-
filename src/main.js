@@ -46,7 +46,13 @@ function add_image(src, id, posX, posY, visible) {
     document.body.appendChild(img);
 }
 add_image('./resources/intro.png', 'intro', WINDOW_WIDTH/2-200,WINDOW_HEIGHT/2-100, 'hidden');
-add_image('./resources/Textures/crosshair.png','crossHair',WINDOW_WIDTH/2-95/2,WINDOW_HEIGHT/2-95/2, 'hidden');
+//add_image('./resources/Textures/crosshair.png','crossHair',WINDOW_WIDTH/2 - (95/2),WINDOW_HEIGHT/2 -(95/2), 'hidden');
+var imgX = document.createElement("img");
+imgX.src = './resources/Textures/crosshair.png';
+imgX.setAttribute("id", 'crossHair');
+imgX.style.cssText = "position: absolute; left: 50%; top: 50%; margin-top: -47.5px; margin-left: -47.5px";
+document.body.appendChild(imgX);
+
 add_image('./resources/loading.png','loading',WINDOW_WIDTH/2-95/2,WINDOW_HEIGHT/2-95/2, '');
 
 function add_text(text, id, posX, posY, visible) {
@@ -63,7 +69,11 @@ add_text("Score:",'score',20,20, 'hidden');
 add_text("Health:",'health',20,40, 'hidden');
 add_text("Bullets:",'bullets',20,60, 'hidden');
 add_text("Level:",'level',80,20, 'hidden');
-add_text("Build Units:",'bUnits',20,100, 'hidden');
+add_text("Build Units:", 'bUnits', 20, 100, 'hidden');
+
+
+
+
 
 var havePointerLock;
 document.body.addEventListener("mousemove", this.moveCallback, false);

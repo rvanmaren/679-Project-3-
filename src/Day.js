@@ -43,7 +43,7 @@ function Day(position)
 	
 	this.markerMaterial = new THREE.MeshBasicMaterial(
 	{
-	    color: 0x2222EE
+	    color: 0xFFF5C3
 	});
 	this.playerMarker = new THREE.Mesh(new THREE.SphereGeometry(8, 10, 10), this.markerMaterial);
 	SCENE.add(this.playerMarker);
@@ -139,15 +139,16 @@ function Day(position)
 		THE_GRID.setPreview(PLAYER.position.x, -1, PLAYER.position.z);
 		this.blocksLeft += buildAmount;
 		this.doneBuilding = false;
-		document.getElementById("bUnits").style.visibility= '';
+		document.getElementById("day-info").style.visibility= '';
     }
 
     this.switchOut = function () {
         this.playerMarker.visible = false;
-		this.building = false;
+        this.building = false;
         THE_GRID.hideLines();
-		THE_GRID.hidePreview(this.mode);
-		document.getElementById("bUnits").style.visibility= 'hidden';
+        THE_GRID.hidePreview(this.mode);
+        document.getElementById("day-info").style.visibility = 'hidden';
+        PLAYER.score += (this.blocksLeft * 10);
     }
 
     this.mouseMovement = function (mouseMoveX, mouseMoveY) {
@@ -198,7 +199,7 @@ function Day(position)
 	}
 	this.update = function(time)
 	{
-	    document.getElementById("bUnits").innerHTML = 'Build Units: '+this.blocksLeft;
+	    document.getElementById("build-units").innerHTML = this.blocksLeft;
 		var forward = this.keys[UP] ? (this.keys[DOWN] ? 0 : 1) : (this.keys[DOWN] ? -1 : 0); //1,0,-1
 		var sideways = this.keys[RIGHT] ? (this.keys[LEFT] ? 0 : 1) : (this.keys[LEFT] ? -1 : 0);
 		

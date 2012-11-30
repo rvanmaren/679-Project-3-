@@ -1,6 +1,6 @@
 /*GAME GLOBALS*/
-var WINDOW_HEIGHT = window.innerHeight;
-var WINDOW_WIDTH = window.innerWidth;
+var WINDOW_HEIGHT = 900//window.innerHeight;
+var WINDOW_WIDTH = 1600//window.innerWidth;
 var MOUSE_X = 0;
 var MOUSE_Y = 0;
 var LOADER;

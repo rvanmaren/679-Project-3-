@@ -101,15 +101,7 @@ function Zombie(position)
 					nextSpot = this.pathArray[1];
 				}
 				
-				if(this.nextMoveMesh){
-				SCENE.remove(this.nextMoveMesh);
-				}
-				this.nextMoveMesh = new THREE.Mesh( new THREE.CubeGeometry( 4,8,4, 2, 2, 2), material);
-				var coordArray = THE_GRID.coordinatesFromSpot(nextSpot[0],nextSpot[1]);
-				this.nextMoveMesh.position.x = coordArray[0];
-				this.nextMoveMesh.position.y = 10;
-				this.nextMoveMesh.position.z = coordArray[1];
-				SCENE.add(this.nextMoveMesh);
+//				
 				
  			} else{
 				
@@ -208,16 +200,7 @@ function Zombie(position)
 			}
 			
 			this.drawPathArray = new Array();
-			for(var i = 0; i < this.pathArray.length; i++){
-				var pathMesh = new THREE.Mesh( new THREE.CubeGeometry( 4,4,4, 2, 2, 2), material);
-				var coordArray = THE_GRID.coordinatesFromSpot(this.pathArray[i][0],this.pathArray[i][1]);
-				pathMesh.position.x = coordArray[0];
-				pathMesh.position.y = 10;
-				pathMesh.position.z = coordArray[1];
-				SCENE.add(pathMesh);
-				this.drawPathArray.push(pathMesh);
 			
-			}
 	
 	}
 	
@@ -273,6 +256,7 @@ function Zombie(position)
 			}
 
 		SCENE.remove(this.mesh);
+        PLAYER.score += 100;
 	}
 
     //Return true if the zombie was killed, false otherwise

@@ -14,8 +14,9 @@ function webGL_intialize()
 	
 	//SET UP RENDERER
 	RENDERER = new THREE.WebGLRenderer({antialias:true});
-	RENDERER.setSize( WINDOW_WIDTH, WINDOW_HEIGHT );
-	document.body.appendChild( RENDERER.domElement );
+	RENDERER.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	RENDERER.domElement.style.cssText = "border: 5px solid #D3E397; border-radius:5px; position: absolute; top: 50%; margin-top:" + WINDOW_HEIGHT / -2 + "px;left: 50%; margin-left:" + WINDOW_WIDTH / -2 + "px;";
+    document.body.appendChild( RENDERER.domElement );
 	
 	SCENE = new THREE.Scene();
 	//SCENE.fog = new THREE.FogExp2( 0xAAAAAA, 0.00018 );

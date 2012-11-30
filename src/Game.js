@@ -23,8 +23,7 @@ function Game()
 	this.score = 0;
 	
 	//Display level
-	document.getElementById("level").style.visibility= '';
-	document.getElementById("health").style.visibility= '';
+	document.getElementById("gen-info").style.visibility= '';
 
 	//timing for state switching. We will wait until there are no more zombies
 	//And have a variable for the amount you can build in a round
@@ -52,27 +51,32 @@ function Game()
 	{
 		this.gameState.key_up(keyEvt);
 	}
-	this.update = function(time)
-	{
-		this.gameState.update(10);
-		//Check if we need to toggle
-		document.getElementById("level").innerHTML = 'Level: '+this.currentLevel;
-		document.getElementById("health").innerHTML = 'Health: ' + PLAYER.health;
-		
-		if(this.gameState.finished())
-		{
-				if (this.gameState == this.day) {
-				    this.currentLevel++;
-					this.day.switchOut();
-					this.night.switchInto(this.currentLevel);
-					this.gameState = this.night;
-				}
-				else {
-					this.day.switchInto(THE_GRID.computeBuildBlocks());
-					this.night.switchOut();
-					this.gameState = this.day;
-				}
-		}
+	this.update = function (time) {
+
+	    if (PLAYER.dead == true) {
+	        document.getElementById("dead").style.visibility = '';
+	        return;
+	    }
+
+	    this.gameState.update(10);
+	    //Check if we need to toggle
+	    document.getElementById("level").innerHTML = this.currentLevel;
+	    document.getElementById("health").innerHTML = PLAYER.health;
+	    document.getElementById("score").innerHTML = PLAYER.score;
+
+	    if (this.gameState.finished()) {
+	        if (this.gameState == this.day) {
+	            this.currentLevel++;
+	            this.day.switchOut();
+	            this.night.switchInto(this.currentLevel);
+	            this.gameState = this.night;
+	        }
+	        else {
+	            this.day.switchInto(THE_GRID.computeBuildBlocks());
+	            this.night.switchOut();
+	            this.gameState = this.day;
+	        }
+	    }
 	}
 	this.mouseMovement = function(deltaX, deltaY)
 	{
