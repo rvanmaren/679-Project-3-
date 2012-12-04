@@ -13,7 +13,7 @@ function Grid(width, height, blocks)
 {
 	this.grid_spots = new Array(blocks);
     this.grid_objects = new Array(blocks);
-	
+	this.wall_build_type = "vertical";
 	//this makes the array 2D;
 
 	for (var i = 0; i < blocks; i++) {
@@ -174,6 +174,21 @@ function Grid(width, height, blocks)
 		housePreview.position.z += mouseX;
 		removePreview.position.x -= mouseY;
 		removePreview.position.z += mouseX;
+		var temp_X = Math.abs(mouseX);
+		var temp_Y = Math.abs(mouseY);
+		if(temp_X > 3 && temp_Y > 3)
+		{
+			if(temp_X<temp_Y)
+			{
+			    this.wall_build_type = "horizontal";
+				wallPreview.rotation.y = 0;
+			}
+			else
+			{
+			    this.wall_build_type = "vertical";
+				wallPreview.rotation.y = Math.PI/2;
+			}
+		}
 	    wallPreview.position.x -= mouseY;
 		wallPreview.position.z += mouseX;
 	}
@@ -198,7 +213,7 @@ function Grid(width, height, blocks)
 					}
 					if(buildCMD.type == "wall")
 					{
-						return this.buildWall(spot,new THREE.Vector3(mouseX,0,mouseY));
+						return this.buildWall(spot);
 					}
 				}
 			}
@@ -206,37 +221,29 @@ function Grid(width, height, blocks)
 			{
 				if(this.grid_spots[spot[0]][spot[1]] != EMPTY)
 				{
-				    if(this.grid_spots[spot[0]][spot[1]] instanceof HousePiece || this.grid_spots[spot[0]][spot[1]] instanceof HousePieceUnit)
+				    if(this.grid_spots[spot[0]][spot[1]] instanceof HousePiece)
 					{
-					    NUM_HOUSES--;
-						if(this.grid_spots[spot[0]][spot[1]] instanceof HousePieceUnit)
-						{
-						    //look up the house and tell to remove
-							this.removeHouse(this.grid_spots[spot[0]][spot[1]].myOwner);
-						}
-						else
-						{
-						    this.removeHouse(this.grid_spots[spot[0]][spot[1]]);
-						}
+						NUM_HOUSES--;
+						this.removeHouse(this.grid_spots[spot[0]][spot[1]]);
+						return true;
 					}
-					else if(this.grid_spots[spot[0]][spot[1]] instanceof WallPiece || this.grid_spots[spot[0]][spot[1]] instanceof HousePieceUnit)
+					if(this.grid_spots[spot[0]][spot[1]].myOwner instanceof HousePiece)
 					{
-					    if(this.grid_spots[spot[0]][spot[1]] instanceof HousePieceUnit)
-						{
-						    //look up the house and tell to remove
-							this.removeWall(this.grid_spots[spot[0]][spot[1]].myOwner);
-						}
-						else
-						{
-						    this.removeWall(this.grid_spots[spot[0]][spot[1]]);
-						}
+						NUM_HOUSES--;
+						this.removeHouse(this.grid_spots[spot[0]][spot[1]].myOwner);
+						return true;
 					}
-					else //Wall or something
-					{console.log("uuhh");
-					    remove(this.grid_spots[spot[0]][spot[1]]);
-					    this.grid_spots[spot[0]][spot[1]] = EMPTY;
+					if(this.grid_spots[spot[0]][spot[1]] instanceof WallPiece)
+					{
+					    this.removeWall(this.grid_spots[spot[0]][spot[1]]);
+						return true;
 					}
-					return true;
+					if(this.grid_spots[spot[0]][spot[1]].myOwner instanceof WallPiece)
+					{
+					    this.removeWall(this.grid_spots[spot[0]][spot[1]].myOwner);
+						return true;
+					}
+					return false;
 				}
 			}
 		}
@@ -427,10 +434,10 @@ function Grid(width, height, blocks)
 		NUM_HOUSES++;
         return true;
 	}
-	this.buildWall = function (spotClick, pullVec)
+	this.buildWall = function (spotClick)
 	{
 	    //determine if horizontal or vertical
-		if(Math.abs(pullVec.x) > Math.abs(pullVec.z))//Horizontal
+		if(this.wall_build_type == "vertical")//Horizontal
 		{
 			//Check up and down
 			if(this.grid_spots[spotClick[0]][spotClick[1]-1] != EMPTY || this.grid_spots[spotClick[0]][spotClick[1]+1] != EMPTY
@@ -463,7 +470,7 @@ function Grid(width, height, blocks)
 			units.push(this.grid_spots[spotClick[0]-1][spotClick[1]] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]-1,spotClick[1]]));
 			units.push(this.grid_spots[spotClick[0]+1][spotClick[1]] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]+1,spotClick[1]]));
 			units.push(this.grid_spots[spotClick[0]-2][spotClick[1]] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]-2,spotClick[1]]));
-			units.push(this.grid_spots[spotClick[0]+2][spotClick[1]] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]+1,spotClick[1]]));
+			units.push(this.grid_spots[spotClick[0]+2][spotClick[1]] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]+2,spotClick[1]]));
 			this.grid_spots[spotClick[0]][spotClick[1]].units = units
 			return true;
 		}
@@ -471,7 +478,7 @@ function Grid(width, height, blocks)
 	this.removeWall = function(fencePiece)
 	{
 	    SCENE.remove(fencePiece.mesh);
-		
+		console.log("hit");
 		var units = fencePiece.units;
 		this.grid_spots[fencePiece.grid_spot[0]][fencePiece.grid_spot[1]] = EMPTY;
 		for(c = 0; c < units.length; c++)

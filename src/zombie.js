@@ -4,7 +4,7 @@ var WALKING = 0;
 var ATTACKING = 1;
 var DYING = 2;
 var STANDING = 3;
-function Zombie(position)
+function Zombie(position, type)
 {
 	this.attack_distance = 75;
 	this.position = position;
@@ -23,6 +23,7 @@ function Zombie(position)
 	this.nextSpot = null;
 	this.path = null;
 	this.distanceToNextSpot = 1000;
+	this.type = type;
 	this.direction =new THREE.Vector3(this.target.position.x - this.position.x
 										,this.target.position.y - this.position.y,
 										 this.target.position.z - this.position.z);
@@ -31,15 +32,29 @@ function Zombie(position)
 	 this.ang = -1*this.ang;
 	var material = new THREE.MeshNormalMaterial({
         color: 0x00FF00,
-    });
-	this.mesh = new THREE.Mesh(GEOMETRIES[ZOMBIE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
-	this.mesh.position.x = position.x;
-	this.mesh.position.y = -.2;
-	this.mesh.position.z = position.z;
-	this.mesh.scale.set(20,20,20);
-    this.boundRadius = zombie_width;
-	this.pathArray = new Array();
-	SCENE.add(this.mesh);
+    });	
+	if(type == 'skeleton')
+	{
+		this.mesh = new THREE.Mesh(GEOMETRIES[ZOMBIE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
+		this.mesh.position.x = position.x;
+		this.mesh.position.y = -.2;
+		this.mesh.position.z = position.z;
+		this.mesh.scale.set(20,20,20);
+		this.boundRadius = zombie_width;
+		this.pathArray = new Array();
+		SCENE.add(this.mesh);
+	}
+	else
+	{
+		this.mesh = new THREE.Mesh(GEOMETRIES[MONSTER_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
+		this.mesh.position.x = position.x;
+		this.mesh.position.y = -.2;
+		this.mesh.position.z = position.z;
+		this.mesh.scale.set(.01,.01,.01);
+		this.boundRadius = zombie_width;
+		this.pathArray = new Array();
+		SCENE.add(this.mesh);
+	}
     THE_GRID.requestPlacement(this,this.position.x, this.position.z);
 	
 		this.grid = new Array(THE_GRID.grid_spots.length);
@@ -345,46 +360,49 @@ function Zombie(position)
 	this.update = function(time) {
 		this.computeNextMove();
 	    // Alternate morph targets
-		if(this.state == WALKING) {
-			time = (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.walkingDuration;
-			keyframe = Math.floor( time / this.walkingInterpolation ) + this.walkingOffset;
-			if ( keyframe != this.walkingcurrentKeyframe ) 
-			{
-				this.mesh.morphTargetInfluences[ this.walkingLastKeyframe ] = 0;
-				this.mesh.morphTargetInfluences[ this.walkingcurrentKeyframe ] = 1;
-				this.mesh.morphTargetInfluences[ keyframe ] = 0;
-				this.walkingLastKeyframe = this.walkingcurrentKeyframe;
-				this.walkingcurrentKeyframe = keyframe;
-			}
-			this.mesh.morphTargetInfluences[ keyframe ] = 
-				( time % this.walkingInterpolation ) / this.walkingInterpolation;
-			this.mesh.morphTargetInfluences[ this.walkingLastKeyframe ] = 
-				1 - this.mesh.morphTargetInfluences[ keyframe ];
-		}
-		if(this.state == ATTACKING)
+		if(this.type == "skeleton")
 		{
-		    time = (new Date().getTime()+this.attackInterpolation) % this.attackDuration;
-			if(time < 500 && time > 475){
-				if(this.canAttack){
-					PLAYER.doDamage(this.attackPower);
-				   this.canAttack = false;
+			if(this.state == WALKING) {
+				time = (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.walkingDuration;
+				keyframe = Math.floor( time / this.walkingInterpolation ) + this.walkingOffset;
+				if ( keyframe != this.walkingcurrentKeyframe ) 
+				{
+					this.mesh.morphTargetInfluences[ this.walkingLastKeyframe ] = 0;
+					this.mesh.morphTargetInfluences[ this.walkingcurrentKeyframe ] = 1;
+					this.mesh.morphTargetInfluences[ keyframe ] = 0;
+					this.walkingLastKeyframe = this.walkingcurrentKeyframe;
+					this.walkingcurrentKeyframe = keyframe;
 				}
-			} else {
-				this.canAttack = true;
+				this.mesh.morphTargetInfluences[ keyframe ] = 
+					( time % this.walkingInterpolation ) / this.walkingInterpolation;
+				this.mesh.morphTargetInfluences[ this.walkingLastKeyframe ] = 
+					1 - this.mesh.morphTargetInfluences[ keyframe ];
 			}
-		    keyframe = Math.floor( time / this.attackInterpolation ) + this.attackOffset;
-			if ( keyframe != this.attackcurrentKeyframe ) 
+			if(this.state == ATTACKING)
 			{
-				this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 0;
-				this.mesh.morphTargetInfluences[ this.attackcurrentKeyframe ] = 1;
-				this.mesh.morphTargetInfluences[ keyframe ] = 0;
-				this.attackLastKeyframe = this.attackcurrentKeyframe;
-				this.attackcurrentKeyframe = keyframe;
+				time = (new Date().getTime()+this.attackInterpolation) % this.attackDuration;
+				if(time < 500 && time > 475){
+					if(this.canAttack){
+						PLAYER.doDamage(this.attackPower);
+					   this.canAttack = false;
+					}
+				} else {
+					this.canAttack = true;
+				}
+				keyframe = Math.floor( time / this.attackInterpolation ) + this.attackOffset;
+				if ( keyframe != this.attackcurrentKeyframe ) 
+				{
+					this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 0;
+					this.mesh.morphTargetInfluences[ this.attackcurrentKeyframe ] = 1;
+					this.mesh.morphTargetInfluences[ keyframe ] = 0;
+					this.attackLastKeyframe = this.attackcurrentKeyframe;
+					this.attackcurrentKeyframe = keyframe;
+				}
+				this.mesh.morphTargetInfluences[ keyframe ] = 
+					( time % this.attackInterpolation ) / this.attackInterpolation;
+				this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 
+					1 - this.mesh.morphTargetInfluences[ keyframe ];
 			}
-			this.mesh.morphTargetInfluences[ keyframe ] = 
-				( time % this.attackInterpolation ) / this.attackInterpolation;
-			this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 
-				1 - this.mesh.morphTargetInfluences[ keyframe ];
 		}
 		this.mesh.rotation.y = this.ang;
 		//Rotate to face direction 

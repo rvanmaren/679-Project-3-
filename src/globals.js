@@ -27,11 +27,12 @@ var ZOMBIES = new Array();
 var GUN_MESH = 0;
 var HOUSE_MESH = 1;
 var FENCE_MESH = 2;
-var ZOMBIE_MESH = 3;
-var ORDER =['gun','house','fence', 'zombie'];
+var MONSTER_MESH = 3;
+var ZOMBIE_MESH = 4;
+var ORDER =['gun','house','fence', 'monster','zombie'];
 var GEOMETRIES = new Array();
 var COLLADAS = new Array();
-var NUM_GEOMETRIES  = 4;
+var NUM_GEOMETRIES  = 5;
 var NUM_COLLADAS = 0;
 function load( geometry,id) {  
 		//var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial({overdraw: true}));   

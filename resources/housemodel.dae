@@ -5,8 +5,8 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.64.0 r51232</authoring_tool>
     </contributor>
-    <created>2012-11-27T17:31:31</created>
-    <modified>2012-11-27T17:31:31</modified>
+    <created>2012-12-04T11:22:22</created>
+    <modified>2012-12-04T11:22:22</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -161,10 +161,48 @@
       </extra>
     </light>
   </library_lights>
-  <library_images/>
+  <library_images>
+    <image id="BrickOldRounded_jpg" name="BrickOldRounded_jpg">
+      <init_from>BrickOldRounded.jpg</init_from>
+    </image>
+    <image id="Brickwallsinside_jpg" name="Brickwallsinside_jpg">
+      <init_from>Brickwallsinside.jpg</init_from>
+    </image>
+    <image id="WoodHousePillars_jpg" name="WoodHousePillars_jpg">
+      <init_from>WoodHousePillars.jpg</init_from>
+    </image>
+    <image id="BrickHouseBase_jpg" name="BrickHouseBase_jpg">
+      <init_from>BrickHouseBase.jpg</init_from>
+    </image>
+    <image id="WoodRoofTiles_jpg" name="WoodRoofTiles_jpg">
+      <init_from>WoodRoofTiles.jpg</init_from>
+    </image>
+    <image id="StuccoCeiling_jpg" name="StuccoCeiling_jpg">
+      <init_from>StuccoCeiling.jpg</init_from>
+    </image>
+    <image id="MetalBase0030_S_jpg" name="MetalBase0030_S_jpg">
+      <init_from>MetalBase0030_S.jpg</init_from>
+    </image>
+    <image id="LightDoorWood_jpg" name="LightDoorWood_jpg">
+      <init_from>LightDoorWood.jpg</init_from>
+    </image>
+    <image id="Grass0105_8_L_jpg" name="Grass0105_8_L_jpg">
+      <init_from>Grass0105_8_L.jpg</init_from>
+    </image>
+  </library_images>
   <library_effects>
     <effect id="Material-effect">
       <profile_COMMON>
+        <newparam sid="Brickwallsinside_jpg-surface">
+          <surface type="2D">
+            <init_from>Brickwallsinside_jpg</init_from>
+          </surface>
+        </newparam>
+        <newparam sid="Brickwallsinside_jpg-sampler">
+          <sampler2D>
+            <source>Brickwallsinside_jpg-surface</source>
+          </sampler2D>
+        </newparam>
         <technique sid="common">
           <phong>
             <emission>
@@ -174,7 +212,7 @@
               <color sid="ambient">0 0 0 1</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.64 0.64 0.64 1</color>
+              <texture texture="Brickwallsinside_jpg-sampler" texcoord="UVTex"/>
             </diffuse>
             <specular>
               <color sid="specular">0.5 0.5 0.5 1</color>
@@ -197,6 +235,16 @@
     </effect>
     <effect id="Material_004-effect">
       <profile_COMMON>
+        <newparam sid="FloorsRegular0128_2_S-surface">
+          <surface type="2D">
+            <init_from>FloorsRegular0128_2_S</init_from>
+          </surface>
+        </newparam>
+        <newparam sid="FloorsRegular0128_2_S-sampler">
+          <sampler2D>
+            <source>FloorsRegular0128_2_S-surface</source>
+          </sampler2D>
+        </newparam>
         <technique sid="common">
           <phong>
             <emission>
@@ -206,7 +254,7 @@
               <color sid="ambient">0 0 0 1</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.64 0.64 0.64 1</color>
+              <texture texture="FloorsRegular0128_2_S-sampler" texcoord="UVTex"/>
             </diffuse>
             <specular>
               <color sid="specular">0.5 0.5 0.5 1</color>
@@ -229,6 +277,16 @@
     </effect>
     <effect id="Material_002-effect">
       <profile_COMMON>
+        <newparam sid="WoodRoofTiles_jpg-surface">
+          <surface type="2D">
+            <init_from>WoodRoofTiles_jpg</init_from>
+          </surface>
+        </newparam>
+        <newparam sid="WoodRoofTiles_jpg-sampler">
+          <sampler2D>
+            <source>WoodRoofTiles_jpg-surface</source>
+          </sampler2D>
+        </newparam>
         <technique sid="common">
           <phong>
             <emission>
@@ -238,7 +296,7 @@
               <color sid="ambient">0 0 0 1</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.64 0.64 0.64 1</color>
+              <texture texture="WoodRoofTiles_jpg-sampler" texcoord="UVTex"/>
             </diffuse>
             <specular>
               <color sid="specular">0.5 0.5 0.5 1</color>
@@ -261,6 +319,16 @@
     </effect>
     <effect id="Material_003-effect">
       <profile_COMMON>
+        <newparam sid="WoodRoofTiles_jpg-surface">
+          <surface type="2D">
+            <init_from>WoodRoofTiles_jpg</init_from>
+          </surface>
+        </newparam>
+        <newparam sid="WoodRoofTiles_jpg-sampler">
+          <sampler2D>
+            <source>WoodRoofTiles_jpg-surface</source>
+          </sampler2D>
+        </newparam>
         <technique sid="common">
           <phong>
             <emission>
@@ -270,7 +338,7 @@
               <color sid="ambient">0 0 0 1</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.64 0.64 0.64 1</color>
+              <texture texture="WoodRoofTiles_jpg-sampler" texcoord="UVTex"/>
             </diffuse>
             <specular>
               <color sid="specular">0.5 0.5 0.5 1</color>
@@ -293,6 +361,16 @@
     </effect>
     <effect id="Material_008-effect">
       <profile_COMMON>
+        <newparam sid="StuccoCeiling_jpg-surface">
+          <surface type="2D">
+            <init_from>StuccoCeiling_jpg</init_from>
+          </surface>
+        </newparam>
+        <newparam sid="StuccoCeiling_jpg-sampler">
+          <sampler2D>
+            <source>StuccoCeiling_jpg-surface</source>
+          </sampler2D>
+        </newparam>
         <technique sid="common">
           <phong>
             <emission>
@@ -302,7 +380,7 @@
               <color sid="ambient">0 0 0 1</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.64 0.64 0.64 1</color>
+              <texture texture="StuccoCeiling_jpg-sampler" texcoord="UVTex"/>
             </diffuse>
             <specular>
               <color sid="specular">0.5 0.5 0.5 1</color>
@@ -325,6 +403,16 @@
     </effect>
     <effect id="Material_001-effect">
       <profile_COMMON>
+        <newparam sid="MetalBase0030_S_jpg-surface">
+          <surface type="2D">
+            <init_from>MetalBase0030_S_jpg</init_from>
+          </surface>
+        </newparam>
+        <newparam sid="MetalBase0030_S_jpg-sampler">
+          <sampler2D>
+            <source>MetalBase0030_S_jpg-surface</source>
+          </sampler2D>
+        </newparam>
         <technique sid="common">
           <phong>
             <emission>
@@ -334,7 +422,7 @@
               <color sid="ambient">0 0 0 1</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.03187513 0.001890911 0.001890911 1</color>
+              <texture texture="MetalBase0030_S_jpg-sampler" texcoord="UVTex"/>
             </diffuse>
             <specular>
               <color sid="specular">0.5 0.5 0.5 1</color>
@@ -357,6 +445,16 @@
     </effect>
     <effect id="Material_005-effect">
       <profile_COMMON>
+        <newparam sid="Grass0105_8_L_jpg-surface">
+          <surface type="2D">
+            <init_from>Grass0105_8_L_jpg</init_from>
+          </surface>
+        </newparam>
+        <newparam sid="Grass0105_8_L_jpg-sampler">
+          <sampler2D>
+            <source>Grass0105_8_L_jpg-surface</source>
+          </sampler2D>
+        </newparam>
         <technique sid="common">
           <phong>
             <emission>
@@ -366,7 +464,7 @@
               <color sid="ambient">0 0 0 1</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.64 0.64 0.64 1</color>
+              <texture texture="Grass0105_8_L_jpg-sampler" texcoord="UVTex"/>
             </diffuse>
             <specular>
               <color sid="specular">0.5 0.5 0.5 1</color>
@@ -430,6 +528,16 @@
     </effect>
     <effect id="Material_007-effect">
       <profile_COMMON>
+        <newparam sid="BrickOldRounded_jpg-surface">
+          <surface type="2D">
+            <init_from>BrickOldRounded_jpg</init_from>
+          </surface>
+        </newparam>
+        <newparam sid="BrickOldRounded_jpg-sampler">
+          <sampler2D>
+            <source>BrickOldRounded_jpg-surface</source>
+          </sampler2D>
+        </newparam>
         <technique sid="common">
           <phong>
             <emission>
@@ -439,7 +547,7 @@
               <color sid="ambient">0 0 0 1</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.64 0.64 0.64 1</color>
+              <texture texture="BrickOldRounded_jpg-sampler" texcoord="UVTex"/>
             </diffuse>
             <specular>
               <color sid="specular">0.2397514 0.2397514 0.2397514 1</color>
@@ -2430,7 +2538,7 @@
       </node>
       <node id="Cube_021" name="Cube_021" type="NODE">
         <translate sid="location">2.381149 -19.22173 3.923726</translate>
-        <rotate sid="rotationZ">0 0 1 0.2527011</rotate>
+        <rotate sid="rotationZ">0 0 1 0</rotate>
         <rotate sid="rotationY">0 1 0 0</rotate>
         <rotate sid="rotationX">1 0 0 0</rotate>
         <scale sid="scale">1.794184 2.164413 3.868843</scale>

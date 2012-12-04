@@ -3,11 +3,8 @@ webGL_intialize();
 //Initialize the mesh loader
 LOADER = new THREE.JSONLoader();
 LOADERC = new THREE.ColladaLoader();
-//LOADERC.load ('./resources/monster.dae',function(collada){COLLADAS.push(collada.scene);});
-//loadEverything
-//loadGeometryCollada('./resources/LongHouse.dae')
-//loadGeometry('./resources/housemodel.js', "gun");	    for (var i = 0; i < geometry.materials.length; i++)
 
+/*Ring of fog in distance*/
 	 var mat2 = new THREE.MeshLambertMaterial(
 	{
 	    color: 0xAAAAAA,
@@ -27,13 +24,14 @@ var count = 0;
 
 LOADER.load( './resources/rifle/rifle_0.js' ,function(geometry){    geometry.id = 'gun';    GEOMETRIES.push(geometry);});
 //LOADER.load( './resources/fence/fence.js' ,function(geometry){GEOMETRIES.push(geometry);});
-LOADER.load( './resources/housemodel.js' ,function(geometry){    geometry.id = 'house';    GEOMETRIES.push(geometry);});
+LOADER.load( './resources/house/housemodel.js' ,function(geometry){    geometry.id = 'house';    GEOMETRIES.push(geometry);});
 LOADER.load( './resources/skeleton_0.js', function(geometry){
     geometry.id = 'skeleton';    
 	for (var i = 0; i < geometry.materials.length; i++)
 		geometry.materials[i].morphTargets = true;
 		GEOMETRIES.push(geometry);});
 LOADER.load( './resources/fence/fence.js' ,function(geometry){    geometry.id = 'fence';    GEOMETRIES.push(geometry);});
+LOADER.load( './resources/monster.js' ,function(geometry){    geometry.id = 'monster';    GEOMETRIES.push(geometry);});
 
 
 //Need to check the order of stuff 

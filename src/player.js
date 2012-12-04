@@ -113,7 +113,7 @@ function Player(position)
 	        this.position.z = nextY;
 	    }
 	    this.gun.update(this.position, this.direction);
-	    LIGHT.position.set(this.position.x, this.position.y + 2, this.position.z);
+	    LIGHT.position.set(this.position.x, this.position.y + 30, this.position.z);
 	    CAMERA.position.set(this.position.x, this.position.y, this.position.z);
 	    //this.camera.lookAt(this.position.x + dir.x, this.position.y + dir.y, this.position.z + dir.x);
 	    var camTarget = new THREE.Vector3(this.position.x + this.direction.x,
