@@ -20,6 +20,9 @@ function Zombie(position)
 	this.currentMoveMesh;
 	this.canAttack = true;
 	this.attackPower = 5;
+	this.nextSpot = null;
+	this.path = null;
+	this.distanceToNextSpot = 1000;
 	this.direction =new THREE.Vector3(this.target.position.x - this.position.x
 										,this.target.position.y - this.position.y,
 										 this.target.position.z - this.position.z);
@@ -38,6 +41,23 @@ function Zombie(position)
 	this.pathArray = new Array();
 	SCENE.add(this.mesh);
     THE_GRID.requestPlacement(this,this.position.x, this.position.z);
+	
+		this.grid = new Array(THE_GRID.grid_spots.length);
+				for(var i = 0; i < THE_GRID.grid_spots.length; i++){
+					this.grid[i] = new Array(THE_GRID.grid_spots.length);
+				}
+					
+				for(var i = 0; i < THE_GRID.grid_spots.length; i++){
+					for(var j = 0; j < THE_GRID.grid_spots.length; j++){
+						if(THE_GRID.isOccupied(i,j)){
+							this.grid[i][j] = 0;
+						} else {
+							this.grid[i][j] = 1;
+						}
+					}
+				} 
+		this.graph = new Graph(this.grid);
+				
 	
 	
 	// I would like to change damage to weapon that way we can have different zombies be vulnerable to 
@@ -74,6 +94,38 @@ function Zombie(position)
 		*/		
 		if(!this.hasDirectPath())
 		{	
+			var spot = THE_GRID.grid_spot(this.position.x, this.position.z);	
+			var targetSpot = THE_GRID.grid_spot(this.target.position.x, this.target.position.z);
+			if(!this.path || this.computeFrame > 500) {
+				this.computeFrame = 0;
+				var start = this.graph.nodes[spot[0]][spot[1]];
+				var end = this.graph.nodes[targetSpot[0]][targetSpot[1]];
+				
+				this.path = astar.search(this.graph.nodes,start,end);
+				var newSpotGraphNode = this.path[0];
+				this.nextSpot = new Array(newSpotGraphNode.x,newSpotGraphNode.y);
+				this.path.splice(0,1);
+				this.moveTowardsGridSpot(this.nextSpot[0], this.nextSpot[1]);	
+			} else {
+				if(this.nextSpot){
+					var nextX = this.position.x + this.direction.x*this.speed;
+					var nextY = this.position.z + this.direction.z*this.speed;
+					var nextSpotCoord =  THE_GRID.coordinatesFromSpot(this.nextSpot[0],this.nextSpot[1]);
+					var distance = Math.sqrt(Math.pow(this.position.x  - nextSpotCoord[0],2) + Math.pow(this.position.z - nextSpotCoord[0],2));
+					if(distance > this.distanceToNextSpot){
+						var newSpotGraphNode = this.path[0];
+						this.distanceToNextSpot = distance;
+						this.nextSpot = new Array(newSpotGraphNode.x,newSpotGraphNode.y);
+						this.path.splice(0,1);
+						this.moveTowardsGridSpot(this.nextSpot[0], this.nextSpot[1]);
+					}
+				
+				}
+			
+			}
+			this.computeFrame++;
+				
+	/*	
 			this.computeFrame++;
 			if(this.computeFrame > 500){
 				this.computePath();
@@ -113,6 +165,7 @@ function Zombie(position)
 			this.direction.y = this.targetForMove.y - this.position.y
 			this.direction.z = this.targetForMove.z - this.position.z
 			this.direction.normalize();
+			*/
 		} else{
 			this.computeFrame = 600;
 			if(this.nextMoveMesh){
@@ -210,7 +263,7 @@ function Zombie(position)
 		var posY = this.position.z;	
 		var xDir = this.target.position.x - this.position.x
 		var zDir = this.target.position.z - this.position.z
-		var speed = 10;
+		var speed = 1;
 		var newDir = new THREE.Vector3(xDir
 										,this.target.position.y - this.position.y,
 										 zDir);
