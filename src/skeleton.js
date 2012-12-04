@@ -2,7 +2,16 @@ Skeleton.prototype =  new Zombie();
 var zombie_height = 40;
 var zombie_width = 10;
 function Skeleton(position){
+
+	
 	Zombie.apply(this,arguments); 
+	
+	this.attack_distance = 75;
+	this.speed = 1;
+    this.rotationSpeed = .5;
+	this.health = 100;
+	this.target = PLAYER;
+
   	this.mesh = new THREE.Mesh(GEOMETRIES[ZOMBIE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.position.x = position.x;
 	this.mesh.position.y = -.2;
