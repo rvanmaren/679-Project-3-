@@ -7,7 +7,7 @@ function Level(levelNum)
 	{
 	 //   ZOMBIES.push(new Zombie(new THREE.Vector3(Math.random()*GRID_WIDTH, 30, Math.random()*GRID_WIDTH)));
 	}
-    ZOMBIES.push(new Zombie(new THREE.Vector3(2300, 30, 2300),'skeleton'));
+    ZOMBIES.push(new Skeleton(new THREE.Vector3(2300, 30, 2300)));
 	this.update = function(time)
 	{
 	

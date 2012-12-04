@@ -1,10 +1,9 @@
-var zombie_height = 40;
-var zombie_width = 10;
+
 var WALKING = 0;
 var ATTACKING = 1;
 var DYING = 2;
 var STANDING = 3;
-function Zombie(position, type)
+function Zombie(position)
 {
 	this.attack_distance = 75;
 	this.position = position;
@@ -23,7 +22,7 @@ function Zombie(position, type)
 	this.nextSpot = null;
 	this.path = null;
 	this.distanceToNextSpot = 1000;
-	this.type = type;
+//	this.type = type;
 	this.direction =new THREE.Vector3(this.target.position.x - this.position.x
 										,this.target.position.y - this.position.y,
 										 this.target.position.z - this.position.z);
@@ -33,7 +32,7 @@ function Zombie(position, type)
 	var material = new THREE.MeshNormalMaterial({
         color: 0x00FF00,
     });	
-	if(type == 'skeleton')
+	/*if(type == 'skeleton')
 	{
 		this.mesh = new THREE.Mesh(GEOMETRIES[ZOMBIE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 		this.mesh.position.x = position.x;
@@ -54,7 +53,7 @@ function Zombie(position, type)
 		this.boundRadius = zombie_width;
 		this.pathArray = new Array();
 		SCENE.add(this.mesh);
-	}
+	}*/
     THE_GRID.requestPlacement(this,this.position.x, this.position.z);
 	
 		this.grid = new Array(THE_GRID.grid_spots.length);
@@ -360,8 +359,8 @@ function Zombie(position, type)
 	this.update = function(time) {
 		this.computeNextMove();
 	    // Alternate morph targets
-		if(this.type == "skeleton")
-		{
+	//	if(this.type == "skeleton")
+	//	{
 			if(this.state == WALKING) {
 				time = (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.walkingDuration;
 				keyframe = Math.floor( time / this.walkingInterpolation ) + this.walkingOffset;
@@ -403,7 +402,7 @@ function Zombie(position, type)
 				this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 
 					1 - this.mesh.morphTargetInfluences[ keyframe ];
 			}
-		}
+	//	}
 		this.mesh.rotation.y = this.ang;
 		//Rotate to face direction 
 		//this.mesh.rotation.y = Math.atan((PLAYER.position.x-this.position.x),(PLAYER.position.z-this.position.z))*(180/Math.PI);
