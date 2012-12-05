@@ -25,14 +25,15 @@ var ZOMBIES = new Array();
 
 /*BUILDER GLOBALS*/
 var GUN_MESH = 0;
-var HOUSE_MESH = 1;
-var FENCE_MESH = 2;
-var MONSTER_MESH = 3;
-var ZOMBIE_MESH = 4;
-var ORDER =['gun','house','fence', 'monster','zombie'];
+var TREE1_MESH = 1;
+var HOUSE_MESH = 2;
+var FENCE_MESH = 3;
+var MONSTER_MESH = 4;
+var ZOMBIE_MESH = 5;
+var ORDER =['gun','tree1','house','fence', 'monster','zombie'];
 var GEOMETRIES = new Array();
 var COLLADAS = new Array();
-var NUM_GEOMETRIES  = 5;
+var NUM_GEOMETRIES  = 6;
 var NUM_COLLADAS = 0;
 function load( geometry,id) {  
 		//var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial({overdraw: true}));   
@@ -56,7 +57,7 @@ function loadGeometry_anim(meshToLoad, id) {
 }
 function loadGeometryCollada(meshToLoad)
 {
-    LOADERC.load (meshToLoad,function(collada){loadC(collada)});
+    //LOADERC.load (meshToLoad,function(collada){GEOMETRIES.push()});
 }
 /*GRID GLOBALS*/
 var GRID_HEIGHT = 10000;
