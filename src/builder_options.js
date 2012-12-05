@@ -23,6 +23,7 @@ function WallPiece(position, grid)
 	this.mesh.position.y = -1;
 	this.mesh.position.z = position.z;
 	SCENE.add(this.mesh );
+	this.health = 20;
 	/*var material = new THREE.MeshBasicMaterial({
         color: 0x00FF00,
     });
@@ -31,6 +32,20 @@ function WallPiece(position, grid)
 	this.mesh.position.y = wall_height/2;
 	this.mesh.position.z = position.z;
 	SCENE.add(this.mesh);*/
+	
+	this.doDamage = function(damage){
+	this.health -= damage;
+	if(this.health < 5){
+		this.health = 1;
+	}
+	var spot = THE_GRID.grid_spot(this.mesh.position.x, this.mesh.position.z);
+	SEARCHGRID[spot[0]][spot[1]] = this.health;
+	SEARCHGRAPH = new Graph(SEARCHGRID);
+	if(this.health == 1){
+		THE_GRID.removeWall(this);
+	}
+	}
+	
 }
 var house_width = 10;
 var house_height = 20;

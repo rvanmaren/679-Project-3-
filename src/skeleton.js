@@ -1,4 +1,4 @@
-Skeleton.prototype =  new Zombie();
+Skeleton.prototype =  new Zombie(new THREE.Vector3(2300, 30, 2300));
 var zombie_height = 40;
 var zombie_width = 10;
 function Skeleton(position){
@@ -22,7 +22,7 @@ function Skeleton(position){
 	SCENE.add(this.mesh);
 
 	
-	
+	this.attackTarget = null;
 	
 	var clock = new THREE.Clock();
 	/*ANIMATION VARIABLES*/
@@ -69,7 +69,9 @@ function Skeleton(position){
 				time = (new Date().getTime()+this.attackInterpolation) % this.attackDuration;
 				if(time < 500 && time > 475){
 					if(this.canAttack){
-						PLAYER.doDamage(this.attackPower);
+						if("undefined" != typeof(this.attackTarget)){
+							this.attackTarget.doDamage(this.attackPower);
+						}
 					   this.canAttack = false;
 					}
 				} else {
@@ -91,38 +93,47 @@ function Skeleton(position){
 			}
 		
 		this.mesh.rotation.y = this.ang;
-		//Rotate to face direction 
-		//this.mesh.rotation.y = Math.atan((PLAYER.position.x-this.position.x),(PLAYER.position.z-this.position.z))*(180/Math.PI);
-	//Move in the direction of looking.
-		//Compute movement based on key press
-		//	var directionPerp = new THREE.Vector3(this.direction.x*Math.cos(Math.PI/2)- this.direction.z*Math.sin(Math.PI/2),
-		//								0, this.direction.x*Math.sin(Math.PI/2)+this.direction.z*Math.cos(Math.PI/2));//just rotate by 90 degrees same direction every time
-
-		//Do y direction with a jump
-		//sideways motion
-		//var nextX = this.position.x + directionPerp.x*this.speed + this.direction.x*this.speed;
-		//var nextY = this.position.z + directionPerp.z*this.speed + this.direction.z*this.speed;
-		
+	
 		var distance = Math.sqrt(Math.pow(this.position.x  - this.target.position.x,2) + Math.pow(this.position.z - this.target.position.z,2));
 		
 		if(distance < this.attack_distance){
 			this.state = ATTACKING;
 			this.mesh.morphTargetInfluences[ (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.walkingDuration ] = 1;
+			this.attackTarget = this.target;
 		}
 		else {
 			this.state = WALKING;
 			this.mesh.morphTargetInfluences[ Math.floor( time / this.attackInterpolation ) + this.attackOffset ] = 0;
 			var nextX = this.position.x + this.direction.x*this.speed + this.direction.x*this.speed;
 			var nextY = this.position.z + this.direction.z*this.speed + this.direction.z*this.speed;
-		
 				
 			if(THE_GRID.requestMoveTo(this,this.position.x,this.position.z,nextX,nextY))
 			{
-				this.position.x = nextX;
-				this.position.z = nextY;
-			} else {
-				this.state = STANDING;
-			
+				var xAhead = this.position.x + this.direction.x*10; 
+				var yAhead = this.position.z + this.direction.z*10;
+				var spot = THE_GRID.grid_spot(xAhead, yAhead);	
+				if(THE_GRID.isSpotOccupied(spot)){
+					var wall = THE_GRID.grid_spots[spot[0]][spot[1]].myOwner;
+					this.attackTarget = wall;
+					if("undefined" != typeof(this.attackTarget)){
+						this.state = ATTACKING;		
+					}
+				} else {				
+					this.position.x = nextX;
+					this.position.z = nextY;
+				}
+			}
+			else {	
+				var spot = THE_GRID.grid_spot(nextX, nextY);	
+				
+				var wall = THE_GRID.grid_spots[spot[0]][spot[1]].myOwner;
+				
+				this.attackTarget = wall;
+				
+				if("undefined" != typeof(this.attackTarget)){
+					this.state = ATTACKING;		
+				}
+				
 			}
 		}
 		this.draw();
