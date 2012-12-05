@@ -18,9 +18,9 @@ function Level(levelNum)
 				for(var i = 0; i < THE_GRID.grid_spots.length; i++){
 					for(var j = 0; j < THE_GRID.grid_spots.length; j++){
 						if(THE_GRID.isOccupied(i,j)){
-							SEARCHGRID[i][j] = 1;
+							SEARCHGRID[i][j] = 0;
 						} else {
-							SEARCHGRID[i][j] = 1000;
+							SEARCHGRID[i][j] = 10;
 						}
 					}
 				} 
@@ -35,11 +35,16 @@ function Level(levelNum)
     ZOMBIES.push(new Skeleton(new THREE.Vector3(4300, 30, 4300)));
 	this.update = function(time)
 	{
-	
+	    var zombies_to_keep = new Array();
 		//this.zombie.update(time);
 		for(var i = 0; i < ZOMBIES.length; i++){
 			ZOMBIES[i].update(time);
+			if(!ZOMBIES[i].dead)
+			{
+			    zombies_to_keep.push(ZOMBIES[i]);
+			}
 		} 
+		ZOMBIES = zombies_to_keep;
 	};
 
 	this.exitLevel = function () {

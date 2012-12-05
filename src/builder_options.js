@@ -17,6 +17,7 @@ var tree1_width = GRID_WIDTH/NUM_BOXES;
 var tree1_height= 100;
 function Tree1Piece(position,grid)
 {
+	this.myOwner = this;
     this.grid_spot = grid;
 	this.mesh = new THREE.Mesh(GEOMETRIES[TREE1_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.scale.set(20,45,20);
@@ -24,11 +25,16 @@ function Tree1Piece(position,grid)
 	this.mesh.position.y = -1;
 	this.mesh.position.z = position.z;
 	SCENE.add(this.mesh );
+	
+	this.doDamage = function(damage){
+	}
+	
 }
 var tree2_width = GRID_WIDTH/NUM_BOXES;
 var tree2_height= 100;
 function Tree2Piece(position,grid)
 {
+	this.myOwner = this;
     this.grid_spot = grid;
 	this.mesh = new THREE.Mesh(GEOMETRIES[TREE2_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.scale.set(20,45,20);
@@ -36,6 +42,10 @@ function Tree2Piece(position,grid)
 	this.mesh.position.y = -1;
 	this.mesh.position.z = position.z;
 	SCENE.add(this.mesh );
+	
+	this.doDamage = function(damage){
+	}
+	
 }
 function WallPiece(position, grid)
 {
@@ -75,6 +85,7 @@ var house_width = 10;
 var house_height = 20;
 function HousePiece(position, grid)
 {
+	this.myOwner = this;
     this.grid_spot = grid;
 	this.mesh = new THREE.Mesh(GEOMETRIES[HOUSE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.scale.set(3,3,3);
@@ -84,6 +95,10 @@ function HousePiece(position, grid)
 	SCENE.add(this.mesh);
 	
 	this.units;
+	
+	
+	this.doDamage = function(damage){
+	}
 }
 function HousePieceUnit(housePiece, position)
 {

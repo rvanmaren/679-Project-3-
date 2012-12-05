@@ -7,7 +7,7 @@ function Skeleton(position){
 	Zombie.apply(this,arguments); 
 	
 	this.attack_distance = 75;
-	this.speed = 1;
+	this.speed = 2;
     this.rotationSpeed = .5;
 	this.health = 100;
 	this.target = PLAYER;
@@ -42,6 +42,12 @@ function Skeleton(position){
 	this.attackLastKeyframe    = 0;  // previous keyframe
 	this.attackcurrentKeyframe = 0;
 	/*DEATH (coming soon)*/
+	this.deathOffset       = 22  // starting frame of animation
+	this.deathDuration        = 4000, // milliseconds to complete animation
+	this.deathKeyframes       = 5,   // total number of animation frames
+	this.deathInterpolation   = this.attackDuration  / this.attackKeyframes; // milliseconds per frame
+	this.deathLastKeyframe    = 0;  // previous keyframe
+	this.deathcurrentKeyframe = 0;
 	/***********************************************************************************************/
 	
 		
@@ -91,50 +97,73 @@ function Skeleton(position){
 				this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 
 					1 - this.mesh.morphTargetInfluences[ keyframe ];
 			}
-		
+			if(this.state == DYING) {
+				time = (new Date().getTime()+this.deathInterpolation) % this.deathDuration;
+				keyframe = Math.floor( time / this.deathInterpolation ) + this.deathOffset;
+				if ( keyframe != this.deathcurrentKeyframe ) 
+				{
+					this.mesh.morphTargetInfluences[ this.deathLastKeyframe ] = 0;
+					this.mesh.morphTargetInfluences[ this.deathcurrentKeyframe ] = 1;
+					this.mesh.morphTargetInfluences[ keyframe ] = 0;
+					this.deathLastKeyframe = this.deathcurrentKeyframe;
+					this.deathcurrentKeyframe = keyframe;
+				}
+				this.mesh.morphTargetInfluences[ keyframe ] = 
+					( time % this.deathInterpolation ) / this.deathInterpolation;
+				this.mesh.morphTargetInfluences[ this.deathLastKeyframe ] = 
+					1 - this.mesh.morphTargetInfluences[ keyframe ];
+				
+				if(keyframe == 28)
+				{
+				    this.kill();
+				}
+			}
 		this.mesh.rotation.y = this.ang;
 	
-		var distance = Math.sqrt(Math.pow(this.position.x  - this.target.position.x,2) + Math.pow(this.position.z - this.target.position.z,2));
 		
-		if(distance < this.attack_distance){
-			this.state = ATTACKING;
-			this.mesh.morphTargetInfluences[ (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.walkingDuration ] = 1;
-			this.attackTarget = this.target;
-		}
-		else {
-			this.state = WALKING;
-			this.mesh.morphTargetInfluences[ Math.floor( time / this.attackInterpolation ) + this.attackOffset ] = 0;
-			var nextX = this.position.x + this.direction.x*this.speed + this.direction.x*this.speed;
-			var nextY = this.position.z + this.direction.z*this.speed + this.direction.z*this.speed;
+		if(this.state == WALKING){
 				
-			if(THE_GRID.requestMoveTo(this,this.position.x,this.position.z,nextX,nextY))
-			{
+			var nextX = this.position.x + this.direction.x*this.speed;
+			var nextY = this.position.z + this.direction.z*this.speed;
+			var spot = THE_GRID.grid_spot(nextX, nextY);	
+					
+				this.position.x = nextX;
+				this.position.z = nextY
+			
+		
 				var xAhead = this.position.x + this.direction.x*10; 
 				var yAhead = this.position.z + this.direction.z*10;
 				var spot = THE_GRID.grid_spot(xAhead, yAhead);	
+				
+				var distance = Math.sqrt(Math.pow(this.position.x  - this.target.position.x,2) + Math.pow(this.position.z - this.target.position.z,2));
+					
 				if(THE_GRID.isSpotOccupied(spot)){
-					var wall = THE_GRID.grid_spots[spot[0]][spot[1]].myOwner;
-					this.attackTarget = wall;
+					
+					var gridItem = THE_GRID.grid_spots[spot[0]][spot[1]].myOwner;
+					this.attackTarget = gridItem;
 					if("undefined" != typeof(this.attackTarget)){
-						this.state = ATTACKING;		
+						this.state = ATTACKING;
+						this.mesh.morphTargetInfluences[ (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.walkingDuration ] = 0;						
 					}
-				} else {				
-					this.position.x = nextX;
-					this.position.z = nextY;
-				}
+				}	else if(distance < this.attack_distance)
+				{
+					this.state = ATTACKING;
+					this.mesh.morphTargetInfluences[ (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.walkingDuration ] = 0;
+					this.attackTarget = this.target;
+				}		
+			
+		}
+		else if(this.state == ATTACKING){
+			var xAhead = this.position.x + this.direction.x*10; 
+			var yAhead = this.position.z + this.direction.z*10;
+			var spot = THE_GRID.grid_spot(xAhead, yAhead);	
+			var distance = Math.sqrt(Math.pow(this.position.x  - this.target.position.x,2) + Math.pow(this.position.z - this.target.position.z,2));
+					
+			if(!THE_GRID.isSpotOccupied(spot) && distance >= this.attack_distance){
+				this.state = WALKING;
+				this.mesh.morphTargetInfluences[ Math.floor( time / this.attackInterpolation ) + this.attackOffset ] = 0;
 			}
-			else {	
-				var spot = THE_GRID.grid_spot(nextX, nextY);	
-				
-				var wall = THE_GRID.grid_spots[spot[0]][spot[1]].myOwner;
-				
-				this.attackTarget = wall;
-				
-				if("undefined" != typeof(this.attackTarget)){
-					this.state = ATTACKING;		
-				}
-				
-			}
+			
 		}
 		this.draw();
 	};

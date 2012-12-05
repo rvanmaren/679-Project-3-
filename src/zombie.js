@@ -22,6 +22,7 @@ function Zombie(position)
 	this.nextSpot = null;
 	this.path = null;
 	this.distanceToNextSpot = 1000;
+	this.dead = false;
 //	this.type = type;
 	if("undefined" != typeof(this.target)){
 		this.direction =new THREE.Vector3(this.target.position.x - this.position.x
@@ -100,7 +101,7 @@ function Zombie(position)
 										,this.targetForMove.y - this.position.y,
 										 this.targetForMove.z - this.position.z)
 										 
-					this.ang  = 3.14*dotProduct(this.direction, new THREE.Vector3(0,0,1));
+					this.ang  = dotProduct(this.direction, new THREE.Vector3(0,0,1));
 					if(newDir.x<0)
 						this.ang = -1*this.ang;
 					
@@ -117,7 +118,8 @@ function Zombie(position)
 			this.direction.z = this.target.position.z - this.position.z
 			this.direction.normalize();
 			
-			
+		}
+
 			var newDirX = this.target.position.x - this.position.x;
 			var newDirZ = this.target.position.Z - this.position.Z;
 			var newDir = new THREE.Vector3(this.target.position.x - this.position.x
@@ -128,14 +130,11 @@ function Zombie(position)
 			if(newDir.x<0)
 				this.ang = -1*this.ang;
 	
-			
-		}
-
-	
 		
 	};
 	
 	this.hasDirectPath = function() {
+	  
 		var reachedTarget = false;
 		var posX = this.position.x;
 		var posY = this.position.z;	
@@ -182,15 +181,10 @@ function Zombie(position)
 	}
 	
 	this.kill = function(){
-        index = ZOMBIES.indexOf(this);
-        if (index >= 0 && index < ZOMBIES.length) {
-            ZOMBIES.splice(index,1);
-        }
-		
 		for(var i = 0; i < this.drawPathArray.length; i++){
 				SCENE.remove(this.drawPathArray[i]);
 			}
-
+		this.dead = true;
 		SCENE.remove(this.mesh);
         PLAYER.score += 100;
 	}
@@ -199,7 +193,7 @@ function Zombie(position)
     this.takeDamage = function(damage){
         this.health -= damage;
         if (this.health <= 0) {
-            this.kill();
+            this.state = DYING;
             return true;
         } else {
             return false;
