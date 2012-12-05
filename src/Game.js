@@ -6,11 +6,16 @@ var RIGHT = 3;
 function Game()
 {
 	THE_GRID = new Grid(GRID_WIDTH,GRID_HEIGHT,NUM_BOXES);
-	PLAYER = new Player(new THREE.Vector3(2000, 30, 2000));
+	PLAYER = new Player(new THREE.Vector3(GRID_WIDTH/2, 30, GRID_HEIGHT/2));
 
 	//Build the first house near the player
 	THE_GRID.handle_command(new Build_Command('build', 'house', PLAYER.position.x + 150, PLAYER.position.z + 150));
-
+	//Build some Scenery 
+	for(var i = 0; i<100;i++)
+	{
+		THE_GRID.handle_command(new Build_Command('build', 'tree1', GRID_WIDTH*Math.random(), GRID_HEIGHT*Math.random()));
+		THE_GRID.handle_command(new Build_Command('build', 'tree2', GRID_WIDTH*Math.random(),GRID_HEIGHT*Math.random()));
+	}
 	this.skybox = new Skybox();
 	this.night = new Night();
 	this.day = new Day(new THREE.Vector3(2000, 400, 2000));

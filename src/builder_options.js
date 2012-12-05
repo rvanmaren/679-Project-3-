@@ -13,6 +13,30 @@ function remove(piece)
 {
 	SCENE.remove(piece.mesh);
 }
+var tree1_width = GRID_WIDTH/NUM_BOXES;
+var tree1_height= 100;
+function Tree1Piece(position,grid)
+{
+    this.grid_spot = grid;
+	this.mesh = new THREE.Mesh(GEOMETRIES[TREE1_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
+	this.mesh.scale.set(20,45,20);
+	this.mesh.position.x = position.x;
+	this.mesh.position.y = -1;
+	this.mesh.position.z = position.z;
+	SCENE.add(this.mesh );
+}
+var tree2_width = GRID_WIDTH/NUM_BOXES;
+var tree2_height= 100;
+function Tree2Piece(position,grid)
+{
+    this.grid_spot = grid;
+	this.mesh = new THREE.Mesh(GEOMETRIES[TREE2_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
+	this.mesh.scale.set(20,45,20);
+	this.mesh.position.x = position.x;
+	this.mesh.position.y = -1;
+	this.mesh.position.z = position.z;
+	SCENE.add(this.mesh );
+}
 function WallPiece(position, grid)
 {
     this.units;

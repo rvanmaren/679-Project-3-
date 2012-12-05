@@ -28,14 +28,15 @@ var SEARCHGRAPH;
 /*BUILDER GLOBALS*/
 var GUN_MESH = 0;
 var TREE1_MESH = 1;
-var HOUSE_MESH = 2;
-var FENCE_MESH = 3;
-var MONSTER_MESH = 4;
-var ZOMBIE_MESH = 5;
-var ORDER =['gun','tree1','house','fence', 'monster','zombie'];
+var TREE2_MESH = 2;
+var HOUSE_MESH = 3;
+var FENCE_MESH = 4;
+var MONSTER_MESH = 5;
+var ZOMBIE_MESH = 6;
+var ORDER =['gun','tree1','tree2','house','fence', 'monster','zombie'];
 var GEOMETRIES = new Array();
 var COLLADAS = new Array();
-var NUM_GEOMETRIES  = 6;
+var NUM_GEOMETRIES  = 7;
 var NUM_COLLADAS = 0;
 function load( geometry,id) {  
 		//var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial({overdraw: true}));   

@@ -215,6 +215,14 @@ function Grid(width, height, blocks)
 					{
 						return this.buildWall(spot);
 					}
+					if(buildCMD.type == "tree1")
+					{
+					    return this.buildTree1(spot);
+					}
+					if(buildCMD.type == "tree2")
+					{
+					    return this.buildTree2(spot);
+					}
 				}
 			}
 			if(buildCMD.command == "remove")
@@ -433,6 +441,26 @@ function Grid(width, height, blocks)
 		this.grid_spots[spotClick[0]][spotClick[1]].units = unit_spots;
 		NUM_HOUSES++;
         return true;
+	}
+	this.buildTree1 = function ( spotClick)
+	{
+	    	if(this.grid_spots[spotClick[0]][spotClick[1]] != EMPTY)
+			{
+			    return false;
+			}
+			this.grid_spots[spotClick[0]][spotClick[1]] = new Tree1Piece(new THREE.Vector3(spotClick[0]*width/blocks+width/blocks/2,0,spotClick[1]*height/blocks+height/blocks/2),[spotClick[0],spotClick[1]]);
+			this.grid_spots[spotClick[0]][spotClick[1]].mesh.rotation.y = Math.PI/2;
+			return true;
+	}
+	this.buildTree2 = function ( spotClick)
+	{
+	    	if(this.grid_spots[spotClick[0]][spotClick[1]] != EMPTY)
+			{
+			    return false;
+			}
+			this.grid_spots[spotClick[0]][spotClick[1]] = new Tree2Piece(new THREE.Vector3(spotClick[0]*width/blocks+width/blocks/2,0,spotClick[1]*height/blocks+height/blocks/2),[spotClick[0],spotClick[1]]);
+			this.grid_spots[spotClick[0]][spotClick[1]].mesh.rotation.y = Math.PI/2 * Math.random();
+			return true;
 	}
 	this.buildWall = function (spotClick)
 	{

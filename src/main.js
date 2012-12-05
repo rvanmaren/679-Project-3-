@@ -24,6 +24,7 @@ var count = 0;
 
 LOADER.load( './resources/rifle/rifle_0.js' ,function(geometry){    geometry.id = 'gun';    GEOMETRIES.push(geometry);});
 LOADER.load( './resources/trees/tree1.js' ,function(geometry){    geometry.id = 'tree1';    GEOMETRIES.push(geometry);});
+LOADER.load( './resources/trees/tree2.js' ,function(geometry){    geometry.id = 'tree2';    GEOMETRIES.push(geometry);});
 //LOADER.load( './resources/fence/fence.js' ,function(geometry){GEOMETRIES.push(geometry);});
 LOADER.load( './resources/house/housemodel.js' ,function(geometry){    geometry.id = 'house';    GEOMETRIES.push(geometry);});
 LOADER.load( './resources/skeleton_0.js', function(geometry){
