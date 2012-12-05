@@ -478,7 +478,6 @@ function Grid(width, height, blocks)
 	this.removeWall = function(fencePiece)
 	{
 	    SCENE.remove(fencePiece.mesh);
-		console.log("hit");
 		var units = fencePiece.units;
 		this.grid_spots[fencePiece.grid_spot[0]][fencePiece.grid_spot[1]] = EMPTY;
 		for(c = 0; c < units.length; c++)

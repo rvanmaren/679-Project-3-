@@ -22,6 +22,8 @@ var P_ROTATE = .5;
 var P_SPEED = 4;
 /*ZOMBIE GLOBALS*/
 var ZOMBIES = new Array();
+var SEARCHGRID;
+var SEARCHGRAPH;
 
 /*BUILDER GLOBALS*/
 var GUN_MESH = 0;
