@@ -6,7 +6,7 @@ function Monster(position){
 	Zombie.apply(this,arguments); 
 	
 	this.attack_distance = 200;
-	this.speed = 4;
+	this.speed = 4 / 30;
     this.rotationSpeed = .5;
 	this.health = 100;
 	this.maxHealth = this.health;
@@ -14,7 +14,8 @@ function Monster(position){
 
   	this.mesh = new THREE.Mesh(GEOMETRIES[MONSTER_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.position.x = position.x;
-	this.mesh.position.y = -.2;
+	this.mesh.position.y = -50;
+	this.yPosition = -.2;
 	this.mesh.position.z = position.z;
 	this.mesh.scale.set(.02,.02,.02);
 	this.boundRadius = zombie_width;
@@ -37,6 +38,17 @@ var clock = new THREE.Clock();
 	this.timeSinceAttack = 0;
 		
 	this.update = function(time) {
+		if(this.spawn && this.mesh.position.y != this.yPosition){
+			var nextYMesh = this.mesh.position.y + 1;
+			if(nextYMesh > this.yPosition){
+				this.mesh.position.y = this.yPosition;
+			} else {
+				this.mesh.position.y = nextYMesh;
+			}
+			return;
+		}
+		
+	
 	    var aniTimeWalk = (new Date().getTime()+this.walkingInterpolation) % this.walkingDuration;
 	    if(this.status != DYING)
 		{
@@ -76,8 +88,8 @@ var clock = new THREE.Clock();
 		
 		if(this.state == WALKING){
 				
-			var nextX = this.position.x + this.direction.x*this.speed;
-			var nextY = this.position.z + this.direction.z*this.speed;
+			var nextX = this.position.x + this.direction.x*this.speed*time;
+			var nextY = this.position.z + this.direction.z*this.speed*time;
 			var spot = THE_GRID.grid_spot(nextX, nextY);	
 					
 				this.position.x = nextX;

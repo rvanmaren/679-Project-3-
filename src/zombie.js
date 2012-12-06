@@ -24,8 +24,10 @@ function Zombie(position)
 	this.path = null;
 	this.distanceToNextSpot = 1000;
 	this.dead = false;
+	this.yPosition = -0.2;
+	this.spawn = false;
 	this.interestDelay = Math.random()*500;
-	this.anger = Math.random()/2;
+	this.anger = Math.random()/10;
 //	this.type = type;
 	if("undefined" != typeof(this.target)){
 		this.direction =new THREE.Vector3(this.target.position.x - this.position.x
@@ -49,7 +51,16 @@ function Zombie(position)
 		this.health -= damage;
 		this.target = entity;
 	};
+	
+	this.spawn = function(){
+		//this.mesh.position.y = this.yPosition;
+		this.spawn = true;
+	}
+	
 	this.computeNextMove = function(){
+		if(this.target.health < 0){
+			this.findPointOfInterest(); 
+		}
 		if(this.interestDelay > 500){
 			this.findPointOfInterest(); 
 			this.interestDelay = 0;
@@ -218,7 +229,6 @@ function Zombie(position)
 	
 	this.draw = function(){
 		this.mesh.position.x = position.x;
-		this.mesh.position.y = -.2;
 		this.mesh.position.z = position.z;
 	}
 	
