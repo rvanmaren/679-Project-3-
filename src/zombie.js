@@ -173,12 +173,6 @@ function Zombie(position)
     //Return true if the zombie was killed, false otherwise
     this.takeDamage = function(damage){
         this.health -= damage;
-        if (this.health <= 0) {
-            this.state = DYING;
-            return true;
-        } else {
-            return false;
-        }
     }
     var clock = new THREE.Clock();
 	/*ANIMATION VARIABLES*/
