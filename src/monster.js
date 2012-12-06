@@ -1,6 +1,6 @@
 Monster.prototype =  new Zombie(new THREE.Vector3(2300, 30, 2300));
 var zombie_height = 40;
-var zombie_width = 10;
+var zombie_width = 15;
 function Monster(position){
 
 	Zombie.apply(this,arguments); 
@@ -17,8 +17,13 @@ function Monster(position){
 	this.mesh.position.y = -50;
 	this.yPosition = -.2;
 	this.mesh.position.z = position.z;
-	this.mesh.scale.set(.02,.02,.02);
+	this.mesh.scale.set(.02, .02, .02);
 	this.boundRadius = zombie_width;
+
+    //Uncomment this as well as the comment in update to see the collision spheres
+//	this.collisionMesh = new THREE.Mesh(new THREE.SphereGeometry(this.boundRadius, 100, 100), new THREE.MeshNormalMaterial());
+//    SCENE.add(this.collisionMesh);
+
 	this.pathArray = new Array();
 	SCENE.add(this.mesh);
 
@@ -36,8 +41,15 @@ var clock = new THREE.Clock();
 	this.walkingcurrentKeyframe = 0;
 	/***********************************************************************************************/
 	this.timeSinceAttack = 0;
+
 		
 	this.update = function(time) {
+	        //Uncomment this to see the collision sphere
+//	    var temp = this.position.clone();
+//	    temp.y -= 15;
+//	    temp.addSelf(this.direction.clone().multiplyScalar(20));
+//	    this.collisionMesh.position = temp;
+	
 		if(this.spawn && this.mesh.position.y != this.yPosition){
 			var nextYMesh = this.mesh.position.y + 1;
 			if(nextYMesh > this.yPosition){
@@ -134,5 +146,15 @@ var clock = new THREE.Clock();
 		}
 		this.draw();
 	
+
 	}
+
+	this.checkCollision = function (collider) {
+	    var collisionPosition = this.position.clone();
+	    collisionPosition.y -= 15;
+	    collisionPosition.addSelf(this.direction.clone().multiplyScalar(20));
+	    if (collider.mesh.position.clone().subSelf(collisionPosition).length() < collider.boundRadius + this.boundRadius) {
+	        return true;
+	    }
+	};
 }

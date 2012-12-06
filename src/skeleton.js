@@ -20,9 +20,18 @@ function Skeleton(position){
 	this.mesh.scale.set(20,20,20);
 	this.boundRadius = zombie_width;
 	this.pathArray = new Array();
+
+    //Uncomment this as well as the comment in update to see collision spheres
+//	this.collisionMesh2 = new THREE.Mesh(new THREE.SphereGeometry(this.boundRadius, 100, 100), new THREE.MeshNormalMaterial());
+//    this.collisionMesh2.position = this.mesh.position.clone();
+//	SCENE.add(this.collisionMesh2);
+
+//	this.collisionMesh = new THREE.Mesh(new THREE.SphereGeometry(this.boundRadius, 100, 100), new THREE.MeshNormalMaterial());
+//	this.collisionMesh.position = this.mesh.position.clone();
+//	SCENE.add(this.collisionMesh);
+
 	SCENE.add(this.mesh);
 
-	
 	this.attackTarget = null;
 	
 	var clock = new THREE.Clock();
@@ -51,8 +60,15 @@ function Skeleton(position){
 	this.deathcurrentKeyframe = 0;
 	/***********************************************************************************************/
 	
-		
 	this.update = function(time) {
+	
+        //Uncomment this to see collision spheres
+		//	    this.collisionMesh.position = this.position.clone();
+		//	    var tempPos = this.position.clone();
+		//	    tempPos.y -= this.boundRadius * 2;
+		//	    this.collisionMesh2.position = tempPos;
+	
+	
 		if(this.spawn && this.mesh.position.y != this.yPosition){
 			var nextYMesh = this.mesh.position.y + 1;
 			if(nextYMesh > this.yPosition){
@@ -208,6 +224,7 @@ function Skeleton(position){
 			
 		}
 		this.draw();
+
 	};
 	
 	

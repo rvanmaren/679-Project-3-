@@ -47,6 +47,7 @@ function Level(levelNum)
 	
 	this.setUpGrid();
 	
+
 	// ZOMBIES.push(new Monster(new THREE.Vector3(4500, 30, 4300)));
 	// ZOMBIES.push(new Monster(new THREE.Vector3(4600, 30, 4300)));
 	// ZOMBIES.push(new Skeleton(new THREE.Vector3(4500, 30, 4400)));
