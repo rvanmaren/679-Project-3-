@@ -536,7 +536,7 @@ function Grid(width, height, blocks)
 		this.grid_spots[fencePiece.grid_spot[0]][fencePiece.grid_spot[1]] = EMPTY;
 		for(c = 0; c < units.length; c++)
 		{
-		    var pos = units[c].position;
+		    var pos = this.grid_spot(units[c].position.x,units[c].position.z);
 		    this.grid_spots[pos[0]][pos[1]] = EMPTY;
 		}
 	}

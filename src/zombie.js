@@ -118,7 +118,7 @@ function Zombie(position)
 	this.findPointOfInterest = function(){
 			var spot = THE_GRID.grid_spot(this.position.x, this.position.z);	
 			var targetSpot = THE_GRID.grid_spot(PLAYER.position.x, PLAYER.position.z);
-			
+			this.target = PLAYER;
 			var bestDistance = Math.sqrt(Math.pow(spot[0]  - targetSpot[0],2) + Math.pow(spot[1]  - targetSpot[1],2));
 			
 			for(var i = 0; i < THE_GRID.grid_spots.length; i++){
@@ -156,7 +156,9 @@ function Zombie(position)
 			
 			var spot = THE_GRID.grid_spot(posX,posY);
 			if(THE_GRID.isSpotOccupied(spot)){
-			return false;
+				if(!(THE_GRID.grid_spots[spot[0]][spot[1]] instanceof this.target.constructor)){
+					return false;
+				} 
 			}
 				distance-= speed;
 		}
