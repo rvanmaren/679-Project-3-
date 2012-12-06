@@ -92,7 +92,6 @@ function Skeleton(position){
 			}
 			if(this.state == ATTACKING)
 			{
-
 				if(aniTimeATTK > 475){
 					if(this.canAttack){
 						if("undefined" != typeof(this.attackTarget)){

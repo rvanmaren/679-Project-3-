@@ -5,7 +5,7 @@ function Monster(position){
 
 	Zombie.apply(this,arguments); 
 	
-	this.attack_distance = 75;
+	this.attack_distance = 200;
 	this.speed = 4;
     this.rotationSpeed = .5;
 	this.health = 100;
@@ -33,7 +33,7 @@ var clock = new THREE.Clock();
 	this.walkingLastKeyframe    = 0;  // previous keyframe
 	this.walkingcurrentKeyframe = 0;
 	/***********************************************************************************************/
-	
+	this.timeSinceAttack = 0;
 		
 	this.update = function(time) {
 	    var aniTimeWalk = (new Date().getTime()+this.walkingInterpolation) % this.walkingDuration;
@@ -56,8 +56,20 @@ var clock = new THREE.Clock();
 					( aniTimeWalk % this.walkingInterpolation ) / this.walkingInterpolation;
 				this.mesh.morphTargetInfluences[ this.walkingLastKeyframe ] = 
 					1 - this.mesh.morphTargetInfluences[ keyframe ];
+		}
+		if(this.state == ATTACKING)
+		{
+		    if(this.timeSinceAttack > 500){
+				if(this.canAttack){
+					if("undefined" != typeof(this.attackTarget)){
+						this.attackTarget.doDamage(this.attackPower);
+					}
+					this.canAttack = false;
+				}
+			} else {
+				this.timeSinceAttack++;
 			}
-			
+		}
 		this.mesh.rotation.y = this.ang-Math.PI/2;
 	
 		
@@ -84,18 +96,28 @@ var clock = new THREE.Clock();
 					if("undefined" != typeof(this.attackTarget)){
 						this.state = ATTACKING;
 						this.mesh.morphTargetInfluences[this.walkingcurrentKeyframe] = 0;
-					    this.mesh.morphTargetInfluences[this.walkingLastKeyframe] = 0;
-						this.attackcurrentKeyframe = 0;						
+					    this.mesh.morphTargetInfluences[this.walkingLastKeyframe] = 0;				
 					}
 				}	else if(distance < this.attack_distance)
 				{
 					this.state = ATTACKING;
-					this.attackcurrentKeyframe = 0;
 					this.mesh.morphTargetInfluences[this.walkingcurrentKeyframe] = 0;
 					this.mesh.morphTargetInfluences[this.walkingLastKeyframe] = 0;
 					this.attackTarget = this.target;
 				}		
 			
+		}
+		else if(this.state == ATTACKING)
+		{
+			var xAhead = this.position.x + this.direction.x*10; 
+			var yAhead = this.position.z + this.direction.z*10;
+			var spot = THE_GRID.grid_spot(xAhead, yAhead);	
+			var distance = Math.sqrt(Math.pow(this.position.x  - this.target.position.x,2) + Math.pow(this.position.z - this.target.position.z,2));
+					
+			if(!THE_GRID.isSpotOccupied(spot) && distance >= this.attack_distance){
+				this.state = WALKING;
+				this.walkingcurrentKeyframe = 0;
+			}
 		}
 		this.draw();
 	
