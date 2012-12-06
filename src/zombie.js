@@ -23,6 +23,7 @@ function Zombie(position)
 	this.path = null;
 	this.distanceToNextSpot = 1000;
 	this.dead = false;
+	this.interestDelay = 0;
 //	this.type = type;
 	if("undefined" != typeof(this.target)){
 		this.direction =new THREE.Vector3(this.target.position.x - this.position.x
@@ -44,9 +45,15 @@ function Zombie(position)
 	// different types of weapons
 	this.dealDamageFromEntity = function(entity, damage){
 		this.health -= damage;
+		this.target = entity;
 	};
 	this.computeNextMove = function(){
-		this.findPointOfInterest(); 
+		if(this.interestDelay > 100){
+			this.findPointOfInterest(); 
+			this.interestDelay = 0;
+		}
+		this.interestDelay++;
+		
 		if(!this.hasDirectPath())
 		{	
 			var spot = THE_GRID.grid_spot(this.position.x, this.position.z);	
@@ -92,6 +99,7 @@ function Zombie(position)
 			
 			}
 			this.computeFrame++;
+			
 				
 		} else{
 			this.computeFrame = 600;
@@ -171,9 +179,9 @@ function Zombie(position)
 		var coordArray = THE_GRID.coordinatesFromSpot(x,y);
 		this.targetForMove.x = coordArray[0];
 		this.targetForMove.z = coordArray[1];
-		this.direction.x = this.targetForMove.x - this.position.x;
-		this.direction.z = this.targetForMove.z - this.position.z;
-		this.direction.normalize();
+		//this.direction.x = this.targetForMove.x - this.position.x;
+		//this.direction.z = this.targetForMove.z - this.position.z;
+		//this.direction.normalize();
 		
 	}
 	
@@ -195,6 +203,7 @@ function Zombie(position)
     //Return true if the zombie was killed, false otherwise
     this.takeDamage = function(damage){
         this.health -= damage;
+		this.target = PLAYER;
     }
     var clock = new THREE.Clock();
 	/*ANIMATION VARIABLES*/

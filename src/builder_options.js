@@ -27,6 +27,7 @@ function Tree1Piece(position,grid)
 	SCENE.add(this.mesh );
 	
 	this.doDamage = function(damage){
+		return false;
 	}
 	
 }
@@ -44,6 +45,7 @@ function Tree2Piece(position,grid)
 	SCENE.add(this.mesh );
 	
 	this.doDamage = function(damage){
+		return false;
 	}
 	
 }
@@ -77,7 +79,9 @@ function WallPiece(position, grid)
 	SEARCHGRAPH = new Graph(SEARCHGRID);
 	if(this.health == 1){
 		THE_GRID.removeWall(this);
+		true;
 	}
+		return false;
 	}
 	
 }
@@ -102,7 +106,9 @@ function HousePiece(position, grid)
 		this.health -= damage;
 		if(this.health <= 0){
 			THE_GRID.removeHouse(this);
+			return true;
 		}
+		return false;
 	}
 }
 function HousePieceUnit(housePiece, position)
@@ -113,7 +119,7 @@ function HousePieceUnit(housePiece, position)
 	
 		
 	this.doDamage = function(damage){
-		this.myOwner.doDamage(damage);
+		return this.myOwner.doDamage(damage);
 	}
 	
 }

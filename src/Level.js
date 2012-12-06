@@ -3,9 +3,9 @@ function Level(levelNum)
 {
     ZOMBIES = new Array();
 	var totalZombies = levelNum*2; //for now
-	for(var i=0; i<10; i++)
+	for(var i=0; i<100; i++)
 	{
-	 //   ZOMBIES.push(new Zombie(new THREE.Vector3(Math.random()*GRID_WIDTH, 30, Math.random()*GRID_WIDTH)));
+	//    ZOMBIES.push(new Zombie(new THREE.Vector3(Math.random()*GRID_WIDTH, 30, Math.random()*GRID_WIDTH)));
 	}
 	
 	
@@ -25,14 +25,15 @@ function Level(levelNum)
 					}
 				} 
 		SEARCHGRAPH = new Graph(SEARCHGRID);
+		
 						
 	
 	}
 	
 	this.setUpGrid();
 	
+	 ZOMBIES.push(new Skeleton(new THREE.Vector3(4500, 30, 4300)));
 	
-    ZOMBIES.push(new Monster(new THREE.Vector3(4300, 30, 4300)));
 	this.update = function(time)
 	{
 	    var zombies_to_keep = new Array();
