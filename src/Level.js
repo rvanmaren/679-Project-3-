@@ -17,8 +17,8 @@ function Level(levelNum)
 					
 				for(var i = 0; i < THE_GRID.grid_spots.length; i++){
 					for(var j = 0; j < THE_GRID.grid_spots.length; j++){
-						if(THE_GRID.isOccupied(i,j)){
-							SEARCHGRID[i][j] = 0;
+						if(THE_GRID.aStarIsOccupied(i,j)){
+							SEARCHGRID[i][j] = 20;
 						} else {
 							SEARCHGRID[i][j] = 10;
 						}

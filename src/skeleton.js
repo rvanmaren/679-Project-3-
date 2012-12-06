@@ -73,14 +73,14 @@ function Skeleton(position){
 			if(this.state == ATTACKING)
 			{
 				time = (new Date().getTime()+this.attackInterpolation) % this.attackDuration;
-				if(time < 500 && time > 475){
+				if(time > 475){
 					if(this.canAttack){
 						if("undefined" != typeof(this.attackTarget)){
 							this.attackTarget.doDamage(this.attackPower);
 						}
 					   this.canAttack = false;
 					}
-				} else {
+				} else if(time < 475){
 					this.canAttack = true;
 				}
 				keyframe = Math.floor( time / this.attackInterpolation ) + this.attackOffset;
