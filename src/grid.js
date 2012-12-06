@@ -52,6 +52,32 @@ function Grid(width, height, blocks)
 		arry.push(x);	
 		return arry;
 	}
+	this.aStarIsOccupied = function(x, y){
+		
+        if(x < 0 || x >= this.grid_spots.length || y < 0 || y >= this.grid_spots[0].length){
+            return true;
+        }
+		if(this.grid_spots[x][y] == EMPTY || this.grid_spots[x][y] instanceof Array){
+			if(this.isOccupied(x+1,y)){
+				return true;
+			}
+			if(this.isOccupied(x-1,y)){
+				return true;
+			}
+			if(this.isOccupied(x,y + 1)){
+				return true;
+			}
+			if(this.isOccupied(x,y - 1)){
+				return true;
+			}
+			return false;
+			}
+		else	{
+			return true;
+		}
+		
+	}
+	
 	this.isOccupied = function(x,y)
 	{
         if(x < 0 || x >= this.grid_spots.length || y < 0 || y >= this.grid_spots[0].length){

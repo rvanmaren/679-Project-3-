@@ -86,6 +86,7 @@ var house_height = 20;
 function HousePiece(position, grid)
 {
 	this.myOwner = this;
+	this.position = position;
     this.grid_spot = grid;
 	this.mesh = new THREE.Mesh(GEOMETRIES[HOUSE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.scale.set(3,3,3);
@@ -93,15 +94,21 @@ function HousePiece(position, grid)
 	this.mesh.position.y = -5;
 	this.mesh.position.z = position.z;
 	SCENE.add(this.mesh);
-	
+	this.health = 30;
 	this.units;
 	
 	
 	this.doDamage = function(damage){
+		this.health -= damage;
+		if(this.health <= 0){
+			THE_GRID.removeHouse(this);
+		}
+	
 	}
 }
 function HousePieceUnit(housePiece, position)
 {
 	this.myOwner = housePiece;
-	this.position = position;
+	var coord =THE_GRID.coordinatesFromSpot(position[0],position[1]);
+	this.position = new THREE.Vector3(coord[0],30,coord[1]);
 }

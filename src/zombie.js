@@ -37,23 +37,6 @@ function Zombie(position)
 		});	
 		
 		THE_GRID.requestPlacement(this,this.position.x, this.position.z);
-		
-			this.grid = new Array(THE_GRID.grid_spots.length);
-					for(var i = 0; i < THE_GRID.grid_spots.length; i++){
-						this.grid[i] = new Array(THE_GRID.grid_spots.length);
-					}
-						
-					for(var i = 0; i < THE_GRID.grid_spots.length; i++){
-						for(var j = 0; j < THE_GRID.grid_spots.length; j++){
-							if(THE_GRID.isOccupied(i,j)){
-								this.grid[i][j] = 1;
-							} else {
-								this.grid[i][j] = 5000;
-							}
-						}
-						
-					} 
-			this.graph = new Graph(this.grid);
 	}
 	
 	
@@ -63,7 +46,7 @@ function Zombie(position)
 		this.health -= damage;
 	};
 	this.computeNextMove = function(){
-
+		this.findPointOfInterest(); 
 		if(!this.hasDirectPath())
 		{	
 			var spot = THE_GRID.grid_spot(this.position.x, this.position.z);	
@@ -84,8 +67,8 @@ function Zombie(position)
 						var nextX = this.position.x + this.direction.x*this.speed;
 						var nextY = this.position.z + this.direction.z*this.speed;
 						var nextSpotCoord =  THE_GRID.coordinatesFromSpot(this.nextSpot[0],this.nextSpot[1]);
-						var distance = Math.sqrt(Math.pow(this.position.x  - nextSpotCoord[0],2) + Math.pow(this.position.z - nextSpotCoord[0],2));
-					
+						var distance = Math.sqrt(Math.pow(nextX  - nextSpotCoord[0],2) + Math.pow(nextY - nextSpotCoord[0],2));
+				
 						if(distance > this.distanceToNextSpot){
 							var newSpotGraphNode = this.path[0];
 							this.distanceToNextSpot = distance;
@@ -98,11 +81,11 @@ function Zombie(position)
 					var newDirX = this.targetForMove.x - this.position.x;
 					var newDirZ = this.targetForMove.z - this.position.z;
 					var newDir = new THREE.Vector3(this.targetForMove.x - this.position.x
-										,this.targetForMove.y - this.position.y,
+										,this.target.position.y - this.position.y,
 										 this.targetForMove.z - this.position.z)
 										 
 					this.ang  = dotProduct(this.direction, new THREE.Vector3(0,0,1));
-					if(newDir.x<0)
+					if(newDir.x>0)
 						this.ang = -1*this.ang;
 					
 				}
@@ -117,8 +100,6 @@ function Zombie(position)
 			this.direction.y = this.target.position.y - this.position.y
 			this.direction.z = this.target.position.z - this.position.z
 			this.direction.normalize();
-			
-		}
 
 			var newDirX = this.target.position.x - this.position.x;
 			var newDirZ = this.target.position.Z - this.position.Z;
@@ -129,9 +110,29 @@ function Zombie(position)
 			this.ang  = dotProduct(this.direction, new THREE.Vector3(0,0,1));
 			if(newDir.x<0)
 				this.ang = -1*this.ang;
-	
+		}
+
 		
 	};
+	
+	this.findPointOfInterest = function(){
+			var spot = THE_GRID.grid_spot(this.position.x, this.position.z);	
+			var targetSpot = THE_GRID.grid_spot(PLAYER.position.x, PLAYER.position.z);
+			
+			var bestDistance = Math.sqrt(Math.pow(spot[0]  - targetSpot[0],2) + Math.pow(spot[1]  - targetSpot[1],2));
+			
+			for(var i = 0; i < THE_GRID.grid_spots.length; i++){
+					for(var j = 0; j < THE_GRID.grid_spots.length; j++){
+						var objInSpot = THE_GRID.grid_spots[i][j];
+						if(objInSpot instanceof HousePieceUnit){
+							 distance = Math.sqrt(Math.pow(spot[0]  - i,2) + Math.pow(spot[1]  - j,2));
+							 if(distance < bestDistance){
+								this.target = objInSpot;
+							 }
+						}
+					}
+				} 
+	}
 	
 	this.hasDirectPath = function() {
 	  
@@ -168,8 +169,8 @@ function Zombie(position)
 		var coordArray = THE_GRID.coordinatesFromSpot(x,y);
 		this.targetForMove.x = coordArray[0];
 		this.targetForMove.z = coordArray[1];
-		this.direction.x = this.targetForMove.x - this.position.x
-		this.direction.z = this.targetForMove.z - this.position.z
+		this.direction.x = this.targetForMove.x - this.position.x;
+		this.direction.z = this.targetForMove.z - this.position.z;
 		this.direction.normalize();
 		
 	}
@@ -215,91 +216,6 @@ function Zombie(position)
 	
 	this.update = function(time) {
 		this.computeNextMove();
-	    // Alternate morph targets
-	//	if(this.type == "skeleton")
-	//	{
-			if(this.state == WALKING) {
-				time = (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.walkingDuration;
-				keyframe = Math.floor( time / this.walkingInterpolation ) + this.walkingOffset;
-				if ( keyframe != this.walkingcurrentKeyframe ) 
-				{
-					this.mesh.morphTargetInfluences[ this.walkingLastKeyframe ] = 0;
-					this.mesh.morphTargetInfluences[ this.walkingcurrentKeyframe ] = 1;
-					this.mesh.morphTargetInfluences[ keyframe ] = 0;
-					this.walkingLastKeyframe = this.walkingcurrentKeyframe;
-					this.walkingcurrentKeyframe = keyframe;
-				}
-				this.mesh.morphTargetInfluences[ keyframe ] = 
-					( time % this.walkingInterpolation ) / this.walkingInterpolation;
-				this.mesh.morphTargetInfluences[ this.walkingLastKeyframe ] = 
-					1 - this.mesh.morphTargetInfluences[ keyframe ];
-			}
-			if(this.state == ATTACKING)
-			{
-				time = (new Date().getTime()+this.attackInterpolation) % this.attackDuration;
-				if(time < 500 && time > 475){
-					if(this.canAttack){
-						PLAYER.doDamage(this.attackPower);
-					   this.canAttack = false;
-					}
-				} else {
-					this.canAttack = true;
-				}
-				keyframe = Math.floor( time / this.attackInterpolation ) + this.attackOffset;
-				if ( keyframe != this.attackcurrentKeyframe ) 
-				{
-					this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 0;
-					this.mesh.morphTargetInfluences[ this.attackcurrentKeyframe ] = 1;
-					this.mesh.morphTargetInfluences[ keyframe ] = 0;
-					this.attackLastKeyframe = this.attackcurrentKeyframe;
-					this.attackcurrentKeyframe = keyframe;
-				}
-				this.mesh.morphTargetInfluences[ keyframe ] = 
-					( time % this.attackInterpolation ) / this.attackInterpolation;
-				this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 
-					1 - this.mesh.morphTargetInfluences[ keyframe ];
-			}
-	//	}
-		this.mesh.rotation.y = this.ang;
-		//Rotate to face direction 
-		//this.mesh.rotation.y = Math.atan((PLAYER.position.x-this.position.x),(PLAYER.position.z-this.position.z))*(180/Math.PI);
-	//Move in the direction of looking.
-		//Compute movement based on key press
-		//	var directionPerp = new THREE.Vector3(this.direction.x*Math.cos(Math.PI/2)- this.direction.z*Math.sin(Math.PI/2),
-		//								0, this.direction.x*Math.sin(Math.PI/2)+this.direction.z*Math.cos(Math.PI/2));//just rotate by 90 degrees same direction every time
-
-		//Do y direction with a jump
-		//sideways motion
-		//var nextX = this.position.x + directionPerp.x*this.speed + this.direction.x*this.speed;
-		//var nextY = this.position.z + directionPerp.z*this.speed + this.direction.z*this.speed;
-		
-		var distance = Math.sqrt(Math.pow(this.position.x  - this.target.position.x,2) + Math.pow(this.position.z - this.target.position.z,2));
-		
-		if(distance < this.attack_distance){
-			this.state = ATTACKING;
-			this.mesh.morphTargetInfluences[ (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.walkingDuration ] = 1;
-		}
-		else {
-			this.state = WALKING;
-			this.mesh.morphTargetInfluences[ Math.floor( time / this.attackInterpolation ) + this.attackOffset ] = 0;
-			var nextX = this.position.x + this.direction.x*this.speed + this.direction.x*this.speed;
-			var nextY = this.position.z + this.direction.z*this.speed + this.direction.z*this.speed;
-		
-				
-			if(THE_GRID.requestMoveTo(this,this.position.x,this.position.z,nextX,nextY))
-			{
-				this.position.x = nextX;
-				this.position.z = nextY;
-			} else {
-			
-				var spot = THE_GRID.grid_spot(nextX, nextY);	
-				var wall = THE_GRID.grid_spots[spot[0]][spot[1]].myOwner;
-							
-				var nextSpotCoord =  THE_GRID.coordinatesFromSpot(this.nextSpot[0],this.nextSpot[1]);
-				
-			}
-		}
-		this.draw();
 	};
 	
 	

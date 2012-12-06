@@ -92,14 +92,15 @@ function Skeleton(position){
 			}
 			if(this.state == ATTACKING)
 			{
-				if(aniTimeATTK < 500 && aniTimeATTK > 475){
+
+				if(aniTimeATTK > 475){
 					if(this.canAttack){
 						if("undefined" != typeof(this.attackTarget)){
 							this.attackTarget.doDamage(this.attackPower);
 						}
 					   this.canAttack = false;
 					}
-				} else {
+				} else if(aniTimeATTK < 475){
 					this.canAttack = true;
 				}
 				keyframe = Math.floor( aniTimeATTK / this.attackInterpolation ) + this.attackOffset;
