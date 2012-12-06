@@ -32,7 +32,7 @@ function Level(levelNum)
 	this.setUpGrid();
 	
 	
-    ZOMBIES.push(new Skeleton(new THREE.Vector3(4300, 30, 4300)));
+    ZOMBIES.push(new Monster(new THREE.Vector3(4300, 30, 4300)));
 	this.update = function(time)
 	{
 	    var zombies_to_keep = new Array();

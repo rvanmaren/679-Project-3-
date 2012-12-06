@@ -16,6 +16,8 @@ var SCENE;
 var CAMERA;
 var FOV = 60;
 var LIGHT;
+
+var CLOCK = new THREE.Clock();
 /*PLAYER GLOBALS*/
 var PLAYER;
 var P_ROTATE = .5;
