@@ -9,6 +9,7 @@ function Monster(position){
 	this.speed = 4;
     this.rotationSpeed = .5;
 	this.health = 100;
+	this.maxHealth = this.health;
 	this.target = PLAYER;
 
   	this.mesh = new THREE.Mesh(GEOMETRIES[MONSTER_MESH], new THREE.MeshFaceMaterial({overdraw: true}));

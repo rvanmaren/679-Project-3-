@@ -10,6 +10,7 @@ function Skeleton(position){
 	this.speed = 2;
     this.rotationSpeed = .5;
 	this.health = 100;
+	this.maxHealth = this.health;
 	this.target = PLAYER;
 
   	this.mesh = new THREE.Mesh(GEOMETRIES[ZOMBIE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
