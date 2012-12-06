@@ -2,9 +2,9 @@
 function Level(levelNum)
 {
     ZOMBIES = new Array();
-	this.totalZombies = 20; //for now
+	this.totalZombies = 2; //for now
 	this.zombies = new Array;
-	this.zombieSpawnLimit = 10;
+	this.zombieSpawnLimit = 1;
 	if(this.zombieSpawnLimit > this.totalZombies){
 		this.zombieSpawnLimit = this.totalZombies;
 	}
