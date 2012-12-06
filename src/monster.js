@@ -59,15 +59,15 @@ var clock = new THREE.Clock();
 		}
 		if(this.state == ATTACKING)
 		{
-		    if(this.timeSinceAttack > 500){
-				if(this.canAttack){
-					if("undefined" != typeof(this.attackTarget)){
-						this.attackTarget.doDamage(this.attackPower);
+		    this.timeSinceAttack += CLOCK.getDelta();
+		    if(this.timeSinceAttack > 2){
+				if("undefined" != typeof(this.attackTarget)){
+					if(this.attackTarget.doDamage(this.attackPower)){
+						this.state = WALKING;
+						this.attackTarget = null;
+						this.findPointOfInterest();
 					}
-					this.canAttack = false;
-				}
-			} else {
-				this.timeSinceAttack++;
+				}this.timeSinceAttack = 0;
 			}
 		}
 		this.mesh.rotation.y = this.ang-Math.PI/2;
