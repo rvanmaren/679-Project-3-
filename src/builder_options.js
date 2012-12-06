@@ -76,10 +76,10 @@ function WallPiece(position, grid)
 	}
 	var spot = THE_GRID.grid_spot(this.mesh.position.x, this.mesh.position.z);
 	SEARCHGRID[spot[0]][spot[1]] = this.health;
-	SEARCHGRAPH = new Graph(SEARCHGRID);
+	//SEARCHGRAPH = new Graph(SEARCHGRID);
 	if(this.health == 1){
 		THE_GRID.removeWall(this);
-		true;
+		return true;
 	}
 		return false;
 	}
