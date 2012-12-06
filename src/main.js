@@ -20,6 +20,7 @@ LOADERC = new THREE.ColladaLoader();
 
 var loaded = false;
 var count = 0;
+var showIntro = false, showInstructions = false;
 
 
 LOADER.load( './resources/rifle/rifle_0.js' ,function(geometry){    geometry.id = 'gun';    GEOMETRIES.push(geometry);});
@@ -99,7 +100,8 @@ function loadLoop()
 	if(GEOMETRIES.length == NUM_GEOMETRIES && COLLADAS.length == NUM_COLLADAS)
 	{
 		//Display Intro Screen
-		document.getElementById("intro-screen").style.visibility= '';
+	    document.getElementById("intro-screen").style.visibility = '';
+	    showIntro = true;
 		GAME_LOADED = true;
 		for(var index = 0; index < GEOMETRIES.length; index++)
 		{
@@ -150,23 +152,28 @@ function mouse_down(event)
 	{
 	    GAME.mouse_down();
 	}
-	else
-	{
-	    if(GAME_LOADED) {
-		    GAME_STARTED = true;
-		    document.getElementById("intro-screen").style.visibility = 'hidden';
+	else {
+	    if (GAME_LOADED && showInstructions) {
+	        GAME_STARTED = true;
+	        document.getElementById("instruction-screen").style.visibility = 'hidden';
 
-		    //add crosshair
-            var imgX = document.createElement("img");
-		    imgX.src = './resources/Textures/crosshair.png';
-		    imgX.setAttribute("id", 'crossHair');
-		    imgX.style.cssText = "position: absolute; left: 50%; top: 50%; margin-top: -47.5px; margin-left: -47.5px";
-		    document.body.appendChild(imgX);
+	        //add crosshair
+	        var imgX = document.createElement("img");
+	        imgX.src = './resources/Textures/crosshair.png';
+	        imgX.setAttribute("id", 'crossHair');
+	        imgX.style.cssText = "position: absolute; left: 50%; top: 50%; margin-top: -47.5px; margin-left: -47.5px";
+	        document.body.appendChild(imgX);
 
-		    document.body.requestPointerLock();
-			GAME = new Game();
-			animloop();
-		}
+	        document.body.requestPointerLock();
+	        GAME = new Game();
+	        animloop();
+	    } else if (showIntro) {
+	        showIntro = false;
+	        showInstructions = true;
+	        document.getElementById("intro-screen").style.visibility = 'hidden';
+	        document.getElementById("instruction-screen").style.visibility = '';
+
+	    }
 	}
 }
 function mouse_up(event)
