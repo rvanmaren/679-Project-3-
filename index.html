@@ -7,6 +7,46 @@
 		<title>Survive the Night</title>
 	</head>
 	<body style="background:url(./resources/fire-background.jpg); background-size: 100%;">
+        <div class = "intro" id = "intro-screen" style = "visibility:hidden;">
+             <span style = "text-align: center"> <h1>Put Story Intro Here</h1> </span>
+             <span style = "text-align: center"> <h1>Click To Continue to instruction</h1> </span>
+        </div>
+        <div class = "intro" id = "instruction-screen" style = "visibility: hidden">
+            
+            <div class ="explanation" id = "night-explanation">
+                <span style = "text-align: center"> <h1>NIGHT</h1> </span>
+                <span style = "text-align: center"> <h4>W A S D To Move</h4> </span>
+                <span style = "text-align: center"> <h4>Click To Shoot These Guys</h4> </span>
+                <span style = "height: 100px"> 
+                    <img style = "width:50px; height:50px; position:absolute; left:30% " src = "Resources/Textures/skeleton_thumb.png" /> 
+                    <img style = "width:50px; height:50px; position:absolute; left:55%" src = "Resources/Textures/dog_thumb.png" />
+                    <br /><br />
+                </span>
+                <span style = "text-align: center"> <h4>Protect These</h4> </span>
+                <span style = "height: 100px"> 
+                    <img style = "width:50px; height:50px; position:absolute; left:30% " src = "Resources/Textures/house_thumb.png" /> 
+                    <img style = "width:50px; height:50px; position:absolute; left:55%" src = "Resources/Textures/fence_thumb.png" />
+                    <br /><br />
+                </span>
+                <br />
+                <span style = "text-align: center"> <h2>SURVIVE!</h2> </span>
+            </div> 
+
+            <div class ="explanation" id = "day-explanation">
+                <span style = "text-align: center"> <h1>DAY</h1> </span>
+                <span style = "text-align: center"> <h4>W A S D to move the camera, Q E to zoom</h4> </span>
+                <span style = "text-align: center"> <h4>Click to build these</h4> </span>
+                <span style = "height: 100px"> 
+                    <img style = "width:50px; height:50px; position:absolute; left:30% " src = "Resources/Textures/house_thumb.png" /> 
+                    <img style = "width:50px; height:50px; position:absolute; left:55%" src = "Resources/Textures/fence_thumb.png" />
+                    <br /><br />
+                </span>
+                <span style = "text-align: center"> <h4>Number keys to change what you are building</h4> </span>
+                <span style = "text-align: center"> <h4>Protect your houses with fences and turrets</h4> </span>
+            </div> 
+            <span style = "text-align: center; bottom: 0%; position: absolute; padding: 10px;"> <h2>Zombies will attack during the night and you must defend your base but more importantly yourself. Build more houses to generate income. Use your money to build turrets, walls, and even upgrade your weapons.</h2></span>
+            <span style = "text-align: center"> <h1>Click To Start</h1> </span>
+        </div>
         <div class = "night-finished message" id = "nightFinished" style ="visibility:hidden"><h1>You have killed all the zombies! Press Space to continue to Daytime.</h1></div>
         <div class = "message" id = "dead" style ="visibility:hidden"><h1>You Died!</h1></div>
         <div class = "day-night-info" id ="day-info" style ="visibility:hidden"><h3>Building Units: </h3> <h3 id = "build-units">0</h3></div>

@@ -11,7 +11,7 @@ function Game()
 	//Build the first house near the player
 	THE_GRID.handle_command(new Build_Command('build', 'house', PLAYER.position.x + 150, PLAYER.position.z + 150));
 	//Build some Scenery 
-	for(var i = 0; i<500;i++)
+	for(var i = 0; i<250;i++)
 	{
 		THE_GRID.handle_command(new Build_Command('build', 'tree1', GRID_WIDTH*Math.random(), GRID_HEIGHT*Math.random()));
 		THE_GRID.handle_command(new Build_Command('build', 'tree2', GRID_WIDTH*Math.random(),GRID_HEIGHT*Math.random()));

@@ -88,11 +88,11 @@ function Night()
             curBullet = BULLETS[bulletIndex];
             for (var zombieIndex = 0; zombieIndex < ZOMBIES.length; zombieIndex++) {
 
-                if (!ZOMBIES[zombieIndex].dead && curBullet.mesh.position.clone().subSelf(ZOMBIES[zombieIndex].position).length() < curBullet.boundRadius + ZOMBIES[zombieIndex].boundRadius) {
+                if (!ZOMBIES[zombieIndex].dead && ZOMBIES[zombieIndex].checkCollision(curBullet)) {
                     hit = true;
-					ZOMBIES[zombieIndex].takeDamage(curBullet.damage);
+                    ZOMBIES[zombieIndex].takeDamage(curBullet.damage);
                 }
-				//The level will handle zombie destruction
+                //The level will handle zombie destruction
             }
 
             //Similar to zombies, if a bullet is destroyed and removed from BULLETS, we need to adjust the index

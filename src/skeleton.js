@@ -7,21 +7,31 @@ function Skeleton(position){
 	Zombie.apply(this,arguments); 
 	
 	this.attack_distance = 75;
-	this.speed = 2;
+	this.speed = 4 / 30;
     this.rotationSpeed = .5;
 	this.health = 100;
+	this.maxHealth = this.health;
 	this.target = PLAYER;
 
   	this.mesh = new THREE.Mesh(GEOMETRIES[ZOMBIE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.position.x = position.x;
-	this.mesh.position.y = -.2;
+	this.mesh.position.y = -50;
 	this.mesh.position.z = position.z;
 	this.mesh.scale.set(20,20,20);
 	this.boundRadius = zombie_width;
 	this.pathArray = new Array();
+
+    //Uncomment this as well as the comment in update to see collision spheres
+//	this.collisionMesh2 = new THREE.Mesh(new THREE.SphereGeometry(this.boundRadius, 100, 100), new THREE.MeshNormalMaterial());
+//    this.collisionMesh2.position = this.mesh.position.clone();
+//	SCENE.add(this.collisionMesh2);
+
+//	this.collisionMesh = new THREE.Mesh(new THREE.SphereGeometry(this.boundRadius, 100, 100), new THREE.MeshNormalMaterial());
+//	this.collisionMesh.position = this.mesh.position.clone();
+//	SCENE.add(this.collisionMesh);
+
 	SCENE.add(this.mesh);
 
-	
 	this.attackTarget = null;
 	
 	var clock = new THREE.Clock();
@@ -50,8 +60,25 @@ function Skeleton(position){
 	this.deathcurrentKeyframe = 0;
 	/***********************************************************************************************/
 	
-		
 	this.update = function(time) {
+	
+        //Uncomment this to see collision spheres
+		//	    this.collisionMesh.position = this.position.clone();
+		//	    var tempPos = this.position.clone();
+		//	    tempPos.y -= this.boundRadius * 2;
+		//	    this.collisionMesh2.position = tempPos;
+	
+	
+		if(this.spawn && this.mesh.position.y != this.yPosition){
+			var nextYMesh = this.mesh.position.y + 1;
+			if(nextYMesh > this.yPosition){
+				this.mesh.position.y = this.yPosition;
+			} else {
+				this.mesh.position.y = nextYMesh;
+			}
+			return;
+		}
+		
 	    var aniTimeWalk = (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.walkingDuration;
 		var aniTimeATTK = (new Date().getTime()+this.attackInterpolation) % this.attackDuration;
 		var aniTimeDie =  (new Date().getTime()+this.deathInterpolation) % this.deathDuration;
@@ -148,8 +175,8 @@ function Skeleton(position){
 		
 		if(this.state == WALKING){
 				
-			var nextX = this.position.x + this.direction.x*this.speed;
-			var nextY = this.position.z + this.direction.z*this.speed;
+			var nextX = this.position.x + this.direction.x*this.speed*time;
+			var nextY = this.position.z + this.direction.z*this.speed*time;
 			var spot = THE_GRID.grid_spot(nextX, nextY);	
 					
 				this.position.x = nextX;
@@ -197,6 +224,15 @@ function Skeleton(position){
 			
 		}
 		this.draw();
+
+	};
+	
+	
+	this.checkCollision = function (collider) {
+	    var collisionPosition = this.position.clone();
+	    if (collider.mesh.position.clone().subSelf(collisionPosition).length() < collider.boundRadius + this.boundRadius) {
+	        return true;
+	    }
 	};
 	
 	

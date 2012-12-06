@@ -38,6 +38,7 @@ function Tree1Piece(position,grid)
 {
 	this.myOwner = this;
     this.grid_spot = grid;
+	this.health = 20;
 	this.mesh = new THREE.Mesh(GEOMETRIES[TREE1_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.scale.set(20,45,20);
 	this.mesh.position.x = position.x;
@@ -46,7 +47,15 @@ function Tree1Piece(position,grid)
 	SCENE.add(this.mesh );
 	
 	this.doDamage = function(damage){
+		this.health -= damage;
+		if(this.health <= 0){
+			remove(this);
+			var pos = THE_GRID.grid_spot(this.mesh.position.x,this.mesh.position.z);
+		    THE_GRID.grid_spots[pos[0]][pos[1]] = 0;
+			return true;	
+		} 
 		return false;
+		
 	}
 	
 }
@@ -55,6 +64,7 @@ var tree2_height= 100;
 function Tree2Piece(position,grid)
 {
 	this.myOwner = this;
+	this.health = 20;
     this.grid_spot = grid;
 	this.mesh = new THREE.Mesh(GEOMETRIES[TREE2_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.scale.set(20,45,20);
@@ -64,8 +74,16 @@ function Tree2Piece(position,grid)
 	SCENE.add(this.mesh );
 	
 	this.doDamage = function(damage){
+		this.health -= damage;
+		if(this.health <= 0){
+			remove(this);
+			var pos = THE_GRID.grid_spot(this.mesh.position.x,this.mesh.position.z);
+		    THE_GRID.grid_spots[pos[0]][pos[1]] = 0;
+			return true;
+		} 
 		return false;
 	}
+		
 	
 }
 function WallPiece(position, grid)
