@@ -103,7 +103,6 @@ function loadLoop()
 		//Display Intro Screen
 		document.getElementById("intro").style.visibility= '';
 		GAME_LOADED = true;
-		console.log(GEOMETRIES);
 		for(var index = 0; index < GEOMETRIES.length; index++)
 		{
 		  if(GEOMETRIES[index].id != ORDER[index])
