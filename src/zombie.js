@@ -46,7 +46,7 @@ function Zombie(position)
 		this.health -= damage;
 	};
 	this.computeNextMove = function(){
-
+		this.findPointOfInterest(); 
 		if(!this.hasDirectPath())
 		{	
 			var spot = THE_GRID.grid_spot(this.position.x, this.position.z);	
@@ -85,7 +85,7 @@ function Zombie(position)
 										 this.targetForMove.z - this.position.z)
 										 
 					this.ang  = dotProduct(this.direction, new THREE.Vector3(0,0,1));
-					if(newDir.x<0)
+					if(newDir.x>0)
 						this.ang = -1*this.ang;
 					
 				}
@@ -111,8 +111,28 @@ function Zombie(position)
 			if(newDir.x<0)
 				this.ang = -1*this.ang;
 		}
+
 		
 	};
+	
+	this.findPointOfInterest = function(){
+			var spot = THE_GRID.grid_spot(this.position.x, this.position.z);	
+			var targetSpot = THE_GRID.grid_spot(PLAYER.position.x, PLAYER.position.z);
+			
+			var bestDistance = Math.sqrt(Math.pow(spot[0]  - targetSpot[0],2) + Math.pow(spot[1]  - targetSpot[1],2));
+			
+			for(var i = 0; i < THE_GRID.grid_spots.length; i++){
+					for(var j = 0; j < THE_GRID.grid_spots.length; j++){
+						var objInSpot = THE_GRID.grid_spots[i][j];
+						if(objInSpot instanceof HousePieceUnit){
+							 distance = Math.sqrt(Math.pow(spot[0]  - i,2) + Math.pow(spot[1]  - j,2));
+							 if(distance < bestDistance){
+								this.target = objInSpot;
+							 }
+						}
+					}
+				} 
+	}
 	
 	this.hasDirectPath = function() {
 	  
