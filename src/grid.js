@@ -52,6 +52,32 @@ function Grid(width, height, blocks)
 		arry.push(x);	
 		return arry;
 	}
+	this.aStarIsOccupied = function(x, y){
+		
+        if(x < 0 || x >= this.grid_spots.length || y < 0 || y >= this.grid_spots[0].length){
+            return true;
+        }
+		if(this.grid_spots[x][y] == EMPTY || this.grid_spots[x][y] instanceof Array){
+			if(this.isOccupied(x+1,y)){
+				return true;
+			}
+			if(this.isOccupied(x-1,y)){
+				return true;
+			}
+			if(this.isOccupied(x,y + 1)){
+				return true;
+			}
+			if(this.isOccupied(x,y - 1)){
+				return true;
+			}
+			return false;
+			}
+		else	{
+			return true;
+		}
+		
+	}
+	
 	this.isOccupied = function(x,y)
 	{
         if(x < 0 || x >= this.grid_spots.length || y < 0 || y >= this.grid_spots[0].length){
@@ -510,7 +536,7 @@ function Grid(width, height, blocks)
 		this.grid_spots[fencePiece.grid_spot[0]][fencePiece.grid_spot[1]] = EMPTY;
 		for(c = 0; c < units.length; c++)
 		{
-		    var pos = units[c].position;
+		    var pos = this.grid_spot(units[c].position.x,units[c].position.z);
 		    this.grid_spots[pos[0]][pos[1]] = EMPTY;
 		}
 	}

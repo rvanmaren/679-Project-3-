@@ -43,20 +43,40 @@ function Skeleton(position){
 	this.attackcurrentKeyframe = 0;
 	/*DEATH (coming soon)*/
 	this.deathOffset       = 22  // starting frame of animation
-	this.deathDuration        = 4000, // milliseconds to complete animation
-	this.deathKeyframes       = 5,   // total number of animation frames
-	this.deathInterpolation   = this.attackDuration  / this.attackKeyframes; // milliseconds per frame
+	this.deathDuration        = 1500, // milliseconds to complete animation
+	this.deathKeyframes       = 6,   // total number of animation frames
+	this.deathInterpolation   = this.deathDuration  / this.deathKeyframes; // milliseconds per frame
 	this.deathLastKeyframe    = 0;  // previous keyframe
 	this.deathcurrentKeyframe = 0;
 	/***********************************************************************************************/
 	
 		
 	this.update = function(time) {
-		this.computeNextMove();
+	    var aniTimeWalk = (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.walkingDuration;
+		var aniTimeATTK = (new Date().getTime()+this.attackInterpolation) % this.attackDuration;
+		var aniTimeDie =  (new Date().getTime()+this.deathInterpolation) % this.deathDuration;
+		if (this.health <= 0 && this.state != DYING) {
+			//clean up of meshes
+			if(this.state == WALKING)
+			{
+				this.mesh.morphTargetInfluences[this.walkingcurrentKeyframe] = 0;
+				this.mesh.morphTargetInfluences[this.walkingLastKeyframe] = 0;
+			}
+			else
+			{
+				this.mesh.morphTargetInfluences[this.deathcurrentKeyframe] = 0;
+				this.mesh.morphTargetInfluences[this.deathLastKeyframe] = 0;
+			}
+			this.deathcurrentKeyframe = 0;
+            this.state = DYING;
+        }
+	    if(this.status != DYING)
+		{
+			this.computeNextMove();
+		}
 	    // Alternate morph targets
 			if(this.state == WALKING) {
-				time = (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.walkingDuration;
-				keyframe = Math.floor( time / this.walkingInterpolation ) + this.walkingOffset;
+				keyframe = Math.floor( aniTimeWalk / this.walkingInterpolation ) + this.walkingOffset;
 				if ( keyframe != this.walkingcurrentKeyframe ) 
 				{
 					this.mesh.morphTargetInfluences[ this.walkingLastKeyframe ] = 0;
@@ -66,24 +86,30 @@ function Skeleton(position){
 					this.walkingcurrentKeyframe = keyframe;
 				}
 				this.mesh.morphTargetInfluences[ keyframe ] = 
-					( time % this.walkingInterpolation ) / this.walkingInterpolation;
+					( aniTimeWalk % this.walkingInterpolation ) / this.walkingInterpolation;
 				this.mesh.morphTargetInfluences[ this.walkingLastKeyframe ] = 
 					1 - this.mesh.morphTargetInfluences[ keyframe ];
 			}
 			if(this.state == ATTACKING)
 			{
-				time = (new Date().getTime()+this.attackInterpolation) % this.attackDuration;
-				if(time < 500 && time > 475){
+				if(aniTimeATTK > 475){
 					if(this.canAttack){
 						if("undefined" != typeof(this.attackTarget)){
-							this.attackTarget.doDamage(this.attackPower);
+							if(this.attackTarget.doDamage(this.attackPower)){
+								this.state = WALKING;
+								this.walkingcurrentKeyframe = 0;
+								this.mesh.morphTargetInfluences[this.attackcurrentKeyframe] = 0;
+								this.mesh.morphTargetInfluences[this.attackLastKeyframe] = 0;
+								this.attackTarget = null;
+								this.findPointOfInterest();
+							}
 						}
 					   this.canAttack = false;
 					}
-				} else {
+				} else if(aniTimeATTK < 475){
 					this.canAttack = true;
 				}
-				keyframe = Math.floor( time / this.attackInterpolation ) + this.attackOffset;
+				keyframe = Math.floor( aniTimeATTK / this.attackInterpolation ) + this.attackOffset;
 				if ( keyframe != this.attackcurrentKeyframe ) 
 				{
 					this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 0;
@@ -93,13 +119,12 @@ function Skeleton(position){
 					this.attackcurrentKeyframe = keyframe;
 				}
 				this.mesh.morphTargetInfluences[ keyframe ] = 
-					( time % this.attackInterpolation ) / this.attackInterpolation;
+					( aniTimeATTK % this.attackInterpolation ) / this.attackInterpolation;
 				this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 
 					1 - this.mesh.morphTargetInfluences[ keyframe ];
 			}
 			if(this.state == DYING) {
-				time = (new Date().getTime()+this.deathInterpolation) % this.deathDuration;
-				keyframe = Math.floor( time / this.deathInterpolation ) + this.deathOffset;
+				keyframe = Math.floor( aniTimeDie / this.deathInterpolation ) + this.deathOffset;
 				if ( keyframe != this.deathcurrentKeyframe ) 
 				{
 					this.mesh.morphTargetInfluences[ this.deathLastKeyframe ] = 0;
@@ -109,11 +134,11 @@ function Skeleton(position){
 					this.deathcurrentKeyframe = keyframe;
 				}
 				this.mesh.morphTargetInfluences[ keyframe ] = 
-					( time % this.deathInterpolation ) / this.deathInterpolation;
+					( aniTimeDie % this.deathInterpolation ) / this.deathInterpolation;
 				this.mesh.morphTargetInfluences[ this.deathLastKeyframe ] = 
 					1 - this.mesh.morphTargetInfluences[ keyframe ];
 				
-				if(keyframe == 28)
+				if(keyframe == 27)
 				{
 				    this.kill();
 				}
@@ -131,8 +156,8 @@ function Skeleton(position){
 				this.position.z = nextY
 			
 		
-				var xAhead = this.position.x + this.direction.x*10; 
-				var yAhead = this.position.z + this.direction.z*10;
+				var xAhead = this.position.x + this.direction.x*5; 
+				var yAhead = this.position.z + this.direction.z*5;
 				var spot = THE_GRID.grid_spot(xAhead, yAhead);	
 				
 				var distance = Math.sqrt(Math.pow(this.position.x  - this.target.position.x,2) + Math.pow(this.position.z - this.target.position.z,2));
@@ -143,25 +168,31 @@ function Skeleton(position){
 					this.attackTarget = gridItem;
 					if("undefined" != typeof(this.attackTarget)){
 						this.state = ATTACKING;
-						this.mesh.morphTargetInfluences[ (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.walkingDuration ] = 0;						
+						this.mesh.morphTargetInfluences[this.walkingcurrentKeyframe] = 0;
+					    this.mesh.morphTargetInfluences[this.walkingLastKeyframe] = 0;
+						this.attackcurrentKeyframe = 0;						
 					}
 				}	else if(distance < this.attack_distance)
 				{
 					this.state = ATTACKING;
-					this.mesh.morphTargetInfluences[ (new Date().getTime()+this.walkingInterpolation*this.WalkingRandom) % this.walkingDuration ] = 0;
+					this.attackcurrentKeyframe = 0;
+					this.mesh.morphTargetInfluences[this.walkingcurrentKeyframe] = 0;
+					this.mesh.morphTargetInfluences[this.walkingLastKeyframe] = 0;
 					this.attackTarget = this.target;
 				}		
 			
 		}
 		else if(this.state == ATTACKING){
-			var xAhead = this.position.x + this.direction.x*10; 
-			var yAhead = this.position.z + this.direction.z*10;
+			var xAhead = this.position.x + this.direction.x*5; 
+			var yAhead = this.position.z + this.direction.z*5;
 			var spot = THE_GRID.grid_spot(xAhead, yAhead);	
 			var distance = Math.sqrt(Math.pow(this.position.x  - this.target.position.x,2) + Math.pow(this.position.z - this.target.position.z,2));
 					
 			if(!THE_GRID.isSpotOccupied(spot) && distance >= this.attack_distance){
 				this.state = WALKING;
-				this.mesh.morphTargetInfluences[ Math.floor( time / this.attackInterpolation ) + this.attackOffset ] = 0;
+				this.walkingcurrentKeyframe = 0;
+				this.mesh.morphTargetInfluences[this.attackcurrentKeyframe] = 0;
+				this.mesh.morphTargetInfluences[this.attackLastKeyframe] = 0;
 			}
 			
 		}

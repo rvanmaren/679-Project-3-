@@ -87,6 +87,7 @@ function Player(position)
 	    if (this.health <= 0) {
 	        this.dead = true;
 	    }
+		return false;
 	}
 
 	this.update = function (time) {
