@@ -103,7 +103,6 @@ function HousePiece(position, grid)
 		if(this.health <= 0){
 			THE_GRID.removeHouse(this);
 		}
-	
 	}
 }
 function HousePieceUnit(housePiece, position)
@@ -111,4 +110,10 @@ function HousePieceUnit(housePiece, position)
 	this.myOwner = housePiece;
 	var coord =THE_GRID.coordinatesFromSpot(position[0],position[1]);
 	this.position = new THREE.Vector3(coord[0],30,coord[1]);
+	
+		
+	this.doDamage = function(damage){
+		this.myOwner.doDamage(damage);
+	}
+	
 }
