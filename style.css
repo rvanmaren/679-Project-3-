@@ -1,4 +1,43 @@
-﻿.message
+﻿.intro-screen 
+{
+    background-color: #FFF5C3;
+    
+    width: 800px;
+    height: 600px;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    margin-top: -300px;
+    margin-left: -400px;
+    border-radius: 10px;
+    z-index: 99;
+    
+}
+
+.explanation
+{
+    background-color: #7C786A;
+    border-radius: 5px;
+    top: 12%;
+    position: absolute;
+    width: 350px;
+    height: 400px;
+    z-index: 100;
+}
+
+#night-explanation
+{
+    left: 3%;
+    color: #6DADA1;
+}
+
+#day-explanation
+{
+    left: 53%;
+    color: #B3C377;
+}
+
+.message
 {
     background-color: #8DCDC1;
     width: 500px;

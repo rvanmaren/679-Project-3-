@@ -49,15 +49,11 @@ function add_image(src, id, posX, posY, visible) {
     // This next line will just add it to the <body> tag
     document.body.appendChild(img);
 }
-add_image('./resources/intro.png', 'intro', WINDOW_WIDTH/2-200,WINDOW_HEIGHT/2-100, 'hidden');
+//add_image('./resources/intro.png', 'intro', WINDOW_WIDTH/2-200,WINDOW_HEIGHT/2-100, 'hidden');
 //add_image('./resources/Textures/crosshair.png','crossHair',WINDOW_WIDTH/2 - (95/2),WINDOW_HEIGHT/2 -(95/2), 'hidden');
-var imgX = document.createElement("img");
-imgX.src = './resources/Textures/crosshair.png';
-imgX.setAttribute("id", 'crossHair');
-imgX.style.cssText = "position: absolute; left: 50%; top: 50%; margin-top: -47.5px; margin-left: -47.5px";
-document.body.appendChild(imgX);
 
-add_image('./resources/loading.png','loading',WINDOW_WIDTH/2-95/2,WINDOW_HEIGHT/2-95/2, '');
+
+//add_image('./resources/loading.png','loading',WINDOW_WIDTH/2-95/2,WINDOW_HEIGHT/2-95/2, '');
 
 function add_text(text, id, posX, posY, visible) {
     var ele = document.createElement("p");
@@ -102,9 +98,8 @@ function loadLoop()
 {
 	if(GEOMETRIES.length == NUM_GEOMETRIES && COLLADAS.length == NUM_COLLADAS)
 	{
-	    document.getElementById("loading").style.visibility= 'hidden';
 		//Display Intro Screen
-		document.getElementById("intro").style.visibility= '';
+		document.getElementById("intro-screen").style.visibility= '';
 		GAME_LOADED = true;
 		for(var index = 0; index < GEOMETRIES.length; index++)
 		{
@@ -157,10 +152,17 @@ function mouse_down(event)
 	}
 	else
 	{
-	    if(GAME_LOADED)
-		{
+	    if(GAME_LOADED) {
 		    GAME_STARTED = true;
-		    document.getElementById("intro").style.visibility = 'hidden';
+		    document.getElementById("intro-screen").style.visibility = 'hidden';
+
+		    //add crosshair
+            var imgX = document.createElement("img");
+		    imgX.src = './resources/Textures/crosshair.png';
+		    imgX.setAttribute("id", 'crossHair');
+		    imgX.style.cssText = "position: absolute; left: 50%; top: 50%; margin-top: -47.5px; margin-left: -47.5px";
+		    document.body.appendChild(imgX);
+
 		    document.body.requestPointerLock();
 			GAME = new Game();
 			animloop();
