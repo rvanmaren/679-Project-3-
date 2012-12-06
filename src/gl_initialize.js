@@ -15,7 +15,7 @@ function webGL_intialize()
 	//SET UP RENDERER
 	RENDERER = new THREE.WebGLRenderer({antialias:true});
 	RENDERER.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	RENDERER.domElement.style.cssText = "border: 5px solid #D3E397; border-radius:5px; position: absolute; top: 50%; margin-top:" + WINDOW_HEIGHT / -2 + "px;left: 50%; margin-left:" + WINDOW_WIDTH / -2 + "px;";
+	RENDERER.domElement.style.cssText = "border: 5px solid #00000; border-radius:5px; position: absolute; top: 50%; margin-top:" + WINDOW_HEIGHT / -2 + "px;left: 50%; margin-left:" + WINDOW_WIDTH / -2 + "px;";
 	document.body.appendChild(RENDERER.domElement);
 
 	document.getElementById("gen-info").style.marginTop = "" + ((WINDOW_HEIGHT / -2) + 10) + "px";
