@@ -95,7 +95,11 @@ function Skeleton(position){
 				if(aniTimeATTK > 475){
 					if(this.canAttack){
 						if("undefined" != typeof(this.attackTarget)){
-							this.attackTarget.doDamage(this.attackPower);
+							if(this.attackTarget.doDamage(this.attackPower)){
+								this.state = WALKING;
+								this.attackTarget = null;
+								this.findPointOfInterest();
+							}
 						}
 					   this.canAttack = false;
 					}
