@@ -101,7 +101,11 @@ function Day(position)
 	                this.mode = "build";
 	                this.type = "house";
 	                break;
-	            case 51:
+				case 51:
+	                this.mode = "build";
+	                this.type = "tower";
+	                break;
+	            case 52:
 	                this.mode = "remove";
 	                break;
 	            case 81:
@@ -231,15 +235,19 @@ function Day(position)
 	    document.getElementById("build-1").style.backgroundColor = "";
 	    document.getElementById("build-2").style.backgroundColor = "";
 	    document.getElementById("build-3").style.backgroundColor = "";
+		document.getElementById("build-4").style.backgroundColor = "";
 	    if (this.mode == "build") {
 	        if (this.type == "house") {
 	            document.getElementById("build-2").style.backgroundColor = "#D3E397";
 	        } else if (this.type == "wall") {
 	            document.getElementById("build-1").style.backgroundColor = "#D3E397";
 	        }
+			else if (this.type == "tower") {
+	            document.getElementById("build-3").style.backgroundColor = "#D3E397";
+	        }
 	    } else {
 
-	        document.getElementById("build-3").style.backgroundColor = "#D3E397";
+	        document.getElementById("build-4").style.backgroundColor = "#D3E397";
 	    }
 
 	    document.getElementById("build-units").innerHTML = this.blocksLeft;

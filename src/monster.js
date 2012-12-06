@@ -119,6 +119,10 @@ var clock = new THREE.Clock();
 				this.walkingcurrentKeyframe = 0;
 			}
 		}
+		if(this.state == DYING)
+		{
+		   this.kill();
+		}
 		this.draw();
 	
 	}

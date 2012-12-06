@@ -13,6 +13,25 @@ function remove(piece)
 {
 	SCENE.remove(piece.mesh);
 }
+var tower_width = GRID_WIDTH/NUM_BOXES;
+var tower_height= 150;
+function TowerPiece(position,grid)
+{
+	this.units = this;
+    this.grid_spot = grid;
+	this.mesh = new THREE.Mesh(GEOMETRIES[TOWER_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
+	this.mesh.scale.set(20,20,20);
+	this.mesh.rotation.x = Math.PI/2
+	this.mesh.position.x = position.x;
+	this.mesh.position.y = -1;
+	this.mesh.position.z = position.z;
+	SCENE.add(this.mesh );
+	
+	this.doDamage = function(damage){
+		return false;
+	}
+	
+}
 var tree1_width = GRID_WIDTH/NUM_BOXES;
 var tree1_height= 100;
 function Tree1Piece(position,grid)

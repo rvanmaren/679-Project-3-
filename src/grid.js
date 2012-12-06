@@ -113,6 +113,10 @@ function Grid(width, height, blocks)
 	var wallPreview = new THREE.Mesh(GEOMETRIES[FENCE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	wallPreview.scale.set(20,45,20);
 	wallPreview.position.y = -1;
+	var towerPreview = new THREE.Mesh(GEOMETRIES[TOWER_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
+	towerPreview.scale.set(20,20,20);
+	towerPreview.position.y = -1;
+	towerPreview.rotation.x = Math.PI/2
 	var removePreview = new THREE.Mesh(new THREE.SphereGeometry(8, 10, 10),new THREE.MeshBasicMaterial({color: 0xFF0000}));
 	removePreview.scale.set(.5,.5,.5);
 	removePreview.position.y = 1;
@@ -126,6 +130,8 @@ function Grid(width, height, blocks)
 		removePreview.position.z = z;
 		wallPreview.position.x = x;
 		wallPreview.position.z = z;
+		towerPreview.position.x = x;
+		towerPreview.position.z = z;
 		SCENE.add(currentPreview);
 	}
 	this.movePreview = function(x,y)
@@ -136,6 +142,27 @@ function Grid(width, height, blocks)
 		removePreview.position.z += y;
 	    wallPreview.position.x += x;
 		wallPreview.position.z += y;
+		towerPreview.position.x += x;
+		towerPreview.position.z += y;
+	}
+	this.removeCurrentPreview = function()
+	{
+		if(currentPreview == housePreview)
+		{
+			SCENE.remove(housePreview);
+		}
+		if (currentPreview == towerPreview)
+		{
+			SCENE.remove(towerPreview);
+		}
+		if (currentPreview == removePreview)
+		{
+			SCENE.remove(removePreview);
+		}
+		if (currentPreview == wallPreview)
+		{
+			SCENE.remove(wallPreview);
+		}
 	}
 	this.hidePreview = function(mode)
 	{
@@ -147,15 +174,7 @@ function Grid(width, height, blocks)
 		{
 		    if(currentPreview != housePreview)
 			{
-			    if(currentPreview == wallPreview)
-				{
-					SCENE.remove(wallPreview);
-				}
-				else
-				{
-					SCENE.remove(removePreview);
-				}
-				
+				this.removeCurrentPreview();
 				currentPreview = housePreview;
 				SCENE.add(housePreview);
 			}
@@ -164,31 +183,26 @@ function Grid(width, height, blocks)
 		{
 		    if(currentPreview != wallPreview)
 			{
-			    if(currentPreview == housePreview)
-				{
-					SCENE.remove(housePreview);
-				}
-				else
-				{
-					SCENE.remove(removePreview);
-				}
-				
+				this.removeCurrentPreview();
 				currentPreview = wallPreview;
 				SCENE.add(wallPreview);
+			}
+		}
+		if(mode == 'build' && type == 'tower')
+		{
+		    if(currentPreview != towerPreview)
+			{
+				this.removeCurrentPreview();
+				
+				currentPreview = towerPreview;
+				SCENE.add(towerPreview);
 			}
 		}
 		if(mode == 'remove')
 		{
 		    if(currentPreview != removePreview)
 			{ 
-				if(currentPreview == housePreview)
-				{
-					SCENE.remove(housePreview);
-				}
-				if(currentPreview == wallPreview)
-				{
-					SCENE.remove(wallPreview);
-				}
+				this.removeCurrentPreview();
 				SCENE.add(removePreview);	
 				currentPreview = removePreview;
 			}
@@ -196,7 +210,9 @@ function Grid(width, height, blocks)
 	}
 	this.update_preview = function(mouseX,mouseY)
 	{
-	    housePreview.position.x -= mouseY;
+	    towerPreview.position.x -= mouseY;
+		towerPreview.position.z += mouseX;
+		housePreview.position.x -= mouseY;
 		housePreview.position.z += mouseX;
 		removePreview.position.x -= mouseY;
 		removePreview.position.z += mouseX;
@@ -248,6 +264,10 @@ function Grid(width, height, blocks)
 					if(buildCMD.type == "tree2")
 					{
 					    return this.buildTree2(spot);
+					}
+					if(buildCMD.type == 'tower')
+					{
+						return this.buildTower(spot);
 					}
 				}
 			}
@@ -477,6 +497,54 @@ function Grid(width, height, blocks)
 			this.grid_spots[spotClick[0]][spotClick[1]] = new Tree1Piece(new THREE.Vector3(spotClick[0]*width/blocks+width/blocks/2,0,spotClick[1]*height/blocks+height/blocks/2),[spotClick[0],spotClick[1]]);
 			this.grid_spots[spotClick[0]][spotClick[1]].mesh.rotation.y = Math.PI/2;
 			return true;
+	}
+	this.buildTower = function ( spotClick)
+	{
+	    var LowX = spotClick[0]-3;
+		var LowY = spotClick[1]-3;
+		
+		for(var x = 0; x < 7; x++)
+		{
+		    if(this.grid_spots[LowX+x][spotClick[1]] != EMPTY || this.grid_spots[spotClick[0]][LowY+x] != EMPTY )
+			{
+			    return false
+			}
+		}
+		
+		if(this.grid_spots[spotClick[0]+1][spotClick[1]+1] != EMPTY || this.grid_spots[spotClick[0]+1][spotClick[1]-1] != EMPTY ||
+		this.grid_spots[spotClick[0]-1][spotClick[1]+1] != EMPTY || this.grid_spots[spotClick[0]-1][spotClick[1]-1] != EMPTY ||
+		this.grid_spots[spotClick[0]][spotClick[1]] != EMPTY)
+		{
+			    return false;
+		}
+		
+		//all good
+		
+		this.grid_spots[spotClick[0]][spotClick[1]] = new TowerPiece(new THREE.Vector3(spotClick[0]*width/blocks+width/blocks/2,0,spotClick[1]*height/blocks+height/blocks/2),[spotClick[0],spotClick[1]]);
+		var unit_spots = new Array();
+		for(var x = 0; x < 7; x++)
+		{
+		    if(LowX+x != spotClick[0])
+			{
+				this.grid_spots[LowX+x][spotClick[1]] =  new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[LowX+x,spotClick[1]]);
+				unit_spots.push(this.grid_spots[LowX+x][spotClick[1]]);
+			}
+			if(LowY+x != spotClick[1])
+			{
+				this.grid_spots[spotClick[0]][LowY+x] =  new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0],LowY+x]);
+				unit_spots.push(this.grid_spots[spotClick[0]][LowY+x]);
+			}
+		}
+		this.grid_spots[spotClick[0]+1][spotClick[1]+1] =  new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]+1,spotClick[1]+1]);
+		this.grid_spots[spotClick[0]+1][spotClick[1]-1] =  new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]+1,spotClick[1]-1]);
+		this.grid_spots[spotClick[0]-1][spotClick[1]-1] =  new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]-1,spotClick[1]-1]);
+		this.grid_spots[spotClick[0]-1][spotClick[1]+1] =  new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]-1,spotClick[1]+1]);
+		unit_spots.push(this.grid_spots[spotClick[0]+1][spotClick[1]+1])
+		unit_spots.push(this.grid_spots[spotClick[0]+1][spotClick[1]-1])
+		unit_spots.push(this.grid_spots[spotClick[0]-1][spotClick[1]-1])
+		unit_spots.push(this.grid_spots[spotClick[0]-1][spotClick[1]+1])
+		this.grid_spots[spotClick[0]][spotClick[1]].units = unit_spots;
+		return true;
 	}
 	this.buildTree2 = function ( spotClick)
 	{
