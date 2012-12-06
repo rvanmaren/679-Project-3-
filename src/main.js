@@ -22,7 +22,6 @@ var loaded = false;
 var count = 0;
 var showIntro = false, showInstructions = false;
 
-
 LOADER.load( './resources/rifle/rifle_0.js' ,function(geometry){    geometry.id = 'gun';    GEOMETRIES.push(geometry);});
 LOADER.load( './resources/trees/tree1.js' ,function(geometry){    geometry.id = 'tree1';    GEOMETRIES.push(geometry);});
 LOADER.load( './resources/trees/tree2.js' ,function(geometry){    geometry.id = 'tree2';    GEOMETRIES.push(geometry);});
@@ -92,7 +91,7 @@ function render() {
 function animloop(){
     //console.log(GEOMETRIES.length);
 	window.requestAnimFrame(animloop);
-	GAME.update(10);
+	GAME.update(timeSinceLastCall());
     render(); 
 };
 function loadLoop()
@@ -222,6 +221,19 @@ function moveCallback(e) {
 	MOUSE_Y = 0;
 }
 
+var timer = null;
+
+function timeSinceLastCall() {
+    if (timer == null) {
+        timer = new Date();
+        return 0;
+    }
+    var newTime = new Date();
+    var timeSinceCall = newTime.getTime() - timer.getTime();
+    timer = newTime;
+    return timeSinceCall;
+
+}
 
 
 
