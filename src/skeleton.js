@@ -7,7 +7,7 @@ function Skeleton(position){
 	Zombie.apply(this,arguments); 
 	
 	this.attack_distance = 75;
-	this.speed = 2 / 30;
+	this.speed = 4 / 30;
     this.rotationSpeed = .5;
 	this.health = 100;
 	this.maxHealth = this.health;
@@ -225,6 +225,14 @@ function Skeleton(position){
 		}
 		this.draw();
 
+	};
+	
+	
+	this.checkCollision = function (collider) {
+	    var collisionPosition = this.position.clone();
+	    if (collider.mesh.position.clone().subSelf(collisionPosition).length() < collider.boundRadius + this.boundRadius) {
+	        return true;
+	    }
 	};
 	
 	
