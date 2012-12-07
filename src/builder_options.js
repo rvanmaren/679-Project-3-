@@ -16,8 +16,8 @@ var tower_width = GRID_WIDTH/NUM_BOXES;
 var tower_height= 150;
 function TowerPiece(position,grid)
 {
-    this.health = 20;
-      this.height = 60;
+    this.health = 50;
+    this.height = 60;
 	this.units = this;
     this.grid_spot = grid;
 	this.mesh = new THREE.Mesh(GEOMETRIES[TOWER_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
@@ -145,7 +145,7 @@ function WallPiece(position, grid)
 	this.mesh.position.y = -1;
 	this.mesh.position.z = position.z;
 	SCENE.add(this.mesh );
-	this.health = 20;
+	this.health = 25;
 	/*var material = new THREE.MeshBasicMaterial({
         color: 0x00FF00,
     });
@@ -185,7 +185,7 @@ function HousePiece(position, grid)
 	this.mesh.position.y = -5;
 	this.mesh.position.z = position.z;
 	SCENE.add(this.mesh);
-	this.health = 30;
+	this.health = 80;
 	this.units;
 	
 	

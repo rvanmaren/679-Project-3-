@@ -105,8 +105,11 @@ function Player(position)
 	    directionPerp.normalize();
 	    //Do y direction with a jump
 	    //sideways motion
-	    var nextX = this.position.x + directionPerp.x * sideways * this.speed + this.direction.x * forward * this.speed;
-	    var nextY = this.position.z + directionPerp.z * sideways * this.speed + this.direction.z * forward * this.speed;
+		
+		
+		
+	    var nextX = this.position.x + directionPerp.x * sideways * this.speed*time + this.direction.x * forward * this.speed*time;
+	    var nextY = this.position.z + directionPerp.z * sideways * this.speed*time + this.direction.z * forward * this.speed*time;
 	    var temp = THE_GRID.grid_spot(nextX, nextY);
 
 	    if (!THE_GRID.isOccupied(temp[0], temp[1])) {
