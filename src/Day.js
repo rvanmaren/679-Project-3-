@@ -4,7 +4,7 @@ var LEFT = 2;
 var RIGHT = 3;
 var builderSpeed = 2;
 var zoomSpeed = 10;
-var buildingNumber = 100;
+var buildingNumber = 10;
 function Builder_Target(position)
 {
     this.posistion = position;
