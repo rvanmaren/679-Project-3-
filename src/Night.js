@@ -47,6 +47,7 @@ function Night()
 	    document.getElementById("night-info").style.visibility = '';
 	    //document.getElementById("health").style.visibility= '';
 	    //document.getElementById("bullets").style.visibility= '';
+	    this.waitingToFinish = false;
 	    this.isFinished = false;
 	}
 
@@ -60,7 +61,6 @@ function Night()
 	}
 
 	this.update = function (time) {
-
 	    if (ZOMBIES.length == 0) {
 	        document.getElementById("nightFinished").style.visibility = '';
 	        this.waitingToFinish = true;
