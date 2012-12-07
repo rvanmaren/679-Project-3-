@@ -62,7 +62,7 @@ var clock = new THREE.Clock();
 		if(this.spawn && this.mesh.position.y != this.yPosition){
 			var nextYMesh = this.mesh.position.y + 1;
 			if(nextYMesh > this.yPosition){
-				this.mesh.position.y = this.yPosition;
+				this.mesh.position.y = this.yPosition;this.spawn = false;
 			} else {
 				this.mesh.position.y = nextYMesh;
 			}
@@ -94,6 +94,7 @@ var clock = new THREE.Clock();
 		if(this.state == ATTACKING)
 		{
 		    this.timeSinceAttack += CLOCK.getDelta();
+			this.mesh.rotation.x += .1;
 		    if(this.timeSinceAttack > 2){
 				if("undefined" != typeof(this.attackTarget)){
 					if(this.attackTarget.doDamage(this.attackPower)){
@@ -129,12 +130,14 @@ var clock = new THREE.Clock();
 					this.attackTarget = gridItem;
 					if("undefined" != typeof(this.attackTarget)){
 						this.state = ATTACKING;
+						this.timeSinceAttack = 0;
 						this.mesh.morphTargetInfluences[this.walkingcurrentKeyframe] = 0;
 					    this.mesh.morphTargetInfluences[this.walkingLastKeyframe] = 0;				
 					}
 				}	else if(distance < this.attack_distance)
 				{
 					this.state = ATTACKING;
+					this.timeSinceAttack = 0;
 					this.mesh.morphTargetInfluences[this.walkingcurrentKeyframe] = 0;
 					this.mesh.morphTargetInfluences[this.walkingLastKeyframe] = 0;
 					this.attackTarget = this.target;
@@ -151,6 +154,7 @@ var clock = new THREE.Clock();
 			if(!THE_GRID.isSpotOccupied(spot) && distance >= this.attack_distance){
 				this.state = WALKING;
 				this.walkingcurrentKeyframe = 0;
+				this.mesh.rotation.x = 0;
 			}
 		}
 		if(this.state == DYING)
