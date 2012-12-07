@@ -146,11 +146,12 @@ function key_up(keyEvt)
     if(GAME_STARTED)
 	GAME.key_up(keyEvt);
 }
-function mouse_down(event)
-{
+function mouse_down(event) {
+   
     if(GAME_STARTED)
 	{
 	    GAME.mouse_down();
+	    document.body.requestPointerLock();
 	}
 	else {
 	    if (GAME_LOADED && showInstructions) {

@@ -15,6 +15,8 @@ function Player(position)
     this.dead = false;
     this.score = 0;
 
+    
+
     //Used for camera shake effect
     this.cameraShakeStart = 0;
     this.cameraShakeDuration = 0;
@@ -22,8 +24,10 @@ function Player(position)
     this.cameraShakeDirection = 0;
 
 	this.gun = new Gun(this.position,this.direction);
-	this.mouse_down = function(keyEvent) {
-        BULLETS.push(new Bullet(this.position, this.direction.clone(),0.125,BULLET_SPEED));
+
+	this.mouse_down = function (keyEvent) {
+	    BULLETS.push(new Bullet(this.position, this.direction.clone(), 0.125, BULLET_SPEED));
+	    AUDIO_MANAGER.playGunshot();
 	}
 
 	this.mouse_up = function(keyEvent) {

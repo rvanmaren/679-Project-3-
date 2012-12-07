@@ -4,7 +4,7 @@ var LEFT = 2;
 var RIGHT = 3;
 var builderSpeed = 2;
 var zoomSpeed = 10;
-var buildingNumber = 0;
+var buildingNumber = 10;
 function Builder_Target(position)
 {
     this.posistion = position;
@@ -180,12 +180,14 @@ function Day(position)
         THE_GRID.update_preview(mouseMoveX, mouseMoveY);
         if (this.building) {
             if (this.blocksLeft || this.mode == "remove") {
-                if (!(this.type == 'house' && this.blocksLeft < HOUSE_COST)) {
+                if (!(this.type == 'house' && this.blocksLeft < HOUSE_COST) && !(this.type == 'tower' && this.blocksLeft < TOWER_COST)) {
                     if (mouseMoveX != 0 || mouseMoveY != 0) {
                         var built = THE_GRID.handle_command(new Build_Command(this.mode, this.type, this.target.position().x, this.target.position().z), mouseMoveX, mouseMoveY);
                         if (built && this.mode != "remove") {
                             if (this.type == 'house') {
                                 this.blocksLeft -= HOUSE_COST;
+                            } else if (this.type = 'tower') {
+                                this.blocksLeft -= TOWER_COST;
                             } else {
                                 this.blocksLeft--;
                             }
@@ -204,11 +206,13 @@ function Day(position)
         }
 	    this.building = true;
 	    if (this.blocksLeft || this.mode == 'remove') {
-	        if (!(this.type == 'house' && this.blocksLeft < HOUSE_COST)&& this.type!='wall') {
+	        if (!(this.type == 'house' && this.blocksLeft < HOUSE_COST)&& this.type!='wall'&& !(this.type == 'tower' && this.blocksLeft < TOWER_COST)) {
 	            var built = THE_GRID.handle_command(new Build_Command(this.mode, this.type, this.target.position().x, this.target.position().z));
 	            if (built && this.mode != 'remove') {
 	                if (this.type == 'house') {
 	                    this.blocksLeft -= HOUSE_COST;
+                    } else if (this.type = 'tower') {
+                            this.blocksLeft -= TOWER_COST;
 	                } else {
 	                    this.blocksLeft--;
 	                }

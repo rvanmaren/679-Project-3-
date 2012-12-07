@@ -8,8 +8,14 @@
 	</head>
 	<body style="background:url(./resources/fire-background.jpg); background-size: 100%;">
         <div class = "intro" id = "intro-screen" style = "visibility:hidden;">
-             <span style = "text-align: center"> <h1>!!!!</h1> </span>
-             <span style = "text-align: center"> <h1>Click To Continue to instruction</h1> </span>
+        <br />
+        <br />
+        <br />
+             <span style = "text-align: center;"> <h1>You are one of the few people left after the zombie apocalypse. You need to build up a civilization and protect it for as long as you can. Don't let those zombies or skeletons destroy your house!</h1> </span>
+        <br />
+        <br />
+        <br />
+             <span style = "text-align: center"> <h1>Click To continue to instructions.</h1> </span>
         </div>
         <div class = "intro" id = "instruction-screen" style = "visibility: hidden">
             
@@ -64,13 +70,13 @@
             <h4>Cost: 10 &nbsp;Income: 4</h4>
         </div>
 		 <div class = "build-info" id = "build-3">
-            <img class = "build-image" id = "bulldozer-image" src="resources/Textures/bulldozer.png" />
+            <img class = "build-image" id = "turret-image" src="resources/Textures/turret.png" />
             <h1 style = "float: right; position: relative; top: 25px">&nbsp;3</h1>
-            <h4>Cost: 20?</h4>
+            <h4>Cost: 20</h4>
         </div>
         <div class = "build-info" id = "build-4">
             <img class = "build-image" id = "bulldozer-image" src="resources/Textures/bulldozer.png" />
-            <h1 style = "float: right; position: relative; top: 25px">&nbsp;3</h1>
+            <h1 style = "float: right; position: relative; top: 25px">&nbsp;4</h1>
             <h4>Cost: free</h4>
         </div>
         </div>
@@ -78,6 +84,7 @@
         <div class = "message"id = "exit-confirmation" style ="visibility: hidden"><h1>Are you sure you want to exit?</h1><h1>Press space bar to confirm,</h1> <h1>or any other key for return.</h1></div>
 	</body>
 	<script type="text/javascript" src="./src/three.js" ></script>
+    <script type="text/javascript" src="./src/AudioManager.js" ></script>
 	<script type="text/javascript" src="./src/ColladaLoader.js" ></script>
 	<script type="text/javascript" src="./src/jquery-1.8.1.min.js" ></script>
 	<script type="text/javascript" src="./src/AudioManager.js" ></script>
@@ -99,6 +106,7 @@
 	<script type="text/javascript" src="./src/Game.js" ></script>
 	<script type="text/javascript" src="./src/gl_initialize.js" ></script>
 	<script type="text/javascript" src="./src/main.js"></script>
+
 		<p style ="visibility:hidden">Press f for full screen(breaks wasd?). <b>G to lock mouse.</b> WASD to move. t to toggle view 
 		if you get a  Cross origin requests are only supported for HTTP. error run chrome with the following option "--allow-file-access-from-files"
 		now with toggle between build type(press 1 or 2 while building) -remove by switching to 3 and clicking</p>

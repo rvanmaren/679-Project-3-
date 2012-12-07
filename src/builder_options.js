@@ -38,7 +38,7 @@ function TowerPiece(position,grid)
 	}
 	
 	//shooting variables
-	this.reloadLeft = 1;
+	this.reloadLeft = .09;
 	
 	this.update = function()
 	{
@@ -70,7 +70,7 @@ function TowerPiece(position,grid)
 				{
 				    direction.normalize();
 					BULLETS.push(new Bullet(new THREE.Vector3(this.mesh.position.x,this.mesh.position.y+100,this.mesh.position.z), direction.clone(), 1, 15));
-					this.reloadLeft = 1;
+					this.reloadLeft = .1;
 				}
 			}
 		}
@@ -185,7 +185,7 @@ function HousePiece(position, grid)
 	this.mesh.position.y = -5;
 	this.mesh.position.z = position.z;
 	SCENE.add(this.mesh);
-	this.health = 80;
+	this.health = 150;
 	this.units;
 	
 	

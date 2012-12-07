@@ -2,16 +2,17 @@
 function Level(levelNum)
 {
     ZOMBIES = new Array();
-	this.totalZombies = Math.pow(2,levelNum); //for now
+    this.totalZombies = Math.pow(levelNum, 2); //for now
+    console.log(this.totalZombies);
 	this.zombies = new Array;
-	this.zombieSpawnLimit = 10;
+	this.zombieSpawnLimit = 15;
 	if(this.zombieSpawnLimit > this.totalZombies){
 		this.zombieSpawnLimit = this.totalZombies;
 	}
 	//this.totalZombies = 1;
 	for(var i=0; i< this.totalZombies; i++)
 	{
-		if(Math.random() > .5){
+		if(Math.random() > .25){
 			this.zombies.push(new Skeleton(new THREE.Vector3(Math.random()*GRID_WIDTH*.7, 30, Math.random()*GRID_WIDTH*.7)));
 		} else {
 			this.zombies.push(new Monster(new THREE.Vector3(Math.random()*GRID_WIDTH*.7, 30, Math.random()*GRID_WIDTH*.7)));

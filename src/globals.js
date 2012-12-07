@@ -72,6 +72,7 @@ var GRID_WIDTH = 10000;
 var NUM_BOXES = 1000;
 var NUM_HOUSES = 0;
 var HOUSE_COST = 10;
+var TOWER_COST = 20;
 var HOUSE_INCOME = 4;
 /*BULLET GLOBALS*/
 var BULLET_SPEED = 30;
@@ -89,3 +90,6 @@ function dotProduct(vec1,vec2)
 	 
 	 return Math.acos((vec1.x*vec2.x+vec1.z*vec2.z)/(l1*l2))
 }
+
+/*AUDIO GLOBALS*/
+var AUDIO_MANAGER;
