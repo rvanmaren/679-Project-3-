@@ -15,7 +15,7 @@ function Player(position)
     this.dead = false;
     this.score = 0;
 
-    this.snd = new Audio("Resources/sounds/sound.wav"); // buffers automatically when created
+    
 
     //Used for camera shake effect
     this.cameraShakeStart = 0;
@@ -24,10 +24,10 @@ function Player(position)
     this.cameraShakeDirection = 0;
 
 	this.gun = new Gun(this.position,this.direction);
+
 	this.mouse_down = function (keyEvent) {
-	    BULLETS.push(new Bullet(this.position, this.direction.clone()));
-	    this.snd.currentTime = 0;
-	    this.snd.play();
+	    BULLETS.push(new Bullet(this.position, this.direction.clone(), 0.125, BULLET_SPEED));
+	    AUDIO_MANAGER.playGunshot();
 	}
 
 	this.mouse_up = function(keyEvent) {
@@ -109,8 +109,11 @@ function Player(position)
 	    directionPerp.normalize();
 	    //Do y direction with a jump
 	    //sideways motion
-	    var nextX = this.position.x + directionPerp.x * sideways * this.speed + this.direction.x * forward * this.speed;
-	    var nextY = this.position.z + directionPerp.z * sideways * this.speed + this.direction.z * forward * this.speed;
+		
+		
+		
+	    var nextX = this.position.x + directionPerp.x * sideways * this.speed*time + this.direction.x * forward * this.speed*time;
+	    var nextY = this.position.z + directionPerp.z * sideways * this.speed*time + this.direction.z * forward * this.speed*time;
 	    var temp = THE_GRID.grid_spot(nextX, nextY);
 
 	    if (!THE_GRID.isOccupied(temp[0], temp[1])) {

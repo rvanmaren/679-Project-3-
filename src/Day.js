@@ -4,7 +4,7 @@ var LEFT = 2;
 var RIGHT = 3;
 var builderSpeed = 2;
 var zoomSpeed = 10;
-var buildingNumber = 0;
+var buildingNumber = 100;
 function Builder_Target(position)
 {
     this.posistion = position;
@@ -72,7 +72,7 @@ function Day(position)
 			this.position.y = Math.min(this.position.y+zoomSpeed, 3000);
 			//this.speed+=2;
 		}
-		
+		console.log(this.position.y);
 		this.speed = Math.sqrt(this.position.y);
 	}
 	this.key_down = function (keyEvent) {
@@ -101,7 +101,11 @@ function Day(position)
 	                this.mode = "build";
 	                this.type = "house";
 	                break;
-	            case 51:
+				case 51:
+	                this.mode = "build";
+	                this.type = "tower";
+	                break;
+	            case 52:
 	                this.mode = "remove";
 	                break;
 	            case 81:
@@ -176,12 +180,14 @@ function Day(position)
         THE_GRID.update_preview(mouseMoveX, mouseMoveY);
         if (this.building) {
             if (this.blocksLeft || this.mode == "remove") {
-                if (!(this.type == 'house' && this.blocksLeft < HOUSE_COST)) {
+                if (!(this.type == 'house' && this.blocksLeft < HOUSE_COST) && !(this.type == 'tower' && this.blocksLeft < TOWER_COST)) {
                     if (mouseMoveX != 0 || mouseMoveY != 0) {
                         var built = THE_GRID.handle_command(new Build_Command(this.mode, this.type, this.target.position().x, this.target.position().z), mouseMoveX, mouseMoveY);
                         if (built && this.mode != "remove") {
                             if (this.type == 'house') {
                                 this.blocksLeft -= HOUSE_COST;
+                            } else if (this.type = 'tower') {
+                                this.blocksLeft -= TOWER_COST;
                             } else {
                                 this.blocksLeft--;
                             }
@@ -200,11 +206,13 @@ function Day(position)
         }
 	    this.building = true;
 	    if (this.blocksLeft || this.mode == 'remove') {
-	        if (!(this.type == 'house' && this.blocksLeft < HOUSE_COST)&& this.type!='wall') {
+	        if (!(this.type == 'house' && this.blocksLeft < HOUSE_COST)&& this.type!='wall'&& !(this.type == 'tower' && this.blocksLeft < TOWER_COST)) {
 	            var built = THE_GRID.handle_command(new Build_Command(this.mode, this.type, this.target.position().x, this.target.position().z));
 	            if (built && this.mode != 'remove') {
 	                if (this.type == 'house') {
 	                    this.blocksLeft -= HOUSE_COST;
+                    } else if (this.type = 'tower') {
+                            this.blocksLeft -= TOWER_COST;
 	                } else {
 	                    this.blocksLeft--;
 	                }
@@ -231,15 +239,19 @@ function Day(position)
 	    document.getElementById("build-1").style.backgroundColor = "";
 	    document.getElementById("build-2").style.backgroundColor = "";
 	    document.getElementById("build-3").style.backgroundColor = "";
+		document.getElementById("build-4").style.backgroundColor = "";
 	    if (this.mode == "build") {
 	        if (this.type == "house") {
 	            document.getElementById("build-2").style.backgroundColor = "#D3E397";
 	        } else if (this.type == "wall") {
 	            document.getElementById("build-1").style.backgroundColor = "#D3E397";
 	        }
+			else if (this.type == "tower") {
+	            document.getElementById("build-3").style.backgroundColor = "#D3E397";
+	        }
 	    } else {
 
-	        document.getElementById("build-3").style.backgroundColor = "#D3E397";
+	        document.getElementById("build-4").style.backgroundColor = "#D3E397";
 	    }
 
 	    document.getElementById("build-units").innerHTML = this.blocksLeft;

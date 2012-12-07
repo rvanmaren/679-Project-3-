@@ -23,6 +23,7 @@ var count = 0;
 var showIntro = false, showInstructions = false;
 
 LOADER.load( './resources/rifle/rifle_0.js' ,function(geometry){    geometry.id = 'gun';    GEOMETRIES.push(geometry);});
+LOADER.load( './resources/tower_0.js' ,function(geometry){    geometry.id = 'tower';    GEOMETRIES.push(geometry);});
 LOADER.load( './resources/trees/tree1.js' ,function(geometry){    geometry.id = 'tree1';    GEOMETRIES.push(geometry);});
 LOADER.load( './resources/trees/tree2.js' ,function(geometry){    geometry.id = 'tree2';    GEOMETRIES.push(geometry);});
 //LOADER.load( './resources/fence/fence.js' ,function(geometry){GEOMETRIES.push(geometry);});
@@ -145,11 +146,12 @@ function key_up(keyEvt)
     if(GAME_STARTED)
 	GAME.key_up(keyEvt);
 }
-function mouse_down(event)
-{
+function mouse_down(event) {
+   
     if(GAME_STARTED)
 	{
 	    GAME.mouse_down();
+	    document.body.requestPointerLock();
 	}
 	else {
 	    if (GAME_LOADED && showInstructions) {

@@ -28,6 +28,7 @@ function Zombie(position)
 	this.spawn = false;
 	this.interestDelay = Math.random()*500;
 	this.anger = Math.random()/10;
+	this.height= 30;
 //	this.type = type;
 	if("undefined" != typeof(this.target)){
 		this.direction =new THREE.Vector3(this.target.position.x - this.position.x
@@ -47,9 +48,9 @@ function Zombie(position)
 	
 	// I would like to change damage to weapon that way we can have different zombies be vulnerable to 
 	// different types of weapons
-	this.dealDamageFromEntity = function(entity, damage){
+	this.doDamageFromEntity = function(damage){
 		this.health -= damage;
-		this.target = entity;
+		
 	};
 	
 	this.spawn = function(){

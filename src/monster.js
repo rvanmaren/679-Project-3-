@@ -4,11 +4,12 @@ var zombie_width = 15;
 function Monster(position){
 
 	Zombie.apply(this,arguments); 
-	
+	this.height = 20;
 	this.attack_distance = 200;
-	this.speed = 8 / 30;
+	this.speed = (8 + Math.random()) / 30;
     this.rotationSpeed = .5;
-	this.health = 100;
+	this.health = 80;
+	this.attackPower = 5;
 	this.maxHealth = this.health;
 	this.target = PLAYER;
 
@@ -19,7 +20,7 @@ function Monster(position){
 	this.mesh.position.z = position.z;
 	this.mesh.scale.set(.02, .02, .02);
 	this.boundRadius = zombie_width;
-
+    this.rotateDead = 0;
     //Uncomment this as well as the comment in update to see the collision spheres
 //	this.collisionMesh = new THREE.Mesh(new THREE.SphereGeometry(this.boundRadius, 100, 100), new THREE.MeshNormalMaterial());
 //    SCENE.add(this.collisionMesh);
@@ -44,6 +45,15 @@ var clock = new THREE.Clock();
 
 		
 	this.update = function(time) {
+		if (this.health <= 0 && this.state != DYING) {
+			//clean up of meshes
+			if(this.state == WALKING)
+			{
+				this.mesh.morphTargetInfluences[this.walkingcurrentKeyframe] = 0;
+				this.mesh.morphTargetInfluences[this.walkingLastKeyframe] = 0;
+			}
+            this.state = DYING;
+        }
 	        //Uncomment this to see the collision sphere
 //	    var temp = this.position.clone();
 //	    temp.y -= 15;
@@ -53,7 +63,7 @@ var clock = new THREE.Clock();
 		if(this.spawn && this.mesh.position.y != this.yPosition){
 			var nextYMesh = this.mesh.position.y + 1;
 			if(nextYMesh > this.yPosition){
-				this.mesh.position.y = this.yPosition;
+				this.mesh.position.y = this.yPosition;this.spawn = false;
 			} else {
 				this.mesh.position.y = nextYMesh;
 			}
@@ -85,6 +95,7 @@ var clock = new THREE.Clock();
 		if(this.state == ATTACKING)
 		{
 		    this.timeSinceAttack += CLOCK.getDelta();
+			this.mesh.rotation.x += .1;
 		    if(this.timeSinceAttack > 2){
 				if("undefined" != typeof(this.attackTarget)){
 					if(this.attackTarget.doDamage(this.attackPower)){
@@ -120,12 +131,14 @@ var clock = new THREE.Clock();
 					this.attackTarget = gridItem;
 					if("undefined" != typeof(this.attackTarget)){
 						this.state = ATTACKING;
+						this.timeSinceAttack = 0;
 						this.mesh.morphTargetInfluences[this.walkingcurrentKeyframe] = 0;
 					    this.mesh.morphTargetInfluences[this.walkingLastKeyframe] = 0;				
 					}
 				}	else if(distance < this.attack_distance)
 				{
 					this.state = ATTACKING;
+					this.timeSinceAttack = 0;
 					this.mesh.morphTargetInfluences[this.walkingcurrentKeyframe] = 0;
 					this.mesh.morphTargetInfluences[this.walkingLastKeyframe] = 0;
 					this.attackTarget = this.target;
@@ -142,7 +155,16 @@ var clock = new THREE.Clock();
 			if(!THE_GRID.isSpotOccupied(spot) && distance >= this.attack_distance){
 				this.state = WALKING;
 				this.walkingcurrentKeyframe = 0;
+				this.mesh.rotation.x = 0;
 			}
+		}
+		if(this.state == DYING)
+		{
+		   this.mesh.rotation.z += .05;
+		   if(this.mesh.rotation.z > Math.PI)
+		   {
+		        this.kill();
+		   }
 		}
 		this.draw();
 	

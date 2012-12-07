@@ -34,12 +34,12 @@ function Night()
 		PLAYER.mouseMovement(mouseMoveX,mouseMoveY);
 	}
 	
-	this.initLevel = function(){
-		this.level = new Level(2);
+	this.initLevel = function(curLevel){
+		this.level = new Level(curLevel);
 	}
 
-	this.switchInto = function () {
-	    this.initLevel(2);
+    this.switchInto = function (curLevel) {
+	    this.initLevel(curLevel);
 	    document.body.requestPointerLock();
 	    PLAYER.keys = [false, false, false, false];
 	    PLAYER.health = 100;
@@ -72,6 +72,10 @@ function Night()
 	        BULLETS[i].update(time);
 	    }
 	    this.level.update(time);
+		for(var t = 0; t < TOWERS.length; t++)
+		{
+		    TOWERS[t].update();
+		}
 	    this.checkProjectiles();
 	};
 	this.finished = function()

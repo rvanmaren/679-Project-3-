@@ -6,7 +6,8 @@ var RIGHT = 3;
 function Game()
 {
 	THE_GRID = new Grid(GRID_WIDTH,GRID_HEIGHT,NUM_BOXES);
-	PLAYER = new Player(new THREE.Vector3(GRID_WIDTH/2, 30, GRID_HEIGHT/2));
+	PLAYER = new Player(new THREE.Vector3(GRID_WIDTH / 2, 30, GRID_HEIGHT / 2));
+	AUDIO_MANAGER = new AudioManager();
 
 	//Build the first house near the player
 	THE_GRID.handle_command(new Build_Command('build', 'house', PLAYER.position.x + 150, PLAYER.position.z + 150));

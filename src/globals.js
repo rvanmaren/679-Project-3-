@@ -21,24 +21,26 @@ var CLOCK = new THREE.Clock();
 /*PLAYER GLOBALS*/
 var PLAYER;
 var P_ROTATE = .5;
-var P_SPEED = 4;
+var P_SPEED = 10/30;
 /*ZOMBIE GLOBALS*/
 var ZOMBIES = new Array();
+var TOWERS = new Array();
 var SEARCHGRID;
 var SEARCHGRAPH;
 
 /*BUILDER GLOBALS*/
 var GUN_MESH = 0;
-var TREE1_MESH = 1;
-var TREE2_MESH = 2;
-var HOUSE_MESH = 3;
-var FENCE_MESH = 4;
-var MONSTER_MESH = 5;
-var ZOMBIE_MESH = 6;
-var ORDER =['gun','tree1','tree2','house','fence', 'monster','zombie'];
+var TOWER_MESH = 1;
+var TREE1_MESH = 2;
+var TREE2_MESH = 3;
+var HOUSE_MESH = 4;
+var FENCE_MESH = 5;
+var MONSTER_MESH = 6;
+var ZOMBIE_MESH = 7;
+var ORDER =['gun','tower', 'tree1','tree2','house','fence', 'monster','zombie'];
 var GEOMETRIES = new Array();
 var COLLADAS = new Array();
-var NUM_GEOMETRIES  = 7;
+var NUM_GEOMETRIES  = 8;
 var NUM_COLLADAS = 0;
 function load( geometry,id) {  
 		//var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial({overdraw: true}));   
@@ -70,6 +72,7 @@ var GRID_WIDTH = 10000;
 var NUM_BOXES = 1000;
 var NUM_HOUSES = 0;
 var HOUSE_COST = 10;
+var TOWER_COST = 20;
 var HOUSE_INCOME = 4;
 /*BULLET GLOBALS*/
 var BULLET_SPEED = 30;
@@ -87,3 +90,6 @@ function dotProduct(vec1,vec2)
 	 
 	 return Math.acos((vec1.x*vec2.x+vec1.z*vec2.z)/(l1*l2))
 }
+
+/*AUDIO GLOBALS*/
+var AUDIO_MANAGER;
