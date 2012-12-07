@@ -23,7 +23,7 @@ function Player(position)
 
 	this.gun = new Gun(this.position,this.direction);
 	this.mouse_down = function(keyEvent) {
-        BULLETS.push(new Bullet(this.position, this.direction.clone()));
+        BULLETS.push(new Bullet(this.position, this.direction.clone(),0.125,BULLET_SPEED));
 	}
 
 	this.mouse_up = function(keyEvent) {

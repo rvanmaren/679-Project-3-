@@ -4,15 +4,15 @@ var DOWN = 1;
 var LEFT = 2;
 var RIGHT = 3;
 
-function Bullet(position, dir) {
+function Bullet(position, dir,radius,speed) {
     
     this.direction = dir;
-    this.speed = BULLET_SPEED;
+    this.speed = speed;
     
     var material = new THREE.MeshPhongMaterial({
         color: 0x3F1212,
     });
-	this.mesh = new THREE.Mesh( new THREE.SphereGeometry( .125,.0125,.0125), material);
+	this.mesh = new THREE.Mesh( new THREE.SphereGeometry( radius,.0125,.0125), material);
     //this.mesh = new THREE.Mesh(GEOMETRIES[GUN_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.position.x = position.x;
 	this.mesh.position.y = position.y;
@@ -38,14 +38,13 @@ function Bullet(position, dir) {
         var nextZ = this.mesh.position.z + this.direction.z *  this.speed;
 		var nextY = this.mesh.position.y + this.direction.y * this.speed;
         var temp = THE_GRID.grid_spot(nextX, nextZ);
-
-        if (!THE_GRID.isOccupied(temp[0], temp[1])) {
+        
+        if (THE_GRID.inBounds(temp[0],temp[1]) && (!THE_GRID.isOccupied(temp[0], temp[1]) || nextY > (THE_GRID.grid_spots[temp[0]][temp[1]]).height)) {
             this.mesh.position.x = nextX;
             this.mesh.position.z = nextZ;
 			this.mesh.position.y = nextY;
         } else {
-			//check for height!
-           this.destroy();
+			this.destroy();
         }
     };
 

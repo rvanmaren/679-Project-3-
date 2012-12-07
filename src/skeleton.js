@@ -6,7 +6,7 @@ function Skeleton(position){
 	
 	Zombie.apply(this,arguments); 
 	
-	this.attack_distance = 75;
+	this.attack_distance = 60;
 	this.speed = 4 / 30;
     this.rotationSpeed = .5;
 	this.health = 100;
@@ -20,7 +20,7 @@ function Skeleton(position){
 	this.mesh.scale.set(20,20,20);
 	this.boundRadius = zombie_width;
 	this.pathArray = new Array();
-
+    this.height = 40;
     //Uncomment this as well as the comment in update to see collision spheres
 //	this.collisionMesh2 = new THREE.Mesh(new THREE.SphereGeometry(this.boundRadius, 100, 100), new THREE.MeshNormalMaterial());
 //    this.collisionMesh2.position = this.mesh.position.clone();

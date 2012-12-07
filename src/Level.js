@@ -8,7 +8,7 @@ function Level(levelNum)
 	if(this.zombieSpawnLimit > this.totalZombies){
 		this.zombieSpawnLimit = this.totalZombies;
 	}
-	
+	//this.totalZombies = 1;
 	for(var i=0; i< this.totalZombies; i++)
 	{
 		if(Math.random() > .5){

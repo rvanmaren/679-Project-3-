@@ -42,7 +42,13 @@ function Grid(width, height, blocks)
 		return arry;
 	}
 	
-	
+	this.inBounds = function(x,y)
+	{
+		if(x < 0 || y < 0 || x >= this.grid_spots.length || y >= this.grid_spots[0].length)
+			return false;
+		else
+		 return true;
+	}
 	this.coordinatesFromSpot = function(xSpot,ySpot)
 	{
 		var arry = new Array();	
@@ -77,7 +83,7 @@ function Grid(width, height, blocks)
 		}
 		
 	}
-	
+
 	this.isOccupied = function(x,y)
 	{
         if(x < 0 || x >= this.grid_spots.length || y < 0 || y >= this.grid_spots[0].length){
@@ -275,6 +281,7 @@ function Grid(width, height, blocks)
 			{
 				if(this.grid_spots[spot[0]][spot[1]] != EMPTY)
 				{
+				    //HOnestly. all these pretty much do the exact same thing...
 				    if(this.grid_spots[spot[0]][spot[1]] instanceof HousePiece)
 					{
 						NUM_HOUSES--;
@@ -295,6 +302,16 @@ function Grid(width, height, blocks)
 					if(this.grid_spots[spot[0]][spot[1]].myOwner instanceof WallPiece)
 					{
 					    this.removeWall(this.grid_spots[spot[0]][spot[1]].myOwner);
+						return true;
+					}
+					if(this.grid_spots[spot[0]][spot[1]] instanceof TowerPiece)
+					{
+					    this.removeTower(this.grid_spots[spot[0]][spot[1]]);
+						return true;
+					}
+					if(this.grid_spots[spot[0]][spot[1]].myOwner instanceof TowerPiece)
+					{
+					    this.removeTower(this.grid_spots[spot[0]][spot[1]].myOwner);
 						return true;
 					}
 					return false;
@@ -471,7 +488,7 @@ function Grid(width, height, blocks)
 			{
 			    if(i!= spotClick[0] && j != spotClick[1])
 				{
-		            this.grid_spots[i][j] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[i,j]);
+		            this.grid_spots[i][j] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[i,j], 50);
 				    unit_spots.push(this.grid_spots[i][j]);
 				}
 			}
@@ -480,7 +497,7 @@ function Grid(width, height, blocks)
 		{
 		    for(var j = bottomSpotY+7; j < bottomSpotY+8+4; j++)
 			{
-		        this.grid_spots[i][j] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[i,j]);
+		        this.grid_spots[i][j] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[i,j], 50);
 				unit_spots.push(this.grid_spots[i][j]);
 			}
 		}
@@ -497,6 +514,17 @@ function Grid(width, height, blocks)
 			this.grid_spots[spotClick[0]][spotClick[1]] = new Tree1Piece(new THREE.Vector3(spotClick[0]*width/blocks+width/blocks/2,0,spotClick[1]*height/blocks+height/blocks/2),[spotClick[0],spotClick[1]]);
 			this.grid_spots[spotClick[0]][spotClick[1]].mesh.rotation.y = Math.PI/2;
 			return true;
+	}
+	this.removeTower = function (towerPiece)
+	{
+	    SCENE.remove(towerPiece.mesh);
+		var units = towerPiece.units;
+		this.grid_spots[towerPiece.grid_spot[0]][towerPiece.grid_spot[1]] = EMPTY;
+		for(c = 0; c < units.length; c++)
+		{
+		    var pos = this.grid_spot(units[c].position.x,units[c].position.z);
+		    this.grid_spots[pos[0]][pos[1]] = EMPTY;
+		}
 	}
 	this.buildTower = function ( spotClick)
 	{
@@ -526,24 +554,26 @@ function Grid(width, height, blocks)
 		{
 		    if(LowX+x != spotClick[0])
 			{
-				this.grid_spots[LowX+x][spotClick[1]] =  new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[LowX+x,spotClick[1]]);
+				this.grid_spots[LowX+x][spotClick[1]] =  new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[LowX+x,spotClick[1]],75);
 				unit_spots.push(this.grid_spots[LowX+x][spotClick[1]]);
 			}
 			if(LowY+x != spotClick[1])
 			{
-				this.grid_spots[spotClick[0]][LowY+x] =  new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0],LowY+x]);
+				this.grid_spots[spotClick[0]][LowY+x] =  new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0],LowY+x],75);
 				unit_spots.push(this.grid_spots[spotClick[0]][LowY+x]);
 			}
 		}
-		this.grid_spots[spotClick[0]+1][spotClick[1]+1] =  new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]+1,spotClick[1]+1]);
-		this.grid_spots[spotClick[0]+1][spotClick[1]-1] =  new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]+1,spotClick[1]-1]);
-		this.grid_spots[spotClick[0]-1][spotClick[1]-1] =  new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]-1,spotClick[1]-1]);
-		this.grid_spots[spotClick[0]-1][spotClick[1]+1] =  new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]-1,spotClick[1]+1]);
+		this.grid_spots[spotClick[0]+1][spotClick[1]+1] =  new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]+1,spotClick[1]+1],75);
+		this.grid_spots[spotClick[0]+1][spotClick[1]-1] =  new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]+1,spotClick[1]-1],75);
+		this.grid_spots[spotClick[0]-1][spotClick[1]-1] =  new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]-1,spotClick[1]-1],75);
+		this.grid_spots[spotClick[0]-1][spotClick[1]+1] =  new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]-1,spotClick[1]+1],75);
 		unit_spots.push(this.grid_spots[spotClick[0]+1][spotClick[1]+1])
 		unit_spots.push(this.grid_spots[spotClick[0]+1][spotClick[1]-1])
 		unit_spots.push(this.grid_spots[spotClick[0]-1][spotClick[1]-1])
 		unit_spots.push(this.grid_spots[spotClick[0]-1][spotClick[1]+1])
 		this.grid_spots[spotClick[0]][spotClick[1]].units = unit_spots;
+		
+		TOWERS.push(this.grid_spots[spotClick[0]][spotClick[1]]);
 		return true;
 	}
 	this.buildTree2 = function ( spotClick)
@@ -570,10 +600,10 @@ function Grid(width, height, blocks)
 			this.grid_spots[spotClick[0]][spotClick[1]] = new WallPiece(new THREE.Vector3(spotClick[0]*width/blocks+width/blocks/2,0,spotClick[1]*height/blocks+height/blocks/2),[spotClick[0],spotClick[1]]);
 			this.grid_spots[spotClick[0]][spotClick[1]].mesh.rotation.y = Math.PI/2;
 			var units = new Array();
-			units.push(this.grid_spots[spotClick[0]][spotClick[1]-1] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0],spotClick[1]-1]));
-			units.push(this.grid_spots[spotClick[0]][spotClick[1]+1] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0],spotClick[1]+1]));
-			units.push(this.grid_spots[spotClick[0]][spotClick[1]-2] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0],spotClick[1]-2]));
-			units.push(this.grid_spots[spotClick[0]][spotClick[1]+2] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0],spotClick[1]+2]));
+			units.push(this.grid_spots[spotClick[0]][spotClick[1]-1] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0],spotClick[1]-1],0));
+			units.push(this.grid_spots[spotClick[0]][spotClick[1]+1] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0],spotClick[1]+1],0));
+			units.push(this.grid_spots[spotClick[0]][spotClick[1]-2] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0],spotClick[1]-2],0));
+			units.push(this.grid_spots[spotClick[0]][spotClick[1]+2] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0],spotClick[1]+2],0));
 			this.grid_spots[spotClick[0]][spotClick[1]].units = units;
 			return true;
 		}
@@ -589,10 +619,10 @@ function Grid(width, height, blocks)
 			this.grid_spots[spotClick[0]][spotClick[1]] = new WallPiece(new THREE.Vector3(spotClick[0]*width/blocks+width/blocks/2,0,spotClick[1]*height/blocks+height/blocks/2),[spotClick[0],spotClick[1]]);
 			//Set up units
 			var units = new Array();
-			units.push(this.grid_spots[spotClick[0]-1][spotClick[1]] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]-1,spotClick[1]]));
-			units.push(this.grid_spots[spotClick[0]+1][spotClick[1]] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]+1,spotClick[1]]));
-			units.push(this.grid_spots[spotClick[0]-2][spotClick[1]] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]-2,spotClick[1]]));
-			units.push(this.grid_spots[spotClick[0]+2][spotClick[1]] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]+2,spotClick[1]]));
+			units.push(this.grid_spots[spotClick[0]-1][spotClick[1]] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]-1,spotClick[1]],0));
+			units.push(this.grid_spots[spotClick[0]+1][spotClick[1]] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]+1,spotClick[1]],0));
+			units.push(this.grid_spots[spotClick[0]-2][spotClick[1]] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]-2,spotClick[1]],0));
+			units.push(this.grid_spots[spotClick[0]+2][spotClick[1]] = new HousePieceUnit(this.grid_spots[spotClick[0]][spotClick[1]],[spotClick[0]+2,spotClick[1]],0));
 			this.grid_spots[spotClick[0]][spotClick[1]].units = units
 			return true;
 		}

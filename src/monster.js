@@ -4,7 +4,7 @@ var zombie_width = 15;
 function Monster(position){
 
 	Zombie.apply(this,arguments); 
-	
+	this.height = 20;
 	this.attack_distance = 200;
 	this.speed = 8 / 30;
     this.rotationSpeed = .5;
@@ -44,6 +44,15 @@ var clock = new THREE.Clock();
 
 		
 	this.update = function(time) {
+		if (this.health <= 0 && this.state != DYING) {
+			//clean up of meshes
+			if(this.state == WALKING)
+			{
+				this.mesh.morphTargetInfluences[this.walkingcurrentKeyframe] = 0;
+				this.mesh.morphTargetInfluences[this.walkingLastKeyframe] = 0;
+			}
+            this.state = DYING;
+        }
 	        //Uncomment this to see the collision sphere
 //	    var temp = this.position.clone();
 //	    temp.y -= 15;

@@ -72,6 +72,10 @@ function Night()
 	        BULLETS[i].update(time);
 	    }
 	    this.level.update(time);
+		for(var t = 0; t < TOWERS.length; t++)
+		{
+		    TOWERS[t].update();
+		}
 	    this.checkProjectiles();
 	};
 	this.finished = function()

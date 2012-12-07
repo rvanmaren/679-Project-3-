@@ -72,7 +72,7 @@ function Day(position)
 			this.position.y = Math.min(this.position.y+zoomSpeed, 3000);
 			//this.speed+=2;
 		}
-		
+		console.log(this.position.y);
 		this.speed = Math.sqrt(this.position.y);
 	}
 	this.key_down = function (keyEvent) {
