@@ -21,7 +21,7 @@ var CLOCK = new THREE.Clock();
 /*PLAYER GLOBALS*/
 var PLAYER;
 var P_ROTATE = .5;
-var P_SPEED = 4;
+var P_SPEED = 10/30;
 /*ZOMBIE GLOBALS*/
 var ZOMBIES = new Array();
 var TOWERS = new Array();

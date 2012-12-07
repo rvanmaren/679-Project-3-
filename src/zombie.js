@@ -48,9 +48,9 @@ function Zombie(position)
 	
 	// I would like to change damage to weapon that way we can have different zombies be vulnerable to 
 	// different types of weapons
-	this.dealDamageFromEntity = function(entity, damage){
+	this.doDamageFromEntity = function(damage){
 		this.health -= damage;
-		this.target = entity;
+		
 	};
 	
 	this.spawn = function(){

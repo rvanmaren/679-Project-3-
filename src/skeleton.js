@@ -7,12 +7,12 @@ function Skeleton(position){
 	Zombie.apply(this,arguments); 
 	
 	this.attack_distance = 60;
-	this.speed = 4 / 30;
+	this.speed = (4 + Math.random())/ 30;
     this.rotationSpeed = .5;
 	this.health = 100;
 	this.maxHealth = this.health;
 	this.target = PLAYER;
-
+	this.attackPower = 10;
   	this.mesh = new THREE.Mesh(GEOMETRIES[ZOMBIE_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.position.x = position.x;
 	this.mesh.position.y = -50;
