@@ -19,7 +19,7 @@ function Monster(position){
 	this.mesh.position.z = position.z;
 	this.mesh.scale.set(.02, .02, .02);
 	this.boundRadius = zombie_width;
-
+    this.rotateDead = 0;
     //Uncomment this as well as the comment in update to see the collision spheres
 //	this.collisionMesh = new THREE.Mesh(new THREE.SphereGeometry(this.boundRadius, 100, 100), new THREE.MeshNormalMaterial());
 //    SCENE.add(this.collisionMesh);
@@ -155,7 +155,11 @@ var clock = new THREE.Clock();
 		}
 		if(this.state == DYING)
 		{
-		   this.kill();
+		   this.mesh.rotation.z += .05;
+		   if(this.mesh.rotation.z > Math.PI)
+		   {
+		        this.kill();
+		   }
 		}
 		this.draw();
 	

@@ -525,6 +525,7 @@ function Grid(width, height, blocks)
 		    var pos = this.grid_spot(units[c].position.x,units[c].position.z);
 		    this.grid_spots[pos[0]][pos[1]] = EMPTY;
 		}
+		TOWERS.splice(TOWERS.indexOf(towerPiece),1);
 	}
 	this.buildTower = function ( spotClick)
 	{
