@@ -77,6 +77,7 @@ var HOUSE_INCOME = 4;
 /*BULLET GLOBALS*/
 var BULLET_SPEED = 30;
 var BULLETS = new Array();
+var PARTICLE_MANAGER = new ParticleController();
 
 function length(vec)
 {

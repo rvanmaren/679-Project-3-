@@ -9,6 +9,7 @@ function Monster(position){
 	this.speed = (8 + Math.random()) / 30;
     this.rotationSpeed = .5;
 	this.health = 80;
+	this.bloodColor = 0x8A0707;
 	this.attackPower = 5;
 	this.maxHealth = this.health;
 	this.target = PLAYER;
