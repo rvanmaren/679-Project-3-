@@ -8,6 +8,7 @@ function Zombie(position)
 	this.attack_distance = 0;
 	this.position = position;
 	this.speed = 0;
+	this.bloodColor;
     this.rotationSpeed = .5;
 	this.health = 100;
 	this.maxHealth = 100;

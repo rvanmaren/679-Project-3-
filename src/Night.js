@@ -77,6 +77,7 @@ function Night()
 		    TOWERS[t].update();
 		}
 	    this.checkProjectiles();
+		PARTICLE_MANAGER.update(time);
 	};
 	this.finished = function()
 	{
@@ -95,12 +96,15 @@ function Night()
                 if (!ZOMBIES[zombieIndex].dead && ZOMBIES[zombieIndex].checkCollision(curBullet)) {
                     hit = true;
                     ZOMBIES[zombieIndex].takeDamage(curBullet.damage);
+					PARTICLE_MANAGER.createParticles(curBullet.mesh.position.clone(),ZOMBIES[zombieIndex].bloodColor);
+               
                 }
                 //The level will handle zombie destruction
             }
 
             //Similar to zombies, if a bullet is destroyed and removed from BULLETS, we need to adjust the index
             if (hit) {
+		//		PARTICLE_MANAGER.createParticles(curBullet.mesh.position.clone());
                 curBullet.destroy();
                 if (BULLETS.length != 0 && bulletIndex < BULLETS.length) {
                     bulletIndex--;
