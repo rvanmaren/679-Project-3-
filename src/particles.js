@@ -21,6 +21,12 @@ function ParticleController() {
 		}
 	}
 	
+	this.destroyAll = function(){
+		for(var i = 0; i < this.particles.length; i++){
+			this.particles[i].destroy();
+		}
+		this.particles.splice(0,this.particles.length);
+	}
     
 }
 

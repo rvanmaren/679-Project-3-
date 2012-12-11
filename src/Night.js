@@ -52,6 +52,7 @@ function Night()
 	}
 
 	this.switchOut = function(){
+		PARTICLE_MANAGER.destroyAll();1
 		this.level.exitLevel();
 		document.getElementById("crossHair").style.visibility= 'hidden';
 		document.getElementById("night-info").style.visibility= 'hidden';
