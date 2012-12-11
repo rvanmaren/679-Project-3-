@@ -1,6 +1,6 @@
 particleMeshes = new Array();
-for(var i = 0; i < 1000; i++){
-	this.particleMeshes.push( new THREE.Mesh(new THREE.SphereGeometry(.5, 10, 10), new THREE.MeshLambertMaterial()));
+for(var i = 0; i < 1500; i++){
+	this.particleMeshes.push( new THREE.Mesh(new THREE.SphereGeometry(.26, 10, 10), new THREE.MeshLambertMaterial()));
 }
 
 function ParticleController() {
@@ -30,7 +30,7 @@ function Particle(position,bloodColor){
 	if(particleMeshes.length > 0){
 		this.mesh = particleMeshes.pop();
 	} else {
-		this.mesh = new THREE.Mesh(new THREE.SphereGeometry(.5, 10, 10), new THREE.MeshLambertMaterial());
+		this.mesh = new THREE.Mesh(new THREE.SphereGeometry(.26, 10, 10), new THREE.MeshLambertMaterial());
 	}
 	this.mesh.material.color.setHex(bloodColor);
 	this.mesh.position = position;
