@@ -11,6 +11,29 @@ function Game()
 
 	//Build the first house near the player
 	THE_GRID.handle_command(new Build_Command('build', 'house', PLAYER.position.x + 150, PLAYER.position.z + 150));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 50, PLAYER.position.z + 50));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 50, PLAYER.position.z + 100));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 50, PLAYER.position.z + 150));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 50, PLAYER.position.z + 200));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 50, PLAYER.position.z + 250));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 50, PLAYER.position.z + 300));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 50, PLAYER.position.z + 350));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 50, PLAYER.position.z + 400));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 400, PLAYER.position.z + 50));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 400, PLAYER.position.z + 100));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 400, PLAYER.position.z + 150));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 400, PLAYER.position.z + 200));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 400, PLAYER.position.z + 250));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 400, PLAYER.position.z + 300));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 400, PLAYER.position.z + 350));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 400, PLAYER.position.z + 400));
+
+//	THE_GRID.wall_build_type = "horizontal";
+//	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 400, PLAYER.position.z + 400));
+//	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 100, PLAYER.position.z + 50));
+//	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 150, PLAYER.position.z + 50));
+	
+	
 	//Build some Scenery 
 	for(var i = 0; i<250;i++)
 	{
