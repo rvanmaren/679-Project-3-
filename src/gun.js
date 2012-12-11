@@ -3,7 +3,7 @@ function Gun() {
     
     this.speed = BULLET_SPEED;
     this.automatic = false;
-
+	this.kickback = 0.01;
 
     this.fire = function (position, dir) {
         BULLETS.push(new Bullet(position, dir.clone(), 0.125,this.speed, 100000));
@@ -15,8 +15,9 @@ function Gun() {
 Shotgun.prototype = new Gun();
 
 function Shotgun() {
-    Gun.apply(this);
-
+	Gun.apply(this);
+	this.kickback = 0.05;
+    
     this.numShots = 9;
     this.delay = 900;
     this.lastFire = -1000;
@@ -42,7 +43,7 @@ function Shotgun() {
 
                 BULLETS.push(new Bullet(position, tempDir.clone(), 0.125, this.speed, this.range));
             }
-            AUDIO_MANAGER.playShotgunShot();
+           // AUDIO_MANAGER.playShotgunShot();
             this.lastFire = curTime;
         }
     }
