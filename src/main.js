@@ -79,6 +79,7 @@ add_text("Build Units:", 'bUnits', 20, 100, 'hidden');
 var havePointerLock;
 document.body.addEventListener("mousemove", this.moveCallback, false);
 window.addEventListener("mousedown", this.mouse_down, false);
+window.addEventListener("mousewheel", this.mouse_wheel, false)
 window.addEventListener("mouseup", this.mouse_up, false);
 havePointerLock = 'pointerLockElement' in document;
 // Hook pointer lock state change events
@@ -184,6 +185,13 @@ function mouse_up(event)
 	    GAME.mouse_up();
 	}
 }
+
+function mouse_wheel(event) {
+    if (GAME_STARTED) {
+        GAME.mouse_wheel(event);
+    }
+}
+
 document.body.requestPointerLock = document.body.requestPointerLock ||
 	document.body.mozRequestPointerLock ||
 	document.body.webkitRequestPointerLock;

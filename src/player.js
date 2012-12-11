@@ -23,17 +23,26 @@ function Player(position)
     this.cameraShakeIntesity = 0;
     this.cameraShakeDirection = 0;
 
-	this.gun = new Shotgun();
 
 	this.guns = new Array();
+	this.guns.push(new Gun());
+	this.guns.push(new Shotgun());
+	this.currentGun = 0;
 
 
 	this.mouse_down = function (keyEvent) {
-	   this.gun.fire(this.position.clone(), this.direction.clone());
+	   this.guns[this.currentGun].fire(this.position.clone(), this.direction.clone());
 	}
 
 	this.mouse_up = function(keyEvent) {
 
+	}
+
+	this.mouse_wheel = function (event) {
+	    if (event.wheelDelta > 0) {
+	        this.currentGun++;
+	        this.currentGun %= this.guns.length;
+	    }
 	}
 	
 	this.key_down = function(keyEvent)

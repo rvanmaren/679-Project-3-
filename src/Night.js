@@ -32,7 +32,11 @@ function Night()
 	this.mouseMovement = function(mouseMoveX, mouseMoveY)
 	{
 		PLAYER.mouseMovement(mouseMoveX,mouseMoveY);
-	}
+    }
+
+    this.mouse_wheel = function (event) {
+        PLAYER.mouse_wheel(event);
+    }
 	
 	this.initLevel = function(curLevel){
 		this.level = new Level(curLevel);

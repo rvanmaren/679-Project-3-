@@ -75,7 +75,12 @@ function Game()
 	this.mouseMovement = function(deltaX, deltaY)
 	{
 		this.gameState.mouseMovement(deltaX,deltaY);
-	}
+    }
+
+    this.mouse_wheel = function (event) {
+        this.gameState.mouse_wheel(event);
+    }
+
 	this.mouse_up = function()
 	{
 		this.gameState.mouse_up();

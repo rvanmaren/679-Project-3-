@@ -21,7 +21,7 @@ function Shotgun() {
     this.delay = 900;
     this.lastFire = -1000;
 
-    this.range = 2000;
+    this.range = 4500;
 
     this.fire = function (position, dir) {
         var curTime = new Date().getTime();
