@@ -49,8 +49,9 @@ function Bullet(position, dir,radius,speed, maxDistance) {
 			this.destroy();
         }
 
-        this.distanceTraveled = speed * time;
+        this.distanceTraveled += speed * time;
         if (this.distanceTraveled > this.maxDistance) {
+        console.log("Max distance reached");
             this.destroy();
         }
     };

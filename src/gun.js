@@ -6,7 +6,7 @@ function Gun() {
 
 
     this.fire = function (position, dir) {
-        BULLETS.push(new Bullet(position, dir.clone(), 0.125,this.speed, 10000));
+        BULLETS.push(new Bullet(position, dir.clone(), 0.125,this.speed, 100000));
         AUDIO_MANAGER.playGunshot();
     }
 
@@ -21,10 +21,12 @@ function Shotgun() {
     this.delay = 900;
     this.lastFire = -1000;
 
+    this.range = 2000;
+
     this.fire = function (position, dir) {
         var curTime = new Date().getTime();
         if (curTime - this.lastFire > this.delay) {
-            BULLETS.push(new Bullet(position, dir.clone(), 0.125, this.speed, 300));
+            BULLETS.push(new Bullet(position, dir.clone(), 0.125, this.speed, this.range));
             for (var i = 1; i < this.numShots; i++) {
                 //                var tempDir = dir.clone();
                 //                var forward = dir.clone();
@@ -38,8 +40,7 @@ function Shotgun() {
                 tempDir.y += ((Math.random() - .5 ) / 20.0);
                 tempDir.z += ((Math.random() - .5 ) / 20.0);
 
-                BULLETS.push(new Bullet(position, tempDir.clone(), 0.125, this.speed, 300));
-                console.log(tempDir);
+                BULLETS.push(new Bullet(position, tempDir.clone(), 0.125, this.speed, this.range));
             }
             AUDIO_MANAGER.playShotgunShot();
             this.lastFire = curTime;
