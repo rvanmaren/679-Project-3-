@@ -1,50 +1,49 @@
 
-function Gun(position, direction)
-{
-	this.direction = direction;
-	this.mesh = new THREE.Mesh(GEOMETRIES[GUN_MESH], new THREE.MeshFaceMaterial({overdraw: true}));  
-	this.mesh.scale.set(2,2,2);
-	this.mesh.position.x= position.x;
-	this.mesh.position.y = 18;
-	this.mesh.position.z= position.z;
+function Gun() {
+    
+    this.speed = BULLET_SPEED;
+    this.automatic = false;
 
-	this.mesh.rotation.x = Math.PI/2;
-	this.mesh.matrix.setRotationFromEuler(this.mesh.rotation);
-	this.mesh.rotation.z = Math.PI/2;
-	this.mesh.matrix.setRotationFromEuler(this.mesh.rotation);
-	//rotateAroundWorldAxis(this.mesh, new THREE.Vector3(1,0,0),Math.PI/2);
-	//rotateAroundObjectAxis(this.mesh, new THREE.Vector3(0,0,1),Math.PI/2);
-	//SCENE.add( this.mesh );
 
-	this.upRotate = 0;
-	this.sideRotate = 0;
-	this.update = function(pos, direction)
-	{
-		//rotateAroundObjectAxis(this.mesh, new THREE.Vector3(0,1,0),Math.PI/2);
-		//this.mesh.rotation.x = Math.PI/2;
-		//this.mesh.rotation.y = this.upRotate;
-		//this.mesh.rotation.z = this.sideRotate;
-		//this.mesh.rotation.z = this.sideRotate;
-		this.mesh.position.x = pos.x + this.direction.x*4;
-		//this.mesh.position.y = 18 + this.direction.y*10;
-		this.mesh.position.z = pos.z + this.direction.z*4;
-	}
-	this.rotateSide = function(ang)
-	{
-		this.mesh.rotation.z += ang;
-		this.mesh.matrix.setRotationFromEuler(this.mesh.rotation);
-		//this.mesh.updateMatrixWorld(true);
-	}
-	this.currentAngle = 0;
-	this.rotateUp = function(ang)
-	{
-		//rotateAroundObjectAxis(this.mesh, new THREE.Vector3(0,1,0),ang);
-		//get perpendicular axis to direction
-		//var directionPerp = new THREE.Vector3(this.direction.x*Math.cos(Math.PI/2)- this.direction.y*Math.sin(Math.PI/2),
-		//									0, this.direction.x*Math.sin(Math.PI/2)+this.direction.y*Math.cos(Math.PI/2));
-		//var angX = this.mesh.rotation.z/(Math.PI/2);
-		//var angY = (Math.PI/2-this.mesh.rotation.z)/(Math.PI/2);
-		//this.mesh.rotation.y -= angY*ang
-		this.mesh.rotation.x -= ang;
-	}
+    this.fire = function (position, dir) {
+        BULLETS.push(new Bullet(position, dir.clone(), 0.125,this.speed, 10000));
+        AUDIO_MANAGER.playGunshot();
+    }
+
+}
+
+Shotgun.prototype = new Gun();
+
+function Shotgun() {
+    Gun.apply(this);
+
+    this.numShots = 9;
+    this.delay = 900;
+    this.lastFire = -1000;
+
+    this.fire = function (position, dir) {
+        var curTime = new Date().getTime();
+        if (curTime - this.lastFire > this.delay) {
+            BULLETS.push(new Bullet(position, dir.clone(), 0.125, this.speed, 300));
+            for (var i = 1; i < this.numShots; i++) {
+                //                var tempDir = dir.clone();
+                //                var forward = dir.clone();
+                //                var randFactor = new THREE.Vector3(Math.random(), Math.random(), Math.random());
+                //                tempDir = tempDir.dot(randFactor);
+                //                tempDir = -5 * tempDir;
+                //                tempDir = forward.multiplyScalar(tempDir);
+                //                tempDir = randFactor.addSelf(tempDir);
+                var tempDir = dir.clone();
+                tempDir.x += ((Math.random() - .5 ) / 20.0);
+                tempDir.y += ((Math.random() - .5 ) / 20.0);
+                tempDir.z += ((Math.random() - .5 ) / 20.0);
+
+                BULLETS.push(new Bullet(position, tempDir.clone(), 0.125, this.speed, 300));
+                console.log(tempDir);
+            }
+            AUDIO_MANAGER.playShotgunShot();
+            this.lastFire = curTime;
+        }
+    }
+
 }

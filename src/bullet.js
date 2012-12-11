@@ -4,10 +4,12 @@ var DOWN = 1;
 var LEFT = 2;
 var RIGHT = 3;
 
-function Bullet(position, dir,radius,speed) {
+function Bullet(position, dir,radius,speed, maxDistance) {
     
     this.direction = dir;
     this.speed = speed;
+    this.maxDistance = maxDistance;
+    this.distanceTraveled = 0;
     
     var material = new THREE.MeshPhongMaterial({
         color: 0x3F1212,
@@ -45,6 +47,11 @@ function Bullet(position, dir,radius,speed) {
 			this.mesh.position.y = nextY;
         } else {
 			this.destroy();
+        }
+
+        this.distanceTraveled = speed * time;
+        if (this.distanceTraveled > this.maxDistance) {
+            this.destroy();
         }
     };
 

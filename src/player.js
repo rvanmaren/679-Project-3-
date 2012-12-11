@@ -23,11 +23,13 @@ function Player(position)
     this.cameraShakeIntesity = 0;
     this.cameraShakeDirection = 0;
 
-	this.gun = new Gun(this.position,this.direction);
+	this.gun = new Shotgun();
+
+	this.guns = new Array();
+
 
 	this.mouse_down = function (keyEvent) {
-	    BULLETS.push(new Bullet(this.position, this.direction.clone(), 0.125, BULLET_SPEED));
-	    AUDIO_MANAGER.playGunshot();
+	   this.gun.fire(this.position.clone(), this.direction.clone());
 	}
 
 	this.mouse_up = function(keyEvent) {
@@ -71,14 +73,12 @@ function Player(position)
 	this.mouseMovement = function (mouseMoveX, mouseMoveY) {
 	    //Update direction based on mouse movement (rotate and point up)
 	    var ang = Math.sin(mouseMoveX / WINDOW_WIDTH);
-	    this.gun.rotateSide(ang);
 	    var xTheta = this.direction.x * Math.cos(ang) - this.direction.z * Math.sin(ang);
 	    var zTheta = this.direction.x * Math.sin(ang) + this.direction.z * Math.cos(ang);
 	    this.direction.x = xTheta;
 	    this.direction.z = zTheta;
 	    //Upwards looking
 	    ang = -1 * Math.sin(mouseMoveY / WINDOW_HEIGHT);
-	    this.gun.rotateUp(ang);
 	    var yTheta = 1 * Math.sin(ang) + this.direction.y * Math.cos(ang);
 	    this.direction.y = yTheta;
 	    this.direction = this.direction.normalize();
@@ -120,7 +120,6 @@ function Player(position)
 	        this.position.x = nextX;
 	        this.position.z = nextY;
 	    }
-	    this.gun.update(this.position, this.direction);
 	    LIGHT.position.set(this.position.x, this.position.y + 30, this.position.z);
 	    CAMERA.position.set(this.position.x, this.position.y, this.position.z);
 	    //this.camera.lookAt(this.position.x + dir.x, this.position.y + dir.y, this.position.z + dir.x);
