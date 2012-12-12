@@ -80,6 +80,16 @@ function Game()
 	    document.getElementById("level").innerHTML = this.currentLevel;
 	    document.getElementById("health").innerHTML = PLAYER.health;
 	    document.getElementById("score").innerHTML = PLAYER.score;
+	    document.getElementById("bullets").innerHTML = "Bullets: " + PLAYER.guns[PLAYER.currentGun].bullets;
+
+	    for (var i = 0; i < 3; i++) {
+	        if (i == PLAYER.currentGun) {
+	            document.getElementById("gun" + i).style.backgroundColor = "#FFF5C3";
+            } else {
+                document.getElementById("gun" + i).style.backgroundColor = "#7C786A";
+            }
+	    }
+	    
 
 	    if (this.gameState.finished()) {
 	        if (this.gameState == this.day) {

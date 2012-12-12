@@ -49,6 +49,7 @@ function Night()
 	    PLAYER.health = 100;
 	    document.getElementById("crossHair").style.visibility = '';
 	    document.getElementById("night-info").style.visibility = '';
+	    document.getElementById("gun-div").style.visibility = '';
 	    //document.getElementById("health").style.visibility= '';
 	    //document.getElementById("bullets").style.visibility= '';
 	    this.waitingToFinish = false;
@@ -59,7 +60,8 @@ function Night()
 		PARTICLE_MANAGER.destroyAll();1
 		this.level.exitLevel();
 		document.getElementById("crossHair").style.visibility= 'hidden';
-		document.getElementById("night-info").style.visibility= 'hidden';
+		document.getElementById("night-info").style.visibility = 'hidden';
+		document.getElementById("gun-div").style.visibility = 'hidden';
 		//document.getElementById("health").style.visibility= 'hidden';
 		//document.getElementById("bullets").style.visibility = 'hidden';
 		document.getElementById("nightFinished").style.visibility = 'hidden';

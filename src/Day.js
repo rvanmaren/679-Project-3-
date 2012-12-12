@@ -229,7 +229,10 @@ function Day(position)
 	        return;
 	    }
 		this.building=false;
-	}
+    }
+
+    this.mouse_wheel = function () { }
+
 	this.update = function (time) {
 
 	    if (this.awaitConfirmation) {

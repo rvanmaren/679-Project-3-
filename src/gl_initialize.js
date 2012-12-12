@@ -26,7 +26,7 @@ function webGL_intialize()
 	document.getElementById("night-info").style.marginLeft = "" + ((WINDOW_WIDTH / -2) + 10) + "px";
 
 	document.getElementById("build-images").style.marginLeft = "" + ((WINDOW_WIDTH / -2) + 25) + "px";
-	document.getElementById("build-images").style.marginTop = "" + ((WINDOW_WIDTH / -2) + 500) + "px";
+	document.getElementById("build-images").style.marginTop = "" + ((WINDOW_HEIGHT / -2) + 125) + "px";
 
 	document.getElementById("exit-day").style.marginTop = "" + ((WINDOW_HEIGHT / 2) - (document.getElementById("exit-day").clientHeight + 10)) + "px";
 	document.getElementById("exit-day").style.marginLeft = "" + ((WINDOW_WIDTH / -2) + (document.getElementById("exit-day").clientWidth/2)) + "px";

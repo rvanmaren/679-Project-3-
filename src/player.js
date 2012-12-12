@@ -14,7 +14,7 @@ function Player(position)
     this.health = 100;
     this.dead = false;
     this.score = 0;
-
+    this.firingAutomatic = false;
     
 
     //Used for camera shake effect
@@ -27,25 +27,42 @@ function Player(position)
 	this.guns = new Array();
 	this.guns.push(new Gun());
 	this.guns.push(new Shotgun());
+	this.guns.push(new MachineGun());
 	this.currentGun = 0;
 
 
 	this.mouse_down = function (keyEvent) {
-	   this.guns[this.currentGun].fire(this.position.clone(), this.direction.clone());
-	   this.direction.y+= this.guns[this.currentGun].kickback;
-	   
-	   
+	    if (this.guns[this.currentGun].fire(this.position.clone(), this.direction.clone())) {
+	        if (!this.guns[this.currentGun].automatic) {
+	            this.direction.y += this.guns[this.currentGun].kickback;
+	        } 
+	    }
+	    if (this.guns[this.currentGun].automatic) {
+	        this.firingAutomatic = true;
+	    }
 	}
 
-	this.mouse_up = function(keyEvent) {
+	this.mouse_up = function (keyEvent) {
+	    this.firingAutomatic = false;
 
+	    if (this.guns[this.currentGun].automatic) {
+	        this.guns[this.currentGun].endFire();
+	    }
 	}
 
 	this.mouse_wheel = function (event) {
 	    if (event.wheelDelta > 0) {
 	        this.currentGun++;
-	        this.currentGun %= this.guns.length;
+	    } else {
+	        this.currentGun--;
 	    }
+
+	    this.currentGun %= this.guns.length;
+	    if (this.currentGun < 0) {
+	        this.currentGun = this.guns.length - 1;
+	    }
+	    console.log(this.currentGun);
+	    AUDIO_MANAGER.playSwitchSound();
 	}
 	
 	this.key_down = function(keyEvent)
@@ -112,6 +129,15 @@ function Player(position)
 	        this.level.update(10);
 	    }
 
+	    if (this.firingAutomatic) {
+	        if (this.guns[this.currentGun].fire(this.position.clone(), this.direction.clone())) {
+	            var randKick = new THREE.Vector3(Math.random() - .5, Math.random() - .5, Math.random() - .5);
+	            randKick.normalize();
+	            randKick.multiplyScalar(this.guns[this.currentGun].kickback);
+	            this.direction.addSelf(randKick);
+	        }
+	    }
+
 	    //Move in the direction of looking.
 	    //Compute movement based on key press
 	    var forward = this.keys[UP] ? (this.keys[DOWN] ? 0 : 1) : (this.keys[DOWN] ? -1 : 0); //1,0,-1
@@ -121,11 +147,11 @@ function Player(position)
 	    directionPerp.normalize();
 	    //Do y direction with a jump
 	    //sideways motion
-		
-		
-		
-	    var nextX = this.position.x + directionPerp.x * sideways * this.speed*time + this.direction.x * forward * this.speed*time;
-	    var nextY = this.position.z + directionPerp.z * sideways * this.speed*time + this.direction.z * forward * this.speed*time;
+
+
+
+	    var nextX = this.position.x + directionPerp.x * sideways * this.speed * time + this.direction.x * forward * this.speed * time;
+	    var nextY = this.position.z + directionPerp.z * sideways * this.speed * time + this.direction.z * forward * this.speed * time;
 	    var temp = THE_GRID.grid_spot(nextX, nextY);
 
 	    if (!THE_GRID.isOccupied(temp[0], temp[1])) {
@@ -146,7 +172,7 @@ function Player(position)
 	        //	        this.direction.z += (Math.random() - .5) * this.cameraShakeIntesity; 
 	        //            this.direction.y += (Math.random() - .5) * this.cameraShakeIntesity;
 	        if (this.cameraShakeDuration / 3 > new Date().getTime() - this.cameraShakeStart) {
-	            this.direction.x += (Math.random()*this.cameraShakeDirection) * this.cameraShakeIntesity;
+	            this.direction.x += (Math.random() * this.cameraShakeDirection) * this.cameraShakeIntesity;
 	        } else if (2 * this.cameraShakeDuration / 3 > new Date().getTime() - this.cameraShakeStart) {
 	            this.direction.y += (Math.random() * this.cameraShakeDirection) * this.cameraShakeIntesity;
 	        } else {
