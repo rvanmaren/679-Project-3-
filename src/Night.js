@@ -71,6 +71,8 @@ function Night()
 	this.update = function (time) {
 	    if (ZOMBIES.length == 0) {
 	        document.getElementById("nightFinished").style.visibility = '';
+			document.getElementById("zombies-left").innerHTML = 'Zombies Left: ' + 0;
+		
 	        this.waitingToFinish = true;
 	        return;
 	    }

@@ -8,13 +8,33 @@ function Level(levelNum)
 	if(this.zombieSpawnLimit > this.totalZombies){
 		this.zombieSpawnLimit = this.totalZombies;
 	}
+	
+	this.randomBetween = function(x,y){
+		return Math.floor(Math.random() * (y-x)) + x;
+	}
+	
 	//this.totalZombies = 1;
 	for(var i=0; i< this.totalZombies; i++)
 	{
+		var location = new THREE.Vector3(1,30,1);
+		if(Math.random() > .5){
+			location.x = this.randomBetween(3500, 4500); 
+		} else{
+			location.x = this.randomBetween(5500, 6500);
+		}
+
+		if(Math.random() > .5){
+			location.z = this.randomBetween(3500, 4500); 
+		} else{
+			location.z = this.randomBetween(5500, 6500);
+		}
+	
+	
+		
 		if(Math.random() > .25){
-			this.zombies.push(new Skeleton(new THREE.Vector3(Math.random()*GRID_WIDTH*.7, 30, Math.random()*GRID_WIDTH*.7)));
+			this.zombies.push(new Skeleton(location));
 		} else {
-			this.zombies.push(new Monster(new THREE.Vector3(Math.random()*GRID_WIDTH*.7, 30, Math.random()*GRID_WIDTH*.7)));
+			this.zombies.push(new Monster(location));
 		}
 	}
 	while(this.zombies.length > 0 && ZOMBIES.length <= this.zombieSpawnLimit){
