@@ -247,7 +247,7 @@ function Zombie(position)
     this.takeDamage = function(damage){
         this.health -= damage;
 		this.anger += damage / this.maxHealth;
-		this.findPointOfInterest();
+		//this.findPointOfInterest();
     }
     var clock = new THREE.Clock();
 	/*ANIMATION VARIABLES*/

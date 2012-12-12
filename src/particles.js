@@ -1,12 +1,12 @@
 particleMeshes = new Array();
 for(var i = 0; i < 1500; i++){
-	this.particleMeshes.push( new THREE.Mesh(new THREE.SphereGeometry(.26, 10, 10), new THREE.MeshLambertMaterial()));
+	particleMeshes.push( new THREE.Mesh(new THREE.SphereGeometry(.26, 2, 2), new THREE.MeshLambertMaterial()));
 }
 
 function ParticleController() {
     this.particles = new Array();
 	this.createParticles = function(position,bloodColor){
-		for(var i = 0; i < 100; i++){
+		for(var i = 0; i < 50; i++){
 			var partPosition = new THREE.Vector3(position.x + Math.random()*2,position.y + Math.random()*2,position.z + Math.random()*2);
 			this.particles.push(new Particle(partPosition,bloodColor));
 		}
@@ -36,7 +36,8 @@ function Particle(position,bloodColor){
 	if(particleMeshes.length > 0){
 		this.mesh = particleMeshes.pop();
 	} else {
-		this.mesh = new THREE.Mesh(new THREE.SphereGeometry(.26, 10, 10), new THREE.MeshLambertMaterial());
+		PARTICLE_MANAGER.particles.pop().destroy();
+		this.mesh = particleMeshes.pop();
 	}
 	this.mesh.material.color.setHex(bloodColor);
 	this.mesh.position = position;

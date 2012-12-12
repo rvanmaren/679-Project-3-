@@ -95,13 +95,15 @@ function Night()
         var hit = false;  //If the current bullet hits something set this flag so we can destroy the bullet
 
         for (var bulletIndex = 0; bulletIndex < BULLETS.length; bulletIndex++) {
+			var zombieBlood;
             curBullet = BULLETS[bulletIndex];
             for (var zombieIndex = 0; zombieIndex < ZOMBIES.length; zombieIndex++) {
 
                 if (!ZOMBIES[zombieIndex].dead && ZOMBIES[zombieIndex].checkCollision(curBullet)) {
                     hit = true;
+					zombieBlood = ZOMBIES[zombieIndex].bloodColor;
                     ZOMBIES[zombieIndex].takeDamage(curBullet.damage);
-					PARTICLE_MANAGER.createParticles(curBullet.mesh.position.clone(),ZOMBIES[zombieIndex].bloodColor);
+					//PARTICLE_MANAGER.createParticles(curBullet.mesh.position.clone(),ZOMBIES[zombieIndex].bloodColor);
                
                 }
                 //The level will handle zombie destruction
@@ -109,7 +111,8 @@ function Night()
 
             //Similar to zombies, if a bullet is destroyed and removed from BULLETS, we need to adjust the index
             if (hit) {
-		//		PARTICLE_MANAGER.createParticles(curBullet.mesh.position.clone());
+				PARTICLE_MANAGER.createParticles(curBullet.mesh.position.clone(),zombieBlood);
+               
                 curBullet.destroy();
                 if (BULLETS.length != 0 && bulletIndex < BULLETS.length) {
                     bulletIndex--;

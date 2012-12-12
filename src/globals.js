@@ -21,7 +21,7 @@ var CLOCK = new THREE.Clock();
 /*PLAYER GLOBALS*/
 var PLAYER;
 var P_ROTATE = .5;
-var P_SPEED = 10/30;
+var P_SPEED = 60/30;
 /*ZOMBIE GLOBALS*/
 var ZOMBIES = new Array();
 var TOWERS = new Array();
@@ -37,7 +37,8 @@ var HOUSE_MESH = 4;
 var FENCE_MESH = 5;
 var MONSTER_MESH = 6;
 var ZOMBIE_MESH = 7;
-var ORDER =['gun','tower', 'tree1','tree2','house','fence', 'monster','zombie'];
+var LIGHTNING_TEXTURE;
+var ORDER =['gun','tower', 'tree1','tree2','house','fence','monster','zombie'];
 var GEOMETRIES = new Array();
 var COLLADAS = new Array();
 var NUM_GEOMETRIES  = 8;

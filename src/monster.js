@@ -22,12 +22,24 @@ function Monster(position){
 	this.mesh.scale.set(.02, .02, .02);
 	this.boundRadius = zombie_width;
     this.rotateDead = 0;
+	SCENE.add(this.mesh);
     //Uncomment this as well as the comment in update to see the collision spheres
 //	this.collisionMesh = new THREE.Mesh(new THREE.SphereGeometry(this.boundRadius, 100, 100), new THREE.MeshNormalMaterial());
 //    SCENE.add(this.collisionMesh);
 
 	this.pathArray = new Array();
-	SCENE.add(this.mesh);
+	
+	//Attempt to add a weird bolt
+	//new THREE.CylinderGeometry(radiusTop, radiusBottom, segmentsRadius, segmentsHeight, openEnded)
+	var matBolt = new THREE.MeshBasicMaterial({
+        map : LIGHTNING_TEXTURE
+    });
+    this.boltMesh = new THREE.Mesh(new THREE.CylinderGeometry(5, 5, this.attack_distance, this.attack_distance, false), matBolt);
+	//this.boltMesh = new THREE.Mesh(GEOMETRIES[LIGHTNING_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
+	//this.boltMesh.scale.set(.02, .02, .02);
+    this.boltMesh.rotation.x = -Math.PI/2;
+	this.boltMesh.scale.set(.4, .4, .4);
+	this.boltMesh.position.y = 10;
 
 	
 	this.attackTarget = null;
@@ -42,9 +54,9 @@ var clock = new THREE.Clock();
 	this.walkingLastKeyframe    = 0;  // previous keyframe
 	this.walkingcurrentKeyframe = 0;
 	/***********************************************************************************************/
+	this.boltInterval = 1;
 	this.timeSinceAttack = 0;
-
-		
+	this.reload_time = 2;
 	this.update = function(time) {
 		if (this.health <= 0 && this.state != DYING) {
 			//clean up of meshes
@@ -96,8 +108,7 @@ var clock = new THREE.Clock();
 		if(this.state == ATTACKING)
 		{
 		    this.timeSinceAttack += CLOCK.getDelta();
-			this.mesh.rotation.x += .1;
-		    if(this.timeSinceAttack > 2){
+		    if(this.timeSinceAttack > this.reload_time){
 				if("undefined" != typeof(this.attackTarget)){
 					if(this.attackTarget.doDamage(this.attackPower)){
 						this.state = WALKING;
@@ -105,6 +116,17 @@ var clock = new THREE.Clock();
 						this.findPointOfInterest();
 					}
 				}this.timeSinceAttack = 0;
+			}
+			
+			if(this.timeSinceAttack>this.boltInterval)
+			{
+			    //Show blue
+				SCENE.add(this.boltMesh);
+			}
+			else
+			{
+			    //hide blue
+				SCENE.remove(this.boltMesh);
 			}
 		}
 		this.mesh.rotation.y = this.ang-Math.PI/2;
@@ -118,7 +140,9 @@ var clock = new THREE.Clock();
 					
 				this.position.x = nextX;
 				this.position.z = nextY
-			
+				
+				this.boltMesh.position.x = nextX;
+				this.boltMesh.position.z = nextY;
 		
 				var xAhead = this.position.x + this.direction.x*10; 
 				var yAhead = this.position.z + this.direction.z*10;
@@ -155,18 +179,24 @@ var clock = new THREE.Clock();
 					
 			if(!THE_GRID.isSpotOccupied(spot) && distance >= this.attack_distance){
 				this.state = WALKING;
+				SCENE.remove(this.boltMesh);
 				this.walkingcurrentKeyframe = 0;
 				this.mesh.rotation.x = 0;
 			}
 		}
 		if(this.state == DYING)
 		{
+		   SCENE.remove(this.boltMesh);
 		   this.mesh.rotation.z += .05;
 		   if(this.mesh.rotation.z > Math.PI)
 		   {
 		        this.kill();
 		   }
 		}
+		//Rotate the target to be same way im pointing
+		this.boltMesh.rotation.z = this.ang;
+		this.boltMesh.position.z = this.mesh.position.z+(this.attack_distance/2)*this.direction.z;
+		this.boltMesh.position.x = this.mesh.position.x+(this.attack_distance/2)*this.direction.x;
 		this.draw();
 	
 

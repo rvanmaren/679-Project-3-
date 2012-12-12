@@ -5,7 +5,7 @@ function Level(levelNum)
     this.totalZombies = Math.pow(levelNum, 2); //for now
     console.log(this.totalZombies);
 	this.zombies = new Array;
-	this.zombieSpawnLimit = 15;
+	this.zombieSpawnLimit = 25;
 	if(this.zombieSpawnLimit > this.totalZombies){
 		this.zombieSpawnLimit = this.totalZombies;
 	}
