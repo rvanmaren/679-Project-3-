@@ -4,7 +4,6 @@ function Night()
 	this.level;
 	this.isFinished = false;
 	this.waitingToFinish = false;
-	
 	this.mouse_down = function(keyEvent)
 	{
 		PLAYER.mouse_down(keyEvent);
@@ -83,11 +82,13 @@ function Night()
 		}
 	    this.checkProjectiles();
 		PARTICLE_MANAGER.update(time);
+
 	};
 	this.finished = function()
 	{
 		return this.isFinished;
     }
+	
 
     this.checkProjectiles = function () {
 
