@@ -31,9 +31,10 @@ function Player(position)
 
 
 	this.mouse_down = function (keyEvent) {
-	   this.guns[this.currentGun].fire(this.position.clone(), this.direction.clone());
-	   this.direction.y+= this.guns[this.currentGun].kickback;
-	   
+	if(!this.dead ){
+		this.guns[this.currentGun].fire(this.position.clone(), this.direction.clone());
+		this.direction.y+= this.guns[this.currentGun].kickback;
+	   }
 	   
 	}
 
