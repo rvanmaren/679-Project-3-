@@ -173,9 +173,18 @@ function Zombie(position)
 					for(var j = 0; j < THE_GRID.grid_spots.length; j++){
 						var objInSpot = THE_GRID.grid_spots[i][j];
 						if(objInSpot instanceof HousePieceUnit){
-							 distance = Math.sqrt(Math.pow(spot[0]  - i,2) + Math.pow(spot[1]  - j,2));
-							 if(distance < bestDistance){
-								this.target = objInSpot;
+							if(objInSpot.myOwner instanceof HousePiece || objInSpot.myOwner instanceof TowerPiece){
+								distance = Math.sqrt(Math.pow(spot[0]  - i,2) + Math.pow(spot[1]  - j,2));
+								if(distance < bestDistance){
+									this.target = objInSpot;
+								}
+							 } else{
+								distance = Math.sqrt(Math.pow(spot[0]  - i,2) + Math.pow(spot[1]  - j,2));
+								distance += 2000;
+								if(distance < bestDistance){
+									this.target = objInSpot;
+								}	 
+							 
 							 }
 						}
 					}

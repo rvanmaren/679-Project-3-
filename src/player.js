@@ -32,14 +32,17 @@ function Player(position)
 
 
 	this.mouse_down = function (keyEvent) {
-	    if (this.guns[this.currentGun].fire(this.position.clone(), this.direction.clone())) {
-	        if (!this.guns[this.currentGun].automatic) {
-	            this.direction.y += this.guns[this.currentGun].kickback;
-	        } 
+	    if (!this.dead && !GAME.gameState.waitingToFinish) {
+	        if (this.guns[this.currentGun].fire(this.position.clone(), this.direction.clone())) {
+	            if (!this.guns[this.currentGun].automatic) {
+	                this.direction.y += this.guns[this.currentGun].kickback;
+	            }
+	        }
+	        if (this.guns[this.currentGun].automatic) {
+	            this.firingAutomatic = true;
+	        }
 	    }
-	    if (this.guns[this.currentGun].automatic) {
-	        this.firingAutomatic = true;
-	    }
+
 	}
 
 	this.mouse_up = function (keyEvent) {

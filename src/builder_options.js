@@ -30,8 +30,12 @@ function TowerPiece(position,grid)
 	
 	this.doDamage = function(damage){
 		this.health -= damage;
+		GAME.displayMessage('Tower is under attack!',3000);
+		
 		if(this.health <= 0){
-			THE_GRID.removeTower(this);
+		THE_GRID.removeTower(this);
+		GAME.displayMessage('Tower has been destroyed!',3000);
+		
 			return true;
 		}
 		return false;
@@ -191,8 +195,10 @@ function HousePiece(position, grid)
 	
 	this.doDamage = function(damage){
 		this.health -= damage;
+		GAME.displayMessage('House is under attack!',3000);
 		if(this.health <= 0){
 			THE_GRID.removeHouse(this);
+			GAME.displayMessage('House has been destroyed!',3000);
 			return true;
 		}
 		return false;

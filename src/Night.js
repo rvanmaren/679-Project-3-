@@ -4,7 +4,6 @@ function Night()
 	this.level;
 	this.isFinished = false;
 	this.waitingToFinish = false;
-	
 	this.mouse_down = function(keyEvent)
 	{
 		PLAYER.mouse_down(keyEvent);
@@ -50,7 +49,8 @@ function Night()
 	    document.getElementById("crossHair").style.visibility = '';
 	    document.getElementById("night-info").style.visibility = '';
 	    document.getElementById("gun-div").style.visibility = '';
-	    //document.getElementById("health").style.visibility= '';
+	    document.getElementById("zombie-info").style.visibility = '';
+
 	    //document.getElementById("bullets").style.visibility= '';
 	    this.waitingToFinish = false;
 	    this.isFinished = false;
@@ -62,6 +62,7 @@ function Night()
 		document.getElementById("crossHair").style.visibility= 'hidden';
 		document.getElementById("night-info").style.visibility = 'hidden';
 		document.getElementById("gun-div").style.visibility = 'hidden';
+		document.getElementById("zombie-info").style.visibility = 'hidden';
 		//document.getElementById("health").style.visibility= 'hidden';
 		//document.getElementById("bullets").style.visibility = 'hidden';
 		document.getElementById("nightFinished").style.visibility = 'hidden';
@@ -70,6 +71,8 @@ function Night()
 	this.update = function (time) {
 	    if (ZOMBIES.length == 0) {
 	        document.getElementById("nightFinished").style.visibility = '';
+			document.getElementById("zombies-left").innerHTML = 'Zombies Left: ' + 0;
+		
 	        this.waitingToFinish = true;
 	        return;
 	    }
@@ -85,11 +88,13 @@ function Night()
 		}
 	    this.checkProjectiles();
 		PARTICLE_MANAGER.update(time);
+
 	};
 	this.finished = function()
 	{
 		return this.isFinished;
     }
+	
 
     this.checkProjectiles = function () {
 

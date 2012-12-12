@@ -8,7 +8,7 @@ function Game()
 	THE_GRID = new Grid(GRID_WIDTH,GRID_HEIGHT,NUM_BOXES);
 	PLAYER = new Player(new THREE.Vector3(GRID_WIDTH / 2, 30, GRID_HEIGHT / 2));
 	AUDIO_MANAGER = new AudioManager();
-
+	this.lastHintTime = 0;
 	//Build the first house near the player
 	THE_GRID.handle_command(new Build_Command('build', 'house', PLAYER.position.x + 150, PLAYER.position.z + 150));
 	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 50, PLAYER.position.z + 50));
@@ -74,6 +74,7 @@ function Game()
 	        document.getElementById("dead").style.visibility = '';
 	        return;
 	    }
+		this.checkHint();
 
 	    this.gameState.update(10);
 	    //Check if we need to toggle
@@ -90,7 +91,6 @@ function Game()
             }
 	    }
 	    
-
 	    if (this.gameState.finished()) {
 	        if (this.gameState == this.day) {
 	            this.currentLevel++;
@@ -122,4 +122,22 @@ function Game()
 	{
 		this.gameState.mouse_down();
 	}
+	
+	this.checkHint = function(){
+		var curTime = new Date().getTime();
+        if (curTime > this.hintTime) {
+			document.getElementById("hint").style.visibility = 'hidden';
+		}
+	}
+	
+	this.displayMessage = function(message,time){
+		document.getElementById("hint").style.visibility = '';
+	    document.getElementById("hintMessage").innerHTML = message;
+		this.hintTime = new Date().getTime();
+		this.hintTime += time;
+	}
+	
+	
+	
+	
 }

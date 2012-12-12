@@ -3,19 +3,39 @@ function Level(levelNum)
 {
     ZOMBIES = new Array();
     this.totalZombies = Math.pow(levelNum, 2); //for now
-    console.log(this.totalZombies);
+	
 	this.zombies = new Array;
 	this.zombieSpawnLimit = 25;
 	if(this.zombieSpawnLimit > this.totalZombies){
 		this.zombieSpawnLimit = this.totalZombies;
 	}
+	
+	this.randomBetween = function(x,y){
+		return Math.floor(Math.random() * (y-x)) + x;
+	}
+	
 	//this.totalZombies = 1;
 	for(var i=0; i< this.totalZombies; i++)
 	{
+		var location = new THREE.Vector3(1,30,1);
+		if(Math.random() > .5){
+			location.x = this.randomBetween(3500, 4500); 
+		} else{
+			location.x = this.randomBetween(5500, 6500);
+		}
+
+		if(Math.random() > .5){
+			location.z = this.randomBetween(3500, 4500); 
+		} else{
+			location.z = this.randomBetween(5500, 6500);
+		}
+	
+	
+		
 		if(Math.random() > .25){
-			this.zombies.push(new Skeleton(new THREE.Vector3(Math.random()*GRID_WIDTH*.7, 30, Math.random()*GRID_WIDTH*.7)));
+			this.zombies.push(new Skeleton(location));
 		} else {
-			this.zombies.push(new Monster(new THREE.Vector3(Math.random()*GRID_WIDTH*.7, 30, Math.random()*GRID_WIDTH*.7)));
+			this.zombies.push(new Monster(location));
 		}
 	}
 	while(this.zombies.length > 0 && ZOMBIES.length <= this.zombieSpawnLimit){
@@ -45,6 +65,7 @@ function Level(levelNum)
 						
 	
 	}
+
 	
 	this.setUpGrid();
 	
@@ -57,6 +78,7 @@ function Level(levelNum)
 	// ZOMBIES.push(new Monster(new THREE.Vector3(4600, 30, 4600)));
 	this.update = function(time)
 	{
+		document.getElementById("zombies-left").innerHTML = 'Zombies Left: ' + (this.zombies.length + ZOMBIES.length);
 		if(ZOMBIES.length < this.zombieSpawnLimit && this.zombies.length > 0){
 			var zombie = this.zombies.pop();
 			zombie.spawn();
@@ -76,6 +98,7 @@ function Level(levelNum)
 	};
 
 	this.exitLevel = function () {
+		
 	    for (var i = 0; i < ZOMBIES.length; i++) {
 	        SCENE.remove(ZOMBIES[i].mesh);
 	    }
