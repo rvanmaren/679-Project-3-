@@ -66,6 +66,20 @@
     border-radius: 5px;
 }
 
+
+.zombies-info
+{
+    position: absolute;
+    top: 19.75%;
+    left: 8.9%;
+    background-color: #EB6E44;
+    padding: 10px;
+    width: 15%;
+    text-align: center;
+    z-index: 11111111;
+    border-radius: 5px;
+}
+
 .general-info
 {
     position: absolute;

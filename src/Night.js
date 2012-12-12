@@ -48,7 +48,9 @@ function Night()
 	    PLAYER.health = 100;
 	    document.getElementById("crossHair").style.visibility = '';
 	    document.getElementById("night-info").style.visibility = '';
-	    //document.getElementById("health").style.visibility= '';
+	    document.getElementById("zombie-info").style.visibility = '';
+	    
+		//document.getElementById("health").style.visibility= '';
 	    //document.getElementById("bullets").style.visibility= '';
 	    this.waitingToFinish = false;
 	    this.isFinished = false;
@@ -59,6 +61,8 @@ function Night()
 		this.level.exitLevel();
 		document.getElementById("crossHair").style.visibility= 'hidden';
 		document.getElementById("night-info").style.visibility= 'hidden';
+		document.getElementById("zombie-info").style.visibility = 'hidden';
+	    
 		//document.getElementById("health").style.visibility= 'hidden';
 		//document.getElementById("bullets").style.visibility = 'hidden';
 		document.getElementById("nightFinished").style.visibility = 'hidden';

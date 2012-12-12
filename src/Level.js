@@ -3,7 +3,6 @@ function Level(levelNum)
 {
     ZOMBIES = new Array();
     this.totalZombies = Math.pow(levelNum, 2); //for now
-    console.log(this.totalZombies);
 	this.zombies = new Array;
 	this.zombieSpawnLimit = 25;
 	if(this.zombieSpawnLimit > this.totalZombies){
@@ -45,6 +44,7 @@ function Level(levelNum)
 						
 	
 	}
+
 	
 	this.setUpGrid();
 	
@@ -57,6 +57,7 @@ function Level(levelNum)
 	// ZOMBIES.push(new Monster(new THREE.Vector3(4600, 30, 4600)));
 	this.update = function(time)
 	{
+		document.getElementById("zombies-left").innerHTML = 'Zombies Left: ' + (this.zombies.length + ZOMBIES.length);
 		if(ZOMBIES.length < this.zombieSpawnLimit && this.zombies.length > 0){
 			var zombie = this.zombies.pop();
 			zombie.spawn();
@@ -76,6 +77,7 @@ function Level(levelNum)
 	};
 
 	this.exitLevel = function () {
+		
 	    for (var i = 0; i < ZOMBIES.length; i++) {
 	        SCENE.remove(ZOMBIES[i].mesh);
 	    }

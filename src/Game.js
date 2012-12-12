@@ -81,7 +81,7 @@ function Game()
 	    document.getElementById("level").innerHTML = this.currentLevel;
 	    document.getElementById("health").innerHTML = PLAYER.health;
 	    document.getElementById("score").innerHTML = PLAYER.score;
-
+		
 	    if (this.gameState.finished()) {
 	        if (this.gameState == this.day) {
 	            this.currentLevel++;

@@ -143,6 +143,10 @@ function Day(position)
         }
     };
     this.switchInto = function (buildAmount) {
+	
+		
+		PLAYER.position = new THREE.Vector3(GRID_WIDTH / 2, 30, GRID_HEIGHT / 2);
+		
         this.position.x = PLAYER.position.x;
         this.position.z = PLAYER.position.z;
         this.playerMarker.position.set(PLAYER.position.x, 1, PLAYER.position.z);
