@@ -180,11 +180,11 @@ function Skeleton(position){
 			var spot = THE_GRID.grid_spot(nextX, nextY);	
 					
 				this.position.x = nextX;
-				this.position.z = nextY
+				this.position.z = nextY;
 			
 		
-				var xAhead = this.position.x + this.direction.x*5; 
-				var yAhead = this.position.z + this.direction.z*5;
+				var xAhead = this.position.x + this.direction.x*10; 
+				var yAhead = this.position.z + this.direction.z*10;
 				var spot = THE_GRID.grid_spot(xAhead, yAhead);	
 				
 				var distance = Math.sqrt(Math.pow(this.position.x  - this.target.position.x,2) + Math.pow(this.position.z - this.target.position.z,2));
