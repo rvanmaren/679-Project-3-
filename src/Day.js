@@ -160,6 +160,7 @@ function Day(position)
         document.getElementById("day-info").style.visibility = '';
         document.getElementById("build-images").style.visibility = '';
         document.getElementById("exit-day").style.visibility = '';
+	    document.getElementById("gun-div").style.visibility = '';
         this.speed = Math.sqrt(this.position.y);
         this.awaitConfirmation = false;
     }
@@ -172,6 +173,7 @@ function Day(position)
         document.getElementById("day-info").style.visibility = 'hidden';
         document.getElementById("build-images").style.visibility = 'hidden';
         document.getElementById("exit-day").style.visibility = 'hidden';
+	    document.getElementById("gun-div").style.visibility = 'hidden';
         PLAYER.score += (this.blocksLeft * 10);
         document.getElementById("exit-confirmation").style.visibility = 'hidden';
     }
@@ -235,7 +237,10 @@ function Day(position)
 		this.building=false;
     }
 
-    this.mouse_wheel = function () { }
+    this.mouse_wheel = function () 
+    { 
+    	PLAYER.mouse_wheel(event);	
+    }
 
 	this.update = function (time) {
 

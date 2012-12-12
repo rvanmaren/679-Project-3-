@@ -5,6 +5,9 @@ function Gun() {
     this.automatic = false;
 	this.kickback = 0.01;
 	this.range = 100000;
+	this.cost = 0;
+	this.ammoCost = 0;
+	this.additionalAmmo = 0;
 
 	this.bullets = "Infinite";
 
@@ -29,8 +32,13 @@ function Shotgun() {
     this.lastFire = -1000;
 
     this.range = 4500;
+    
+    this.cost = 20;
+	this.ammoCost = 5;
+	this.additionalAmmo = 15;
 
-    this.bullets = 5;
+
+    this.bullets = 15;
 
     this.fire = function (position, dir) {
         var curTime = new Date().getTime();
@@ -71,13 +79,18 @@ MachineGun.prototype = new Gun();
 function MachineGun() {
     Gun.apply(this);
 
-    this.bullets = 400;
+    this.bullets = 100;
 
     this.automatic = true;
     this.kickback = .008;
     this.delay = 200;
     this.lastFire = -1000;
     this.isFiring = false;
+    
+    this.cost = 25;
+	this.ammoCost = 5;
+	this.additionalAmmo = 50;
+
 
     this.fire = function (position, dir) {
         if (this.bullets <= 0) {
