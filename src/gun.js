@@ -43,7 +43,7 @@ function Shotgun() {
 
                 BULLETS.push(new Bullet(position, tempDir.clone(), 0.125, this.speed, this.range));
             }
-           // AUDIO_MANAGER.playShotgunShot();
+            AUDIO_MANAGER.playShotgunShot();
             this.lastFire = curTime;
         }
     }
