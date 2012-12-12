@@ -3,6 +3,7 @@ function Level(levelNum)
 {
     ZOMBIES = new Array();
     this.totalZombies = Math.pow(levelNum, 2); //for now
+	
 	this.zombies = new Array;
 	this.zombieSpawnLimit = 25;
 	if(this.zombieSpawnLimit > this.totalZombies){

@@ -144,8 +144,8 @@ var clock = new THREE.Clock();
 				this.boltMesh.position.x = nextX;
 				this.boltMesh.position.z = nextY;
 		
-				var xAhead = this.position.x + this.direction.x*10; 
-				var yAhead = this.position.z + this.direction.z*10;
+				var xAhead = this.position.x + this.direction.x*this.attack_distance; 
+				var yAhead = this.position.z + this.direction.z*this.attack_distance;
 				var spot = THE_GRID.grid_spot(xAhead, yAhead);	
 				
 				var distance = Math.sqrt(Math.pow(this.position.x  - this.target.position.x,2) + Math.pow(this.position.z - this.target.position.z,2));
@@ -172,8 +172,8 @@ var clock = new THREE.Clock();
 		}
 		else if(this.state == ATTACKING)
 		{
-			var xAhead = this.position.x + this.direction.x*10; 
-			var yAhead = this.position.z + this.direction.z*10;
+			var xAhead = this.position.x + this.direction.x*this.attack_distance; 
+			var yAhead = this.position.z + this.direction.z*this.attack_distance;
 			var spot = THE_GRID.grid_spot(xAhead, yAhead);	
 			var distance = Math.sqrt(Math.pow(this.position.x  - this.target.position.x,2) + Math.pow(this.position.z - this.target.position.z,2));
 					

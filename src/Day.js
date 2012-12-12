@@ -190,7 +190,7 @@ function Day(position)
                         if (built && this.mode != "remove") {
                             if (this.type == 'house') {
                                 this.blocksLeft -= HOUSE_COST;
-                            } else if (this.type = 'tower') {
+                            } else if (this.type == 'tower') {
                                 this.blocksLeft -= TOWER_COST;
                             } else {
                                 this.blocksLeft--;
@@ -215,7 +215,7 @@ function Day(position)
 	            if (built && this.mode != 'remove') {
 	                if (this.type == 'house') {
 	                    this.blocksLeft -= HOUSE_COST;
-                    } else if (this.type = 'tower') {
+                    } else if (this.type == 'tower') {
                             this.blocksLeft -= TOWER_COST;
 	                } else {
 	                    this.blocksLeft--;
