@@ -67,7 +67,7 @@ function TowerPiece(position,grid)
 				}
 			}
 			if(distance != -1)
-			{   console.log(distance);
+			{  
 				direction = new THREE.Vector3(zombie.position.x-this.mesh.position.x,-1*(zombie.mesh.position.y-this.mesh.position.y+100)+zombie.height,zombie.position.z-this.mesh.position.z);
 				//Shoot a bullet at it
 				if(distance < 500*500)

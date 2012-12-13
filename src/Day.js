@@ -78,7 +78,6 @@ function Day(position)
 			this.position.y = Math.min(this.position.y+zoomSpeed, 3000);
 			//this.speed+=2;
 		}
-		console.log(this.position.y);
 		this.speed = Math.sqrt(this.position.y);
 	}
 	this.key_down = function (keyEvent) {
@@ -98,6 +97,9 @@ function Day(position)
 	                break;
 	            case 83:
 	                this.keys[DOWN] = true;
+	                break;
+	            case 82:
+	                THE_GRID.reset_preview();
 	                break;
 	            case 49:
 	                this.mode = "build";

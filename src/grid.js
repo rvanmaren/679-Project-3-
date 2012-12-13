@@ -240,6 +240,18 @@ function Grid(width, height, blocks)
 	    wallPreview.position.x -= mouseY;
 		wallPreview.position.z += mouseX;
 	}
+	this.reset_preview = function()
+	{
+	    /*Yeah could of made these an array*/
+	   	towerPreview.position.x = CAMERA.position.x;
+		towerPreview.position.z = CAMERA.position.z;
+		housePreview.position.x = CAMERA.position.x;
+		housePreview.position.z = CAMERA.position.z;
+		removePreview.position.x = CAMERA.position.x;
+		removePreview.position.z = CAMERA.position.z; 
+		wallPreview.position.x = CAMERA.position.x;
+		wallPreview.position.z = CAMERA.position.z;
+	}
 	this.handle_command = function(buildCMD, mouseX,mouseY)
 	{
         var playerSpot = this.grid_spot(PLAYER.position.x, PLAYER.position.z);
