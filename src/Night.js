@@ -69,6 +69,25 @@ function Night()
 	}
 
 	this.update = function (time) {
+		//Compute distance from middle
+		var distance = Math.pow(GRID_WIDTH/2-PLAYER.position.x,2)+Math.pow(GRID_HEIGHT/2-PLAYER.position.z,2);
+		
+		if(distance > 2000*2000)
+		{
+		    //Compute a scale up based on distance
+			var from_boundry = distance-2000*2000;
+			//This will be between 2500^2 and 5000^2 and we want
+			//5000 = .001
+			//2500 = .00019
+			//Liner = -0.000803x + 2500y = -1.515 => 
+			var val = (-1.015 + 1*0.000803*(Math.sqrt(distance)))/3000
+			
+			SCENE.fog.density = val;
+		}
+		else
+		{
+			SCENE.fog.density = 0.000197
+		}
 	    if (ZOMBIES.length == 0) {
 	        document.getElementById("nightFinished").style.visibility = '';
 			document.getElementById("zombies-left").innerHTML = 'Zombies Left: ' + 0;

@@ -87,7 +87,7 @@ function Game()
 		this.gameState.key_up(keyEvt);
 	}
 	this.update = function (time) {
-
+		this.skybox.update();
 	    if (PLAYER.dead == true) {
 	        document.getElementById("dead").style.visibility = '';
 	        return;
