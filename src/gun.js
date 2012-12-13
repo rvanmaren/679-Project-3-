@@ -8,6 +8,8 @@ function Gun() {
 	this.cost = 0;
 	this.ammoCost = 0;
 	this.additionalAmmo = 0;
+	this.description = 'A short description of the gun';
+	this.purchased = true;
 
 	this.bullets = "Infinite";
 
@@ -24,7 +26,8 @@ function Gun() {
 Shotgun.prototype = new Gun();
 
 function Shotgun() {
-	Gun.apply(this);
+    Gun.apply(this);
+    this.purchased = false;
 	this.kickback = 0.05;
     
     this.numShots = 9;
@@ -78,7 +81,7 @@ MachineGun.prototype = new Gun();
 
 function MachineGun() {
     Gun.apply(this);
-
+    this.purchased = false;
     this.bullets = 100;
 
     this.automatic = true;
