@@ -271,6 +271,22 @@ this.previousBuildOption = function () {
 
     this.switchInto = function (buildAmount) {
 	
+		if(GAME.currentLevel == 1){
+			GAME.displayMessage("Use the arrow keys to change between build options",7000);
+		}
+		if(GAME.currentLevel == 2){
+			GAME.displayMessage("Build Houses to earn more income",7000);
+		}
+		
+		if(GAME.currentLevel == 3){
+			GAME.displayMessage("Press enter to access the gun store",7000);
+		}
+		
+		if(GAME.currentLevel == 4){
+			GAME.displayMessage("Towers will defend your base for you",7000);
+		}
+		
+		
 		
 		PLAYER.position = new THREE.Vector3(GRID_WIDTH / 2, 30, GRID_HEIGHT / 2);
 		

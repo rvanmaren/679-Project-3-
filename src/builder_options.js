@@ -149,7 +149,7 @@ function WallPiece(position, grid)
 	this.mesh.position.y = -1;
 	this.mesh.position.z = position.z;
 	SCENE.add(this.mesh );
-	this.health = 25;
+	this.health = 40;
 	/*var material = new THREE.MeshBasicMaterial({
         color: 0x00FF00,
     });
@@ -189,7 +189,7 @@ function HousePiece(position, grid)
 	this.mesh.position.y = -5;
 	this.mesh.position.z = position.z;
 	SCENE.add(this.mesh);
-	this.health = 150;
+	this.health = 200;
 	this.units;
 	
 	

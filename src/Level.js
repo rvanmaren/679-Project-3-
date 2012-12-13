@@ -2,7 +2,35 @@
 function Level(levelNum)
 {
     ZOMBIES = new Array();
-    this.totalZombies = Math.pow(levelNum, 2); //for now
+    this.totalZombies = 5; //for now
+	if(levelNum == 1){
+		this.totalZombies = 1; //for now
+	}
+	else if(levelNum == 2){
+		this.totalZombies = 3; //for now
+	}
+	
+	else if(levelNum == 3){
+		this.totalZombies = 1; //for now
+	} 
+	else if (levelNum == 4) {
+		this.totalZombies = 8;
+	} else if (levelNum == 5) {
+		this.totalZombies = 12;	
+	
+	} else if (levelNum == 6) {		
+		this.totalZombies = 18;
+	
+	} else if (levelNum == 7) {
+		this.totalZombies = 25;		
+	}
+	else if (levelNum == 8) {
+		this.totalZombies = 35;		
+	} else {
+		this.totalZombies = 35 + (levelNum/2);		
+	}
+	
+	
 	
 	this.zombies = new Array;
 	this.zombieSpawnLimit = 25;
@@ -29,18 +57,29 @@ function Level(levelNum)
 		} else{
 			location.z = this.randomBetween(5500, 6500);
 		}
-	
-	
-		var pick = Math.random();
-		if(pick > .66){
+		if(levelNum == 1){
 			this.zombies.push(new Skeleton(location));
-		} else if (pick > .33){
+		}
+	    else if(levelNum == 2){
 			this.zombies.push(new Monster(location));
 		}
-		else
-		{
-		    this.zombies.push(new Cerberus(location));
+		else if(levelNum == 3){
+		    this.zombies.push(new Cerberus(location));	
+		} else{ 
+		
+			var pick = Math.random();
+			if(pick > .4){
+				this.zombies.push(new Skeleton(location));
+			} else if (pick > .05){
+				this.zombies.push(new Monster(location));
+			}
+			else
+			{
+				this.zombies.push(new Cerberus(location));
+			}
+		
 		}
+	
 	}
 	while(this.zombies.length > 0 && ZOMBIES.length <= this.zombieSpawnLimit){
 			var zombie = this.zombies.pop();
@@ -82,7 +121,7 @@ function Level(levelNum)
 	// ZOMBIES.push(new Monster(new THREE.Vector3(4600, 30, 4600)));
 	this.update = function(time)
 	{
-		document.getElementById("zombies-left").innerHTML = 'Zombies Left: ' + (this.zombies.length + ZOMBIES.length);
+		document.getElementById("zombies-left").innerHTML = 'Creatures Left: ' + (this.zombies.length + ZOMBIES.length);
 		if(ZOMBIES.length < this.zombieSpawnLimit && this.zombies.length > 0){
 			var zombie = this.zombies.pop();
 			zombie.spawn();

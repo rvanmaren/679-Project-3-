@@ -170,6 +170,8 @@ function mouse_down(event) {
 
 	        document.body.requestPointerLock();
 	        GAME = new Game();
+			GAME.night.switchInto(GAME.currentLevel);
+			
 	        animloop();
 	    } else if (showIntro) {
 	        showIntro = false;

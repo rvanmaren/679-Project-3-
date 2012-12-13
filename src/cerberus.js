@@ -6,11 +6,11 @@ function Cerberus(position){
 	Zombie.apply(this,arguments); 
 	this.height = 20;
 	this.attack_distance = 60;
-	this.speed = (8 + Math.random()) / 30;
+	this.speed = (1 + Math.random()) / 30;
     this.rotationSpeed = .5;
-	this.health = 80;
+	this.health = 200;
 	this.bloodColor = 0x8A0707;
-	this.attackPower = 5;
+	this.attackPower = 25;
 	this.maxHealth = this.health;
 	this.target = PLAYER;
 

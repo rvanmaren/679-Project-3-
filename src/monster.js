@@ -6,9 +6,9 @@ function Monster(position){
 	Zombie.apply(this,arguments); 
 	this.height = 20;
 	this.attack_distance = 200;
-	this.speed = (8 + Math.random()) / 30;
+	this.speed = (9.9 + Math.random()) / 30;
     this.rotationSpeed = .5;
-	this.health = 80;
+	this.health = 50;
 	this.bloodColor = 0x8A0707;
 	this.attackPower = 5;
 	this.maxHealth = this.health;

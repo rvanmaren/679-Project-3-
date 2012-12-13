@@ -4,6 +4,8 @@ function Night()
 	this.level;
 	this.isFinished = false;
 	this.waitingToFinish = false;
+	this.startTime = 0;
+	this.displaySecondTip = true;
 	this.mouse_down = function(keyEvent)
 	{
 		PLAYER.mouse_down(keyEvent);
@@ -43,7 +45,20 @@ function Night()
 
     this.switchInto = function (curLevel) {
 	    this.initLevel(curLevel);
-	    document.body.requestPointerLock();
+		
+		if(curLevel == 1){
+			GAME.displayMessage("Find and kill the skeleton to survive the level", 7000);
+	    } else if(curLevel == 2)
+		{
+			GAME.displayMessage("Those small creatures are fast and have a longer ranged attack",7000);
+		} else if(curLevel == 3){
+			GAME.displayMessage("Watch out the cerberus is slow but has a strong bite",7000);		
+		}
+		
+		this.startTime = new Date().getTime() + 9000;
+		this.displaySecondTip = true;
+		
+		document.body.requestPointerLock();
 	    PLAYER.keys = [false, false, false, false];
 	    PLAYER.health = 100;
 	    document.getElementById("crossHair").style.visibility = '';
@@ -69,6 +84,13 @@ function Night()
 	}
 
 	this.update = function (time) {
+		if(this.displaySecondTip){
+			if(new Date().getTime() > this.startTime && (PLAYER.guns[1].purchased || PLAYER.guns[2].purchased )){
+				GAME.displayMessage("Use the mouse scrollwheel to switch weapons",7000);		
+				this.displaySecondTip = false;
+			}
+			
+		}
 		//Compute distance from middle
 		var distance = Math.pow(GRID_WIDTH/2-PLAYER.position.x,2)+Math.pow(GRID_HEIGHT/2-PLAYER.position.z,2);
 		
@@ -90,12 +112,12 @@ function Night()
 		}
 	    if (ZOMBIES.length == 0) {
 	        document.getElementById("nightFinished").style.visibility = '';
-			document.getElementById("zombies-left").innerHTML = 'Zombies Left: ' + 0;
+			document.getElementById("zombies-left").style.innerHTML = 'Creatures Left: ' + 0;
 		
 	        this.waitingToFinish = true;
 	        return;
 	    }
-
+	
 	    PLAYER.update(time);
 	    for (var i = 0; i < BULLETS.length; i++) {
 	        BULLETS[i].update(time);
