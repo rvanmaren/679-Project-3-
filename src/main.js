@@ -5,17 +5,17 @@ LOADER = new THREE.JSONLoader();
 LOADERC = new THREE.ColladaLoader();
 
 /*Ring of fog in distance*/
-	 var mat2 = new THREE.MeshLambertMaterial(
-	{
-	    color: 0xAAAAAA,
-		depthTest: true,
-        opacity: .5,
-		transparent: true
-	});
-	var mark = new THREE.Mesh(new THREE.TorusGeometry(7500, 1000, 50,50),  mat2);
-	mark.rotation.x = Math.PI/2;
-	mark.position.set(GRID_HEIGHT/2,5,GRID_WIDTH/2);
-	SCENE.add(mark);
+//	 var mat2 = new THREE.MeshLambertMaterial(
+//	{
+//	    color: 0xAAAAAA,
+//		depthTest: true,
+//        opacity: .5,
+//		transparent: true
+//	});
+//	var mark = new THREE.Mesh(new THREE.TorusGeometry(7500, 1000, 50,50),  mat2);
+//	mark.rotation.x = Math.PI/2;
+//	mark.position.set(GRID_HEIGHT/2,5,GRID_WIDTH/2);
+//	SCENE.add(mark);
 
 
 var loaded = false;
