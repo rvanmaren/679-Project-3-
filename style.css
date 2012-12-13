@@ -29,12 +29,21 @@
  	position:absolute;
     left: 78%;
     margin-left: -150px;
-    top: 25%;
+    top: 20%;
     background-color: #D3E397;
     border-radius: 10px;
     width: 300px;
-    height: 300px;
+    height: 100px;
     z-index: 999999;
+    opacity: .9;
+ }
+ 
+ #gun-store-details
+ {
+     position:absolute;
+     top: 5%;
+     text-align: center;
+     width: 300px;
  }
  
 #night-explanation
@@ -126,7 +135,8 @@ h3
 .build-image 
 {
     width: 75px;
-    height: 75px;  
+    height: 75px; 
+    opacity: .9; 
 }
 
 .build-images
@@ -135,6 +145,7 @@ h3
     top: 50%;
     left: 50%;
     z-index: 11111111;
+    opacity: .9;
 }
 
 

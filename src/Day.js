@@ -40,8 +40,14 @@ function Day(position)
 	this.direction = new THREE.Vector3(0,-1,0);
 	this.building = false;
 	this.blocksLeft = buildingNumber;
-
+	this.gunStoreOpen = false;
 	this.awaitConfirmation = false;
+
+	this.buildOptions = ['wall', 'house', 'tower', ''];
+	this.currentBuildOption = 0;
+
+	this.currentGunOption = 0;
+	this.gunOptions = ['buy', 'ammo', 'exit'];
 
 	this.markerMaterial = new THREE.MeshBasicMaterial(
 	{
@@ -101,7 +107,7 @@ function Day(position)
 	                this.mode = "build";
 	                this.type = "house";
 	                break;
-				case 51:
+	            case 51:
 	                this.mode = "build";
 	                this.type = "tower";
 	                break;
@@ -114,12 +120,70 @@ function Day(position)
 	            case 69:
 	                this.zoom("in");
 	                break;
+	            case 37: //Left Arrow
+	                this.previousGun()
+	                break;
+	            case 38: //Up Arrow
+	                if (this.gunStoreOpen) {
+	                    this.previousGunOption();
+	                } else {
+	                    this.previousBuildOption();
+	                }
+	                break;
+	            case 39: //Right Arrow
+	                this.nextGun()
+	                break;
+	            case 40: //Down Arrow
+	                if (this.gunStoreOpen) {
+	                    this.nextGunOption();
+	                } else {
+	                    this.nextBuildOption();
+	                }
+	                break;
+	            case 13:
+	                if (!this.gunStoreOpen) {
+	                    this.gunStoreOpen = true;
+	                    document.getElementById("open-gun-store").style.visibility = "hidden";
+	                    document.getElementById("gun-store").style.height = "400px";
+	                    document.getElementById("gun-store-details").style.visibility = "";
+	                } else {
+
+	                    if (this.gunOptions[this.currentGunOption] == 'exit') {
+	                        document.getElementById("gun-store-details").style.visibility = "hidden";
+	                        document.getElementById("gun-store").style.height = "100px";
+	                        document.getElementById("open-gun-store").style.visibility = "";
+	                        this.gunStoreOpen = false;
+	                    } else if (this.gunOptions[this.currentGunOption] == 'buy') {
+	                        if (PLAYER.guns[PLAYER.currentGun].cost > this.blocksLeft || PLAYER.guns[PLAYER.currentGun].purchased) {
+	                            AUDIO_MANAGER.playEmptySound();
+	                        } else {
+	                            AUDIO_MANAGER.playAmmoSound();
+	                            PLAYER.guns[PLAYER.currentGun].purchased = true;
+	                            this.blocksLeft -= PLAYER.guns[PLAYER.currentGun].cost;
+	                        }
+	                    } else if (this.gunOptions[this.currentGunOption] == 'ammo') {
+	                        if (PLAYER.guns[PLAYER.currentGun].ammoCost > this.blocksLeft || !PLAYER.guns[PLAYER.currentGun].purchased || PLAYER.guns[PLAYER.currentGun].ammoCost == 0) {
+	                            AUDIO_MANAGER.playEmptySound();
+	                        } else {
+	                            AUDIO_MANAGER.playAmmoSound();
+	                            this.blocksLeft -= PLAYER.guns[PLAYER.currentGun].ammoCost;
+	                            PLAYER.guns[PLAYER.currentGun].bullets += PLAYER.guns[PLAYER.currentGun].additionalAmmo;
+	                        }
+	                    }
+	                }
 	        }
 	    } else {
 	        if (event.keyCode != 32) {
 	            document.getElementById("exit-confirmation").style.visibility = 'hidden';
 	            this.awaitConfirmation = false;
 	        } else {
+	            if (this.gunStoreOpen) {
+	                document.getElementById("gun-store-details").style.visibility = "hidden";
+	                document.getElementById("gun-store").style.height = "100px";
+	                document.getElementById("open-gun-store").style.visibility = "";
+	                this.gunStoreOpen = false;
+	            }
+	            PLAYER.currentGun = 0;
 	            this.doneBuilding = true;
 	        }
 	    }
@@ -141,7 +205,59 @@ function Day(position)
 				this.keys[DOWN] = false;
 				break;
         }
-    };
+};
+
+
+this.nextGunOption = function () {
+    this.currentGunOption++;
+
+    this.currentGunOption %= this.gunOptions.length;
+    if (this.currentGunOption < 0) {
+        this.currentGunOption = this.gunOptions.length - 1;
+    }
+}
+
+this.previousGunOption = function () {
+    this.currentGunOption--;
+
+    this.currentGunOption %= this.gunOptions.length;
+    if (this.currentGunOption < 0) {
+        this.currentGunOption = this.gunOptions.length - 1;
+    }
+}
+
+this.nextBuildOption = function () {
+    this.currentBuildOption++;
+
+    this.currentBuildOption %= this.buildOptions.length;
+    if (this.currentBuildOption < 0) {
+        this.currentBuildOption = this.buildOptions.length - 1;
+    }
+
+    this.type = this.buildOptions[this.currentBuildOption];
+    if (this.type == '') {
+        this.mode = "remove";
+    } else {
+        this.mode = "build";
+    }
+}
+
+this.previousBuildOption = function () {
+    this.currentBuildOption--;
+
+    this.currentBuildOption %= this.buildOptions.length;
+    if (this.currentBuildOption < 0) {
+        this.currentBuildOption = this.buildOptions.length - 1;
+    }
+
+    this.type = this.buildOptions[this.currentBuildOption];
+    if (this.type == '') {
+        this.mode = "remove";
+    } else {
+        this.mode = "build";
+    }
+}
+
     this.switchInto = function (buildAmount) {
 	
 		
@@ -160,7 +276,8 @@ function Day(position)
         document.getElementById("day-info").style.visibility = '';
         document.getElementById("build-images").style.visibility = '';
         document.getElementById("exit-day").style.visibility = '';
-	    document.getElementById("gun-div").style.visibility = '';
+        document.getElementById("gun-div").style.visibility = '';
+        document.getElementById("gun-store").style.visibility = '';
         this.speed = Math.sqrt(this.position.y);
         this.awaitConfirmation = false;
     }
@@ -173,7 +290,8 @@ function Day(position)
         document.getElementById("day-info").style.visibility = 'hidden';
         document.getElementById("build-images").style.visibility = 'hidden';
         document.getElementById("exit-day").style.visibility = 'hidden';
-	    document.getElementById("gun-div").style.visibility = 'hidden';
+        document.getElementById("gun-div").style.visibility = 'hidden';
+        document.getElementById("gun-store").style.visibility = 'hidden';
         PLAYER.score += (this.blocksLeft * 10);
         document.getElementById("exit-confirmation").style.visibility = 'hidden';
     }
@@ -212,7 +330,7 @@ function Day(position)
         }
 	    this.building = true;
 	    if (this.blocksLeft || this.mode == 'remove') {
-	        if (!(this.type == 'house' && this.blocksLeft < HOUSE_COST)&& this.type!='wall'&& !(this.type == 'tower' && this.blocksLeft < TOWER_COST)) {
+	        if (!(this.type == 'house' && this.blocksLeft < HOUSE_COST)&& !(this.type == 'tower' && this.blocksLeft < TOWER_COST)) {
 	            var built = THE_GRID.handle_command(new Build_Command(this.mode, this.type, this.target.position().x, this.target.position().z));
 	            if (built && this.mode != 'remove') {
 	                if (this.type == 'house') {
@@ -237,65 +355,118 @@ function Day(position)
 		this.building=false;
     }
 
-    this.mouse_wheel = function () 
-    { 
-    	PLAYER.mouse_wheel(event);	
+    this.mouse_wheel = function (event) {
+        if (event.wheelDelta < 0) {
+            this.nextGun();
+        } else {
+            this.previousGun();
+        }
     }
 
-	this.update = function (time) {
+    this.update = function (time) {
 
-	    if (this.awaitConfirmation) {
-	        document.getElementById("exit-confirmation").style.visibility = '';
-	    }
+        if (this.awaitConfirmation) {
+            document.getElementById("exit-confirmation").style.visibility = '';
+        }
 
-	    document.getElementById("build-1").style.backgroundColor = "";
-	    document.getElementById("build-2").style.backgroundColor = "";
-	    document.getElementById("build-3").style.backgroundColor = "";
-		document.getElementById("build-4").style.backgroundColor = "";
-	    if (this.mode == "build") {
-	        if (this.type == "house") {
-	            document.getElementById("build-2").style.backgroundColor = "#D3E397";
-	        } else if (this.type == "wall") {
-	            document.getElementById("build-1").style.backgroundColor = "#D3E397";
-	        }
-			else if (this.type == "tower") {
-	            document.getElementById("build-3").style.backgroundColor = "#D3E397";
-	        }
-	    } else {
+        if (this.gunStoreOpen) {
 
-	        document.getElementById("build-4").style.backgroundColor = "#D3E397";
-	    }
+            if (!PLAYER.guns[PLAYER.currentGun].purchased) {
+                document.getElementById("gun-cost").innerHTML = "Purchase for $" + PLAYER.guns[PLAYER.currentGun].cost;
+                document.getElementById("ammo-cost").innerHTML = "Purchase the gun before purchasing more ammo.";
+            } else {
+                document.getElementById("gun-cost").innerHTML = "Purchased";
+                if (PLAYER.guns[PLAYER.currentGun].ammoCost == 0) {
+                    document.getElementById("ammo-cost").innerHTML = "Ammo: Unlimited";
+                } else {
+                    document.getElementById("ammo-cost").innerHTML = "Ammo: " + PLAYER.guns[PLAYER.currentGun].additionalAmmo + " for $" + PLAYER.guns[PLAYER.currentGun].ammoCost;
+                }
+            } 
+            document.getElementById("gun-description").innerHTML = PLAYER.guns[PLAYER.currentGun].description;
 
-	    document.getElementById("build-units").innerHTML = this.blocksLeft;
-	    var forward = this.keys[UP] ? (this.keys[DOWN] ? 0 : 1) : (this.keys[DOWN] ? -1 : 0); //1,0,-1
-	    var sideways = this.keys[RIGHT] ? (this.keys[LEFT] ? 0 : 1) : (this.keys[LEFT] ? -1 : 0);
+            document.getElementById("gun-cost").style.backgroundColor = "";
+            document.getElementById("ammo-cost").style.backgroundColor = "";
+            document.getElementById("exit-gun-store").style.backgroundColor = "";
 
-	    this.position.x += forward * this.speed;
-	    this.position.z += sideways * this.speed;
-	    //Move the crosshair with the camera
-	    this.target.move(forward * this.speed, sideways * this.speed);
-	    THE_GRID.movePreview(forward * this.speed, sideways * this.speed);
-	    //this.position.z += this.direction.z*forward;
-	    CAMERA.position.set(this.position.x, this.position.y, this.position.z);
-	    //this.builderBar.update(CAMERA.position);
-	    //this.camera.lookAt(this.position.x + dir.x, this.position.y + dir.y, this.position.z + dir.x);
-	    var camTarget = new THREE.Vector3(this.position.x + this.direction.x,
+            if (this.gunOptions[this.currentGunOption] == 'buy') {
+                document.getElementById("gun-cost").style.backgroundColor = "#FFF5C3";
+            } else if (this.gunOptions[this.currentGunOption] == 'ammo') {
+                document.getElementById("ammo-cost").style.backgroundColor = "#FFF5C3";
+            } if (this.gunOptions[this.currentGunOption] == 'exit') {
+                document.getElementById("exit-gun-store").style.backgroundColor = "#FFF5C3";
+            }
+        }
+
+        document.getElementById("build-1").style.backgroundColor = "";
+        document.getElementById("build-2").style.backgroundColor = "";
+        document.getElementById("build-3").style.backgroundColor = "";
+        document.getElementById("build-4").style.backgroundColor = "";
+        if (this.mode == "build") {
+            if (this.type == "house") {
+                document.getElementById("build-2").style.backgroundColor = "#D3E397";
+            } else if (this.type == "wall") {
+                document.getElementById("build-1").style.backgroundColor = "#D3E397";
+            }
+            else if (this.type == "tower") {
+                document.getElementById("build-3").style.backgroundColor = "#D3E397";
+            }
+        } else {
+
+            document.getElementById("build-4").style.backgroundColor = "#D3E397";
+        }
+
+        document.getElementById("build-units").innerHTML = this.blocksLeft;
+        var forward = this.keys[UP] ? (this.keys[DOWN] ? 0 : 1) : (this.keys[DOWN] ? -1 : 0); //1,0,-1
+        var sideways = this.keys[RIGHT] ? (this.keys[LEFT] ? 0 : 1) : (this.keys[LEFT] ? -1 : 0);
+
+        this.position.x += forward * this.speed;
+        this.position.z += sideways * this.speed;
+        //Move the crosshair with the camera
+        this.target.move(forward * this.speed, sideways * this.speed);
+        THE_GRID.movePreview(forward * this.speed, sideways * this.speed);
+        //this.position.z += this.direction.z*forward;
+        CAMERA.position.set(this.position.x, this.position.y, this.position.z);
+        //this.builderBar.update(CAMERA.position);
+        //this.camera.lookAt(this.position.x + dir.x, this.position.y + dir.y, this.position.z + dir.x);
+        var camTarget = new THREE.Vector3(this.position.x + this.direction.x,
 											this.position.y + this.direction.y,
 											this.position.z + this.direction.z);
-	    CAMERA.lookAt(camTarget);
-	    CAMERA.rotation.z = -90 * Math.PI / 180;
+        CAMERA.lookAt(camTarget);
+        CAMERA.rotation.z = -90 * Math.PI / 180;
 
-	    if (Math.floor(this.position.y / 250) != this.numLinesSkipped) {
-	        this.numLinesSkipped = Math.floor(this.position.y / 250);
-	        THE_GRID.hideSomeLines(this.numLinesSkipped);
-	    }
-	};
+        if (Math.floor(this.position.y / 250) != this.numLinesSkipped) {
+            this.numLinesSkipped = Math.floor(this.position.y / 250);
+            THE_GRID.hideSomeLines(this.numLinesSkipped);
+        }
+    };
 	this.finished = function()
 	{
 		if(this.doneBuilding)
 			return true;
 		else
 			return false;
-	}
+    }
+
+    this.nextGun = function () {
+
+        PLAYER.currentGun++;
+
+        PLAYER.currentGun %= PLAYER.guns.length;
+        if (PLAYER.currentGun < 0) {
+            PLAYER.currentGun = PLAYER.guns.length - 1;
+        }
+        AUDIO_MANAGER.playSwitchSound();
+    }
+
+    this.previousGun = function () {
+
+        PLAYER.currentGun--;
+
+        PLAYER.currentGun %= PLAYER.guns.length;
+        if (PLAYER.currentGun < 0) {
+            PLAYER.currentGun = PLAYER.guns.length - 1;
+        }
+        AUDIO_MANAGER.playSwitchSound();
+    }
 }
 
