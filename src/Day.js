@@ -330,7 +330,7 @@ this.previousBuildOption = function () {
         }
 	    this.building = true;
 	    if (this.blocksLeft || this.mode == 'remove') {
-	        if (!(this.type == 'house' && this.blocksLeft < HOUSE_COST)&& this.type!='wall'&& !(this.type == 'tower' && this.blocksLeft < TOWER_COST)) {
+	        if (!(this.type == 'house' && this.blocksLeft < HOUSE_COST)&& !(this.type == 'tower' && this.blocksLeft < TOWER_COST)) {
 	            var built = THE_GRID.handle_command(new Build_Command(this.mode, this.type, this.target.position().x, this.target.position().z));
 	            if (built && this.mode != 'remove') {
 	                if (this.type == 'house') {
