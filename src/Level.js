@@ -31,11 +31,15 @@ function Level(levelNum)
 		}
 	
 	
-		
-		if(Math.random() > .25){
+		var pick = Math.random();
+		if(pick > .66){
 			this.zombies.push(new Skeleton(location));
-		} else {
+		} else if (pick > .33){
 			this.zombies.push(new Monster(location));
+		}
+		else
+		{
+		    this.zombies.push(new Cerberus(location));
 		}
 	}
 	while(this.zombies.length > 0 && ZOMBIES.length <= this.zombieSpawnLimit){
