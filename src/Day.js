@@ -101,6 +101,15 @@ function Day(position)
 	            case 82:
 	                THE_GRID.reset_preview();
 	                break;
+				case 72:
+				{
+				    this.position.x = PLAYER.position.x;
+					this.position.z = PLAYER.position.z;
+					CAMERA.position.x = PLAYER.position.x;
+					CAMERA.position.z = PLAYER.position.z;
+	                THE_GRID.reset_preview();
+	                break;
+				}					
 	            case 49:
 	                this.mode = "build";
 	                this.type = "wall";
