@@ -10,6 +10,9 @@ var GAME_LOADED = false;
 var SKYBOX;
 var THE_GRID;
 var GAME;
+var FOG_DISTANCE = 1000;
+var DAMAGE_DISTANCE = 1000;
+var TIME_FOG = 4;
 /*WEBGL GLOBALS*/
 var RENDERER;
 var SCENE;

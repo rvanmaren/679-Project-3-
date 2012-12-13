@@ -155,7 +155,7 @@ function Cerberus(position){
 			this.mesh.morphTargetInfluences[ this.deathLastKeyframe ] = 
 				1 - this.mesh.morphTargetInfluences[ keyframe ];
 			
-			if(keyframe >= 29)
+			if(keyframe >= 89)
 			{
 			    this.kill();
 			}
