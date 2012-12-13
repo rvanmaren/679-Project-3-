@@ -1,6 +1,6 @@
 Cerberus.prototype =  new Zombie(new THREE.Vector3(2300, 30, 2300));
 var zombie_height = 40;
-var zombie_width = 15;
+var cerebus_width = 15;
 function Cerberus(position){
 
 	Zombie.apply(this,arguments); 
@@ -20,11 +20,11 @@ function Cerberus(position){
 	this.yPosition = 19;
 	this.mesh.position.z = position.z;
 	this.mesh.scale.set(3, 3, 3);
-	this.boundRadius = zombie_width;
+	this.boundRadius = cerebus_width;
 	SCENE.add(this.mesh);
     //Uncomment this as well as the comment in update to see the collision spheres
-//	this.collisionMesh = new THREE.Mesh(new THREE.SphereGeometry(this.boundRadius, 100, 100), new THREE.MeshNormalMaterial());
-//    SCENE.add(this.collisionMesh);
+	//this.collisionMesh = new THREE.Mesh(new THREE.SphereGeometry(this.boundRadius, 100, 100), new THREE.MeshNormalMaterial());
+    //SCENE.add(this.collisionMesh);
 
 	this.pathArray = new Array();
 
@@ -66,11 +66,11 @@ function Cerberus(position){
 			}
             this.state = DYING;
         }
-	        //Uncomment this to see the collision sphere
-//	    var temp = this.position.clone();
-//	    temp.y -= 15;
-//	    temp.addSelf(this.direction.clone().multiplyScalar(20));
-//	    this.collisionMesh.position = temp;
+	    //Uncomment this to see the collision sphere
+	    //var temp = this.position.clone();
+	    //temp.y -= 15;
+	    //temp.addSelf(this.direction.clone().multiplyScalar(20));
+	    //this.collisionMesh.position = temp;
 	
 		if(this.spawn && this.mesh.position.y != this.yPosition){
 			var nextYMesh = this.mesh.position.y + 1;
@@ -108,6 +108,20 @@ function Cerberus(position){
 		}
 		if(this.state == ATTACKING)
 		{
+			keyframe = Math.floor( aniTimeATTK / this.attackInterpolation ) + this.attackOffset;
+			if ( keyframe != this.attackcurrentKeyframe ) 
+			{
+				this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 0;
+				this.mesh.morphTargetInfluences[ this.attackcurrentKeyframe ] = 1;
+				this.mesh.morphTargetInfluences[ keyframe ] = 0;
+				this.attackLastKeyframe = this.attackcurrentKeyframe;
+				this.attackcurrentKeyframe = keyframe;
+			}
+			this.mesh.morphTargetInfluences[ keyframe ] = 
+				( aniTimeATTK % this.attackInterpolation ) / this.attackInterpolation;
+			this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 
+				1 - this.mesh.morphTargetInfluences[ keyframe ];
+			
 			if(aniTimeATTK > 475){
 				if(this.canAttack){
 					if("undefined" != typeof(this.attackTarget)){
@@ -125,19 +139,6 @@ function Cerberus(position){
 			} else if(aniTimeATTK < 475){
 				this.canAttack = true;
 			}
-			keyframe = Math.floor( aniTimeATTK / this.attackInterpolation ) + this.attackOffset;
-			if ( keyframe != this.attackcurrentKeyframe ) 
-			{
-				this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 0;
-				this.mesh.morphTargetInfluences[ this.attackcurrentKeyframe ] = 1;
-				this.mesh.morphTargetInfluences[ keyframe ] = 0;
-				this.attackLastKeyframe = this.attackcurrentKeyframe;
-				this.attackcurrentKeyframe = keyframe;
-			}
-			this.mesh.morphTargetInfluences[ keyframe ] = 
-				( aniTimeATTK % this.attackInterpolation ) / this.attackInterpolation;
-			this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 
-				1 - this.mesh.morphTargetInfluences[ keyframe ];
 		}
 		if(this.state == DYING) {
 			keyframe = Math.floor( aniTimeDie / this.deathInterpolation ) + this.deathOffset;
