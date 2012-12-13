@@ -34,7 +34,7 @@ function Monster(position){
 	var matBolt = new THREE.MeshBasicMaterial({
         map : LIGHTNING_TEXTURE
     });
-    this.boltMesh = new THREE.Mesh(new THREE.CylinderGeometry(5, 5, this.attack_distance, this.attack_distance, false), matBolt);
+    this.boltMesh = new THREE.Mesh(new THREE.CylinderGeometry(5, 5, this.attack_distance*2, this.attack_distance, false), matBolt);
 	//this.boltMesh = new THREE.Mesh(GEOMETRIES[LIGHTNING_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	//this.boltMesh.scale.set(.02, .02, .02);
     this.boltMesh.rotation.x = -Math.PI/2;
@@ -46,6 +46,7 @@ function Monster(position){
 		
 var clock = new THREE.Clock();
 	/*ANIMATION VARIABLES*/
+	
 	/*WALKING*/
 	this.walkingOffset       = 1  // starting frame of animation
 	this.walkingDuration        = 500, // milliseconds to complete animation
@@ -57,6 +58,7 @@ var clock = new THREE.Clock();
 	this.boltInterval = 1;
 	this.timeSinceAttack = 0;
 	this.reload_time = 2;
+	this.mineClock = new THREE.Clock();
 	this.update = function(time) {
 		if (this.health <= 0 && this.state != DYING) {
 			//clean up of meshes
@@ -107,7 +109,7 @@ var clock = new THREE.Clock();
 		}
 		if(this.state == ATTACKING)
 		{
-		    this.timeSinceAttack += CLOCK.getDelta();
+		    this.timeSinceAttack += this.mineClock.getDelta();
 		    if(this.timeSinceAttack > this.reload_time){
 				if("undefined" != typeof(this.attackTarget)){
 					if(this.attackTarget.doDamage(this.attackPower)){
