@@ -82,7 +82,7 @@ function Night()
 		//document.getElementById("bullets").style.visibility = 'hidden';
 		document.getElementById("nightFinished").style.visibility = 'hidden';
 	}
-
+	this.clockMine = new THREE.Clock();
 	this.update = function (time) {
 		if(this.displaySecondTip){
 			if(new Date().getTime() > this.startTime && (PLAYER.guns[1].purchased || PLAYER.guns[2].purchased )){
@@ -94,20 +94,30 @@ function Night()
 		//Compute distance from middle
 		var distance = Math.pow(GRID_WIDTH/2-PLAYER.position.x,2)+Math.pow(GRID_HEIGHT/2-PLAYER.position.z,2);
 		
-		if(distance > 2000*2000)
+		
+		if(distance > FOG_DISTANCE*FOG_DISTANCE)
 		{
 		    //Compute a scale up based on distance
-			var from_boundry = distance-2000*2000;
+			var from_boundry = distance-FOG_DISTANCE*FOG_DISTANCE;
 			//This will be between 2500^2 and 5000^2 and we want
 			//5000 = .001
 			//2500 = .00019
 			//Liner = -0.000803x + 2500y = -1.515 => 
-			var val = (-1.015 + 1*0.000803*(Math.sqrt(distance)))/3000
-			
+			var val = (-0.24 + 1*0.00081*(Math.sqrt(distance)))/3000;
 			SCENE.fog.density = val;
+			if(SCENE.fog.density > 0.0004 && distance > DAMAGE_DISTANCE*DAMAGE_DISTANCE)
+			{
+				TIME_FOG -= this.clockMine.getDelta();
+				if(TIME_FOG<=0)
+				{
+					PLAYER.doDamage(2);
+					TIME_FOG = 4;
+				}
+			}
 		}
 		else
 		{
+		    TIME_FOG = 4;
 			SCENE.fog.density = 0.000197
 		}
 	    if (ZOMBIES.length == 0) {
