@@ -7,7 +7,7 @@ var LOADER;
 var LOADERC;
 var GAME_STARTED = false;
 var GAME_LOADED = false;
-
+var SKYBOX;
 var THE_GRID;
 var GAME;
 /*WEBGL GLOBALS*/

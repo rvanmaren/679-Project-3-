@@ -12,10 +12,6 @@ LOADERC = new THREE.ColladaLoader();
         opacity: .5,
 		transparent: true
 	});
-	var mark = new THREE.Mesh(new THREE.TorusGeometry(7500, 1000, 50,50),  mat2);
-	mark.rotation.x = Math.PI/2;
-	mark.position.set(GRID_HEIGHT/2,5,GRID_WIDTH/2);
-	SCENE.add(mark);
 
 
 var loaded = false;
