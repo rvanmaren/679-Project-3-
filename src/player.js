@@ -15,7 +15,7 @@ function Player(position)
     this.dead = false;
     this.score = 0;
     this.firingAutomatic = false;
-    
+    this.lastWeaponChangeTime = 0;
 
     //Used for camera shake effect
     this.cameraShakeStart = 0;
@@ -54,6 +54,8 @@ function Player(position)
 	}
 
 	this.mouse_wheel = function (event) {
+		this.lastWeaponChangeTime = new Date().getTime() + 3000;
+		document.getElementById("gun-div").style.visibility = '';	    
 	    if (event.wheelDelta > 0) {
 	        this.currentGun++;
 	    } else {
@@ -114,11 +116,13 @@ function Player(position)
 	    var yTheta = 1 * Math.sin(ang) + this.direction.y * Math.cos(ang);
 	    this.direction.y = yTheta;
 	    this.direction = this.direction.normalize();
-
+        
 	}
 
 	this.doDamage = function (damage) {
 	    this.health -= damage;
+	    PARTICLE_MANAGER.createParticles(this.position.clone(), 0x8A0707,-this.direction);
+               
 	    this.cameraShake(400, .05);
 	    if (this.health <= 0) {
 	        this.dead = true;
@@ -127,11 +131,13 @@ function Player(position)
 	}
 
 	this.update = function (time) {
-
+		if(this.lastWeaponChangeTime < new Date().getTime()){
+			document.getElementById("gun-div").style.visibility = 'hidden';
+		}
 	    if (this.level) {
 	        this.level.update(10);
 	    }
-
+		
 	    if (this.firingAutomatic) {
 	        if (this.guns[this.currentGun].fire(this.position.clone(), this.direction.clone())) {
 	            var randKick = new THREE.Vector3(Math.random() - .5, Math.random() - .5, Math.random() - .5);
