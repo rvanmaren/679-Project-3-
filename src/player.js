@@ -56,18 +56,41 @@ function Player(position)
 	this.mouse_wheel = function (event) {
 		this.lastWeaponChangeTime = new Date().getTime() + 3000;
 		document.getElementById("gun-div").style.visibility = '';	    
-	    if (event.wheelDelta > 0) {
-	        this.currentGun++;
+	    if (event.wheelDelta < 0) {
+	        this.nextGun();
 	    } else {
-	        this.currentGun--;
+	        this.previousGun();
 	    }
+	}
+
+	this.nextGun = function () {
+
+	    this.currentGun++;
 
 	    this.currentGun %= this.guns.length;
 	    if (this.currentGun < 0) {
 	        this.currentGun = this.guns.length - 1;
 	    }
-	    console.log(this.currentGun);
-	    AUDIO_MANAGER.playSwitchSound();
+	    if (this.guns[this.currentGun].purchased) {
+	        AUDIO_MANAGER.playSwitchSound();
+	    } else {
+	        this.nextGun();
+	    }
+	}
+
+	this.previousGun = function () {
+
+	    this.currentGun--;
+
+	    this.currentGun %= this.guns.length;
+	    if (this.currentGun < 0) {
+	        this.currentGun = this.guns.length - 1;
+	    }
+	    if (this.guns[this.currentGun].purchased) {
+	        AUDIO_MANAGER.playSwitchSound();
+	    } else {
+	        this.previousGun();
+	    }
 	}
 	
 	this.key_down = function(keyEvent)
