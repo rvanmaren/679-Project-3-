@@ -118,6 +118,7 @@ function Night()
 	            TIME_FOG -= this.clockMine.getDelta();
 	            if (TIME_FOG <= 0) {
 	                PLAYER.doDamage(2);
+					GAME.displayMessage("Danger the fog is hurting you",3000);
 	                TIME_FOG = 4;
 	            }
 	        }
