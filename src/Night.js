@@ -22,7 +22,7 @@ function Night()
 	        this.isFinished = true;
 	    }
 	    if (keyEvent.keyCode == 75) {
-	        this.level.exitLevel();
+	      //  this.level.exitLevel();
 	    }
 	    PLAYER.key_down(keyEvent);
 	};
