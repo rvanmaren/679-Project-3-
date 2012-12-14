@@ -12,6 +12,7 @@ function Zombie(position)
     this.rotationSpeed = .5;
 	this.health = 100;
 	this.maxHealth = 100;
+	this.score = 100;
 	this.target = PLAYER;
 	this.targetForMove = new THREE.Vector3(0,0,0);
 	this.frame = 0;
@@ -249,7 +250,7 @@ function Zombie(position)
 			}
 		this.dead = true;
 		SCENE.remove(this.mesh);
-        PLAYER.score += 100;
+        PLAYER.score += this.score;
 	}
 
     //Return true if the zombie was killed, false otherwise
