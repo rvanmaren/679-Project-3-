@@ -164,7 +164,7 @@ function WallPiece(position, grid)
 	this.mesh.position.y = -1;
 	this.mesh.position.z = position.z;
 	SCENE.add(this.mesh );
-	this.health = 40;
+	this.health = 50;
 	this.maxHealth = this.health;
 	/*var material = new THREE.MeshBasicMaterial({
         color: 0x00FF00,

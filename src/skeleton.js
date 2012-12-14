@@ -63,10 +63,10 @@ function Skeleton(position){
 	this.update = function(time) {
 	
         //Uncomment this to see collision spheres
-		//	    this.collisionMesh.position = this.position.clone();
-		//	    var tempPos = this.position.clone();
-		//	    tempPos.y -= this.boundRadius * 2;
-		//	    this.collisionMesh2.position = tempPos;
+//			    this.collisionMesh.position = this.position.clone();
+//			    var tempPos = this.position.clone();
+//			    tempPos.y -= this.boundRadius * 2;
+//			    this.collisionMesh2.position = tempPos;
 	
 	
 		if(this.spawn && this.mesh.position.y != this.yPosition){
@@ -230,7 +230,12 @@ function Skeleton(position){
 	
 	this.checkCollision = function (collider) {
 	    var collisionPosition = this.position.clone();
+	    var collisionPosition2 = this.position.clone();
+	    collisionPosition2.y -= this.boundRadius * 2;
 	    if (collider.mesh.position.clone().subSelf(collisionPosition).length() < collider.boundRadius + this.boundRadius) {
+	        return true;
+	    }
+	    if (collider.mesh.position.clone().subSelf(collisionPosition2).length() < collider.boundRadius + this.boundRadius) {
 	        return true;
 	    }
 	};

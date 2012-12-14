@@ -23,8 +23,11 @@ function Cerberus(position){
 	this.boundRadius = cerebus_width;
 	SCENE.add(this.mesh);
     //Uncomment this as well as the comment in update to see the collision spheres
-	//this.collisionMesh = new THREE.Mesh(new THREE.SphereGeometry(this.boundRadius, 100, 100), new THREE.MeshNormalMaterial());
-    //SCENE.add(this.collisionMesh);
+//	this.collisionMesh = new THREE.Mesh(new THREE.SphereGeometry(this.boundRadius, 100, 100), new THREE.MeshNormalMaterial());
+//	SCENE.add(this.collisionMesh);
+
+//	this.collisionMesh2 = new THREE.Mesh(new THREE.SphereGeometry(this.boundRadius, 100, 100), new THREE.MeshNormalMaterial());
+//	SCENE.add(this.collisionMesh2);
 
 	this.pathArray = new Array();
 
@@ -67,10 +70,15 @@ function Cerberus(position){
             this.state = DYING;
         }
 	    //Uncomment this to see the collision sphere
-	    //var temp = this.position.clone();
-	    //temp.y -= 15;
-	    //temp.addSelf(this.direction.clone().multiplyScalar(20));
-	    //this.collisionMesh.position = temp;
+//	    var temp = this.position.clone();
+//	    temp.y -= 15;
+//	    temp.addSelf(this.direction.clone().multiplyScalar(-20));
+//	    this.collisionMesh.position = temp;
+
+//	    var temp2 = this.position.clone();
+//	    temp2.y -= 15;
+//	    temp2.addSelf(this.direction.clone().multiplyScalar(10));
+//	    this.collisionMesh2.position = temp2;
 	
 		if(this.spawn && this.mesh.position.y != this.yPosition){
 			var nextYMesh = this.mesh.position.y + 1;
@@ -230,8 +238,17 @@ function Cerberus(position){
 	this.checkCollision = function (collider) {
 	    var collisionPosition = this.position.clone();
 	    collisionPosition.y -= 15;
-	    collisionPosition.addSelf(this.direction.clone().multiplyScalar(20));
+	    collisionPosition.addSelf(this.direction.clone().multiplyScalar(-20));
+
 	    if (collider.mesh.position.clone().subSelf(collisionPosition).length() < collider.boundRadius + this.boundRadius) {
+	        return true;
+	    }
+
+	    var collisionPosition2 = this.position.clone();
+	    collisionPosition2.y -= 15;
+	    collisionPosition2.addSelf(this.direction.clone().multiplyScalar(10));
+
+	    if (collider.mesh.position.clone().subSelf(collisionPosition2).length() < collider.boundRadius + this.boundRadius) {
 	        return true;
 	    }
 	};

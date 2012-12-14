@@ -10,10 +10,17 @@
         <div class = "intro" id = "intro-screen" style = "visibility:hidden;">
         <br />
         <br />
+             <span style = "text-align: center;"> <h1>SURVIVE THE NIGHT</h1></span>
         <br />
+
              <span style = "text-align: center;"> <h1>You are one of the few people left after the monster apocalypse. You need to build up a civilization and protect it for as long as you can. Don't let those monster destroy your house!</h1> </span>
         <br />
+
         <br />
+            <span style = "text-align: center;"> <h2>This is a FPS survival game. Created by Paul Bolanowski, Justin Smith, Michael Masanek.</h2></span>
+		<br />
+            <span style = "text-align: center;"> <h2>We allow for this game to be left online. We used models from opengameart.org and used the Three.js library for 3D.
+				This Game was only tested on chrome.</h2></span>
         <br />
              <span style = "text-align: center"> <h1>Click To continue to instructions.</h1> </span>
         </div>
@@ -34,8 +41,8 @@
                     <img style = "width:50px; height:50px; position:absolute; left:55%" src = "resources/Textures/fence_thumb.png" />
                     <br /><br />
                 </span>
-                <br />
                 <span style = "text-align: center"> <h2>SURVIVE!</h2> </span>
+                <span style = "text-align: center"> <p>Look out for hints at the top</p> </span>
             </div> 
 
             <div class ="explanation" id = "day-explanation">
@@ -51,7 +58,7 @@
                 <span style = "text-align: center"> <h4>Number keys to change what you are building, Move mouse to change fence direction</h4> </span>
                 <span style = "text-align: center"> <h4>Protect your houses with fences and turrets</h4> </span>
             </div> 
-            <span style = "text-align: center; bottom: 0%; position: absolute; padding: 10px;"> <h2>Zombies will attack during the night and you must defend your base but more importantly yourself. Build more houses to generate income. Use your money to build turrets, walls, and even upgrade your weapons.</h2></span>
+            <span style = "text-align: center; bottom: 0%; position: absolute; padding: 10px;"> <h2>Zombies will attack during the night and you must defend your base but more importantly yourself. Build more houses to generate income. Use your money to build turrets, walls, and even buy new weapons.</h2></span>
             <span style = "text-align: center"> <h1>Click To Start</h1> </span>
         </div>
 		 <div class = "hint" id ="hint" style ="visibility:hidden"><h3 id = "hintMessage"> </h3></div>
@@ -85,7 +92,10 @@
             <h4>Cost: free</h4>
         </div>
         </div>
-        <div id = "exit-day" style ="visibility: hidden"><h1>Press space bar when you are finished building.</h1></div>
+        <div id = "exit-day" style ="visibility: hidden">
+            <h1>Press space bar when you are finished building.</h1>
+            <h4>Press R to reset mouse pointer. Press H to warp to the players position.</h4>
+        </div>
         <div id = "gun-store" style =  "visibility: hidden; text-align: center;">
         	<h2 id = "open-gun-store" style = "position: absolute; top: 0%;">Press enter to open the weapon store.</h2>
             <div id="gun-store-details" style = "visibility: hidden;">

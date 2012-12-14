@@ -100,6 +100,10 @@ function Day(position)
 	                break;
 	            case 82:
 	                THE_GRID.reset_preview();
+					this.position.x = CAMERA.position.x;
+					this.position.z = CAMERA.position.z;
+					this.target.position.x= PLAYER.position.x;
+					this.target.position.z = PLAYER.position.z;
 	                break;
 				case 72:
 				{
@@ -107,6 +111,8 @@ function Day(position)
 					this.position.z = PLAYER.position.z;
 					CAMERA.position.x = PLAYER.position.x;
 					CAMERA.position.z = PLAYER.position.z;
+					this.target.position.x= PLAYER.position.x;
+					this.target.position.z = PLAYER.position.z;
 	                THE_GRID.reset_preview();
 	                break;
 				}					
