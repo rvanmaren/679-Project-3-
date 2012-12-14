@@ -203,3 +203,13 @@ h3
     border-radius: 15px;
     z-index: 11111111;
 }
+
+::-moz-selection{
+    background-color:Transparent;
+    color:#000;
+    }
+
+    ::selection {
+    background-color:Transparent;
+    color:#000;
+    }

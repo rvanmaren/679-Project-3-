@@ -4,8 +4,10 @@ var DOWN = 1;
 var LEFT = 2;
 var RIGHT = 3;
 
-function Bullet(position, dir,radius,speed, maxDistance) {
+function Bullet(position, dir,radius,speed, maxDistance, power) {
     
+    if (typeof(power)=='undefined') power = 10;
+
     this.direction = dir;
     this.speed = speed;
     this.maxDistance = maxDistance;
@@ -22,7 +24,7 @@ function Bullet(position, dir,radius,speed, maxDistance) {
     this.boundRadius = 2;
 	SCENE.add(this.mesh);
 
-    this.damage = 10;
+    this.damage = power;
 
 	SCENE.add(this.mesh);
 

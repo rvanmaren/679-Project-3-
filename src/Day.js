@@ -271,6 +271,22 @@ this.previousBuildOption = function () {
 
     this.switchInto = function (buildAmount) {
 	
+		if(GAME.currentLevel == 1){
+			GAME.displayMessage("Use the arrow keys to change between build options",7000);
+		}
+		if(GAME.currentLevel == 2){
+			GAME.displayMessage("Build Houses to earn more income",7000);
+		}
+		
+		if(GAME.currentLevel == 3){
+			GAME.displayMessage("Press enter to access the gun store",7000);
+		}
+		
+		if(GAME.currentLevel == 4){
+			GAME.displayMessage("Towers will defend your base for you",7000);
+		}
+		
+		
 		
 		PLAYER.position = new THREE.Vector3(GRID_WIDTH / 2, 30, GRID_HEIGHT / 2);
 		
@@ -383,14 +399,14 @@ this.previousBuildOption = function () {
         if (this.gunStoreOpen) {
 
             if (!PLAYER.guns[PLAYER.currentGun].purchased) {
-                document.getElementById("gun-cost").innerHTML = "Purchase for $" + PLAYER.guns[PLAYER.currentGun].cost;
+                document.getElementById("gun-cost").innerHTML = "Purchase for $" + PLAYER.guns[PLAYER.currentGun].cost + "0";
                 document.getElementById("ammo-cost").innerHTML = "Purchase the gun before purchasing more ammo.";
             } else {
                 document.getElementById("gun-cost").innerHTML = "Purchased";
                 if (PLAYER.guns[PLAYER.currentGun].ammoCost == 0) {
                     document.getElementById("ammo-cost").innerHTML = "Ammo: Unlimited";
                 } else {
-                    document.getElementById("ammo-cost").innerHTML = "Ammo: " + PLAYER.guns[PLAYER.currentGun].additionalAmmo + " for $" + PLAYER.guns[PLAYER.currentGun].ammoCost;
+                    document.getElementById("ammo-cost").innerHTML = "Ammo: " + PLAYER.guns[PLAYER.currentGun].additionalAmmo + " for $" + PLAYER.guns[PLAYER.currentGun].ammoCost + "0";
                 }
             } 
             document.getElementById("gun-description").innerHTML = PLAYER.guns[PLAYER.currentGun].description;
@@ -426,7 +442,7 @@ this.previousBuildOption = function () {
             document.getElementById("build-4").style.backgroundColor = "#D3E397";
         }
 
-        document.getElementById("build-units").innerHTML = this.blocksLeft;
+        document.getElementById("build-units").innerHTML = "$" +this.blocksLeft + "0";
         var forward = this.keys[UP] ? (this.keys[DOWN] ? 0 : 1) : (this.keys[DOWN] ? -1 : 0); //1,0,-1
         var sideways = this.keys[RIGHT] ? (this.keys[LEFT] ? 0 : 1) : (this.keys[LEFT] ? -1 : 0);
 

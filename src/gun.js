@@ -3,20 +3,29 @@ function Gun() {
     
     this.speed = BULLET_SPEED;
     this.automatic = false;
-	this.kickback = 0.01;
+	this.kickback = 0.02;
 	this.range = 100000;
 	this.cost = 0;
 	this.ammoCost = 0;
 	this.additionalAmmo = 0;
 	this.description = 'A short description of the gun';
 	this.purchased = true;
+	this.power = 10;
+	this.lastFire = -1000;
+	this.delay = 300;
 
 	this.bullets = "Infinite";
 
 	this.fire = function (position, dir) {
-	    BULLETS.push(new Bullet(position, dir.clone(), 0.125, this.speed, this.range));
-	    AUDIO_MANAGER.playGunshot();
-	    return true;
+	    var curTime = new Date().getTime();
+	    if (curTime - this.lastFire > this.delay) {
+	        BULLETS.push(new Bullet(position, dir.clone(), 0.125, this.speed, this.range, this.power));
+	        AUDIO_MANAGER.playGunshot();
+	        this.lastFire = curTime;
+	        return true;
+	    } else {
+	        return false;
+	    }
 	}
 
     this.endFire = function () { }
@@ -32,14 +41,13 @@ function Shotgun() {
     
     this.numShots = 9;
     this.delay = 900;
-    this.lastFire = -1000;
 
     this.range = 4500;
     
-    this.cost = 20;
-	this.ammoCost = 5;
+    this.cost = 10;
+	this.ammoCost = 3;
 	this.additionalAmmo = 15;
-
+    this.power = 7;
 
     this.bullets = 15;
 
@@ -51,7 +59,7 @@ function Shotgun() {
                 return false;
             }
             this.bullets--;
-            BULLETS.push(new Bullet(position, dir.clone(), 0.125, this.speed, this.range));
+            BULLETS.push(new Bullet(position, dir.clone(), 0.125, this.speed, this.range, this.power));
             for (var i = 1; i < this.numShots; i++) {
                 //                var tempDir = dir.clone();
                 //                var forward = dir.clone();
@@ -65,7 +73,7 @@ function Shotgun() {
                 tempDir.y += ((Math.random() - .5) / 20.0);
                 tempDir.z += ((Math.random() - .5) / 20.0);
 
-                BULLETS.push(new Bullet(position, tempDir.clone(), 0.125, this.speed, this.range));
+                BULLETS.push(new Bullet(position, tempDir.clone(), 0.125, this.speed, this.range, this.power));
             }
             AUDIO_MANAGER.playShotgunShot();
             this.lastFire = curTime;
@@ -87,23 +95,33 @@ function MachineGun() {
     this.automatic = true;
     this.kickback = .008;
     this.delay = 200;
-    this.lastFire = -1000;
     this.isFiring = false;
     
-    this.cost = 25;
+    this.cost = 20;
 	this.ammoCost = 5;
-	this.additionalAmmo = 50;
-
-
+	this.additionalAmmo = 100;
+	this.power = 15;
+	this.firedSinceReload = 0;
+	this.clipSize = 15;
+    this.reloadTime = 0;
+    this.reloadDuration = 1000;
     this.fire = function (position, dir) {
         if (this.bullets <= 0) {
+            this.endFire();
             AUDIO_MANAGER.playEmptySound();
             return false;
         }
         var curTime = new Date().getTime();
-        if (curTime - this.lastFire > this.delay) {
+        if (this.firedSinceReload >= this.clipSize) {
+            this.endFire();
+            this.firedSinceReload = 0;
+            AUDIO_MANAGER.playReload();
+            this.reloadTime = curTime;
+            return false;
+        } else if (curTime - this.lastFire > this.delay && curTime - this.reloadTime > this.reloadDuration) {
             this.bullets--;
-            BULLETS.push(new Bullet(position, dir.clone(), 0.125, this.speed, this.range));
+            this.firedSinceReload++;
+            BULLETS.push(new Bullet(position, dir.clone(), 0.125, this.speed, this.range, this.power));
             if (!this.isFiring) {
                 AUDIO_MANAGER.playMachineGunSound();
             }
@@ -115,8 +133,8 @@ function MachineGun() {
             return false;
         }
 
-       
-        
+
+
     } 
 
     this.endFire = function () {

@@ -5,6 +5,7 @@ LOADER = new THREE.JSONLoader();
 LOADERC = new THREE.ColladaLoader();
 
 /*Ring of fog in distance*/
+
 	 var mat2 = new THREE.MeshLambertMaterial(
 	{
 	    color: 0xAAAAAA,
@@ -170,6 +171,8 @@ function mouse_down(event) {
 
 	        document.body.requestPointerLock();
 	        GAME = new Game();
+			GAME.night.switchInto(GAME.currentLevel);
+			
 	        animloop();
 	    } else if (showIntro) {
 	        showIntro = false;

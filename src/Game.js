@@ -65,7 +65,6 @@ function Game()
 	
 	//Start in the night
     this.gameState = this.night;
-	this.night.switchInto(this.currentLevel);
 	
 	this.score = 0;
 	

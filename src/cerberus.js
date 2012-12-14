@@ -6,11 +6,11 @@ function Cerberus(position){
 	Zombie.apply(this,arguments); 
 	this.height = 20;
 	this.attack_distance = 60;
-	this.speed = (8 + Math.random()) / 30;
+	this.speed = (3.5 + Math.random()) / 30;
     this.rotationSpeed = .5;
-	this.health = 80;
+	this.health = 200;
 	this.bloodColor = 0x8A0707;
-	this.attackPower = 5;
+	this.attackPower = 25;
 	this.maxHealth = this.health;
 	this.target = PLAYER;
 
@@ -155,7 +155,7 @@ function Cerberus(position){
 			this.mesh.morphTargetInfluences[ this.deathLastKeyframe ] = 
 				1 - this.mesh.morphTargetInfluences[ keyframe ];
 			
-			if(keyframe >= 29)
+			if(keyframe >= 89)
 			{
 			    this.kill();
 			}

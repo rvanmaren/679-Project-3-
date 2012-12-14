@@ -10,6 +10,9 @@ var GAME_LOADED = false;
 var SKYBOX;
 var THE_GRID;
 var GAME;
+var FOG_DISTANCE = 1000;
+var DAMAGE_DISTANCE = 1000;
+var TIME_FOG = 4;
 /*WEBGL GLOBALS*/
 var RENDERER;
 var SCENE;
@@ -21,7 +24,10 @@ var CLOCK = new THREE.Clock();
 /*PLAYER GLOBALS*/
 var PLAYER;
 var P_ROTATE = .5;
-var P_SPEED = 60/30;
+
+var P_SPEED = 9.5/30;
+
+
 /*ZOMBIE GLOBALS*/
 var ZOMBIES = new Array();
 var TOWERS = new Array();
@@ -75,7 +81,7 @@ var NUM_BOXES = 1000;
 var NUM_HOUSES = 0;
 var HOUSE_COST = 10;
 var TOWER_COST = 20;
-var HOUSE_INCOME = 4;
+var HOUSE_INCOME = 6;
 /*BULLET GLOBALS*/
 var BULLET_SPEED = 30;
 var BULLETS = new Array();

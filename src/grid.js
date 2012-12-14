@@ -296,13 +296,13 @@ function Grid(width, height, blocks)
 				    //HOnestly. all these pretty much do the exact same thing...
 				    if(this.grid_spots[spot[0]][spot[1]] instanceof HousePiece)
 					{
-						NUM_HOUSES--;
+						
 						this.removeHouse(this.grid_spots[spot[0]][spot[1]]);
 						return true;
 					}
 					if(this.grid_spots[spot[0]][spot[1]].myOwner instanceof HousePiece)
 					{
-						NUM_HOUSES--;
+						
 						this.removeHouse(this.grid_spots[spot[0]][spot[1]].myOwner);
 						return true;
 					}
@@ -448,6 +448,7 @@ function Grid(width, height, blocks)
 				this.grid_spots[i][j] = EMPTY;
 			}
 		}
+        NUM_HOUSES--;
 	}
     this.buildHouse = function(spotClick)
 	{
