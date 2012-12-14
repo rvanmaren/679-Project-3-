@@ -31,7 +31,7 @@ LOADER.load( './resources/skeleton_0.js', function(geometry){
 	for (var i = 0; i < geometry.materials.length; i++)
 		geometry.materials[i].morphTargets = true;
 		GEOMETRIES.push(geometry);});
-LOADER.load( './resources/fence/fence.js' ,function(geometry){    geometry.id = 'fence';    GEOMETRIES.push(geometry);});
+LOADER.load( './resources/fence/fence_fix.js' ,function(geometry){    geometry.id = 'fence';    GEOMETRIES.push(geometry);});
 LOADER.load( './resources/cerberus_v002.js' ,function(geometry){    geometry.id = 'cerberus';    
 	for (var i = 0; i < geometry.materials.length; i++)
 		geometry.materials[i].morphTargets = true;

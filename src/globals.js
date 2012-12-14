@@ -42,7 +42,7 @@ var LIGHTNING_TEXTURE;
 var ORDER =['gun','tower', 'tree1','tree2','house','fence','cerberus','monster','zombie'];
 var GEOMETRIES = new Array();
 var COLLADAS = new Array();
-var NUM_GEOMETRIES  = 8;
+var NUM_GEOMETRIES  = 9;
 var NUM_COLLADAS = 0;
 function load( geometry,id) {  
 		//var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial({overdraw: true}));   
