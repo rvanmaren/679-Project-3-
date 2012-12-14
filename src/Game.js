@@ -28,9 +28,27 @@ function Game()
 	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 400, PLAYER.position.z + 350));
 	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 400, PLAYER.position.z + 400));
 
-//	THE_GRID.wall_build_type = "horizontal";
-//	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 400, PLAYER.position.z + 400));
-//	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 100, PLAYER.position.z + 50));
+	THE_GRID.wall_build_type = "horizontal";
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 380, PLAYER.position.z + 435));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 330, PLAYER.position.z + 435));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 280, PLAYER.position.z + 435));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 230, PLAYER.position.z + 435));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 180, PLAYER.position.z + 435));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 130, PLAYER.position.z + 435));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 80, PLAYER.position.z + 435));
+
+	
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 380, PLAYER.position.z + 30));
+	
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 330, PLAYER.position.z + 30));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 280, PLAYER.position.z + 30));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 230, PLAYER.position.z + 30));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 180, PLAYER.position.z + 30));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 130, PLAYER.position.z + 30));
+	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 80, PLAYER.position.z + 30));
+
+	
+	//	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 100, PLAYER.position.z + 50));
 //	THE_GRID.handle_command(new Build_Command('build', 'wall', PLAYER.position.x + 150, PLAYER.position.z + 50));
 	
 	
@@ -47,7 +65,6 @@ function Game()
 	
 	//Start in the night
     this.gameState = this.night;
-	this.night.switchInto(this.currentLevel);
 	
 	this.score = 0;
 	
@@ -69,7 +86,7 @@ function Game()
 		this.gameState.key_up(keyEvt);
 	}
 	this.update = function (time) {
-
+		this.skybox.update();
 	    if (PLAYER.dead == true) {
 	        document.getElementById("dead").style.visibility = '';
 	        return;

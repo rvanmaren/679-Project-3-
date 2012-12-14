@@ -29,7 +29,8 @@ function Player(position)
 	this.guns.push(new Shotgun());
 	this.guns.push(new MachineGun());
 	this.currentGun = 0;
-
+	this.weaponHintDisplayed = false;
+	this.deadSoundPlayed = false;
 
 	this.mouse_down = function (keyEvent) {
 	    if (!this.dead && !GAME.gameState.waitingToFinish) {
@@ -143,14 +144,21 @@ function Player(position)
 	}
 
 	this.doDamage = function (damage) {
-	    this.health -= damage;
-	    PARTICLE_MANAGER.createParticles(this.position.clone(), 0x8A0707,-this.direction);
-               
+	    this.health = Math.max(this.health - damage, 0);
+	    PARTICLE_MANAGER.createParticles(this.position.clone(), 0x8A0707, -this.direction);
+
 	    this.cameraShake(400, .05);
 	    if (this.health <= 0) {
 	        this.dead = true;
+
+	        if (!this.deadSoundPlayed) {
+	            AUDIO_MANAGER.playDeath();
+	            this.deadSoundPlayed = true;
+	        }
+	    } else {
+	        AUDIO_MANAGER.playGrunt();
 	    }
-		return false;
+	    return false;
 	}
 
 	this.update = function (time) {

@@ -7,7 +7,7 @@ function Skeleton(position){
 	Zombie.apply(this,arguments); 
 	this.bloodColor = 0xFFFFFF;
 	this.attack_distance = 60;
-	this.speed = (4 + Math.random())/ 30;
+	this.speed = (5 + Math.random())/ 30;
     this.rotationSpeed = .5;
 	this.health = 100;
 	this.maxHealth = this.health;
@@ -119,6 +119,19 @@ function Skeleton(position){
 			}
 			if(this.state == ATTACKING)
 			{
+				keyframe = Math.floor( aniTimeATTK / this.attackInterpolation ) + this.attackOffset;
+				if ( keyframe != this.attackcurrentKeyframe ) 
+				{
+					this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 0;
+					this.mesh.morphTargetInfluences[ this.attackcurrentKeyframe ] = 1;
+					this.mesh.morphTargetInfluences[ keyframe ] = 0;
+					this.attackLastKeyframe = this.attackcurrentKeyframe;
+					this.attackcurrentKeyframe = keyframe;
+				}
+				this.mesh.morphTargetInfluences[ keyframe ] = 
+					( aniTimeATTK % this.attackInterpolation ) / this.attackInterpolation;
+				this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 
+					1 - this.mesh.morphTargetInfluences[ keyframe ];
 				if(aniTimeATTK > 475){
 					if(this.canAttack){
 						if("undefined" != typeof(this.attackTarget)){
@@ -136,19 +149,6 @@ function Skeleton(position){
 				} else if(aniTimeATTK < 475){
 					this.canAttack = true;
 				}
-				keyframe = Math.floor( aniTimeATTK / this.attackInterpolation ) + this.attackOffset;
-				if ( keyframe != this.attackcurrentKeyframe ) 
-				{
-					this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 0;
-					this.mesh.morphTargetInfluences[ this.attackcurrentKeyframe ] = 1;
-					this.mesh.morphTargetInfluences[ keyframe ] = 0;
-					this.attackLastKeyframe = this.attackcurrentKeyframe;
-					this.attackcurrentKeyframe = keyframe;
-				}
-				this.mesh.morphTargetInfluences[ keyframe ] = 
-					( aniTimeATTK % this.attackInterpolation ) / this.attackInterpolation;
-				this.mesh.morphTargetInfluences[ this.attackLastKeyframe ] = 
-					1 - this.mesh.morphTargetInfluences[ keyframe ];
 			}
 			if(this.state == DYING) {
 				keyframe = Math.floor( aniTimeDie / this.deathInterpolation ) + this.deathOffset;

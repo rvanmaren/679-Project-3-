@@ -33,7 +33,7 @@ function webGL_intialize()
     
 	
 	SCENE = new THREE.Scene();
-	//SCENE.fog = new THREE.FogExp2( 0xAAAAAA, 0.00018 );
+	SCENE.fog = new THREE.FogExp2( 0xAAAAAA, 0.001197);
 
 	//SET UP CAMERA
 	CAMERA = new THREE.PerspectiveCamera(

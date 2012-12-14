@@ -17,6 +17,7 @@ var tower_height= 150;
 function TowerPiece(position,grid)
 {
     this.health = 50;
+    this.maxHealth = this.health;
     this.height = 60;
 	this.units = this;
     this.grid_spot = grid;
@@ -67,7 +68,7 @@ function TowerPiece(position,grid)
 				}
 			}
 			if(distance != -1)
-			{   console.log(distance);
+			{  
 				direction = new THREE.Vector3(zombie.position.x-this.mesh.position.x,-1*(zombie.mesh.position.y-this.mesh.position.y+100)+zombie.height,zombie.position.z-this.mesh.position.z);
 				//Shoot a bullet at it
 				if(distance < 500*500)
@@ -79,6 +80,10 @@ function TowerPiece(position,grid)
 			}
 		}
 	}
+    
+    this.restoreHealth = function() {
+        this.heatlth = this.maxHealth;
+    }
 	
 }
 var tree1_width = GRID_WIDTH/NUM_BOXES;
@@ -88,7 +93,8 @@ function Tree1Piece(position,grid)
     this.height = 0;
 	this.myOwner = this;
     this.grid_spot = grid;
-	this.health = 20;
+    this.health = 20;
+    this.maxHealth = this.health;
 	this.mesh = new THREE.Mesh(GEOMETRIES[TREE1_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.scale.set(20,45,20);
 	this.mesh.position.x = position.x;
@@ -107,6 +113,10 @@ function Tree1Piece(position,grid)
 		return false;
 		
 	}
+
+    this.restoreHealth = function() {
+        this.heatlth = this.maxHealth;
+    }
 	
 }
 var tree2_width = GRID_WIDTH/NUM_BOXES;
@@ -116,6 +126,7 @@ function Tree2Piece(position,grid)
     this.height = 0;
 	this.myOwner = this;
 	this.health = 20;
+	this.maxHealth = this.health;
     this.grid_spot = grid;
 	this.mesh = new THREE.Mesh(GEOMETRIES[TREE2_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.scale.set(20,45,20);
@@ -134,6 +145,10 @@ function Tree2Piece(position,grid)
 		} 
 		return false;
 	}
+
+    this.restoreHealth = function() {
+        this.heatlth = this.maxHealth;
+    }
 		
 	
 }
@@ -149,7 +164,8 @@ function WallPiece(position, grid)
 	this.mesh.position.y = -1;
 	this.mesh.position.z = position.z;
 	SCENE.add(this.mesh );
-	this.health = 25;
+	this.health = 40;
+	this.maxHealth = this.health;
 	/*var material = new THREE.MeshBasicMaterial({
         color: 0x00FF00,
     });
@@ -173,6 +189,10 @@ function WallPiece(position, grid)
 	}
 		return false;
 	}
+
+    this.restoreHealth = function() {
+        this.health = this.maxHealth;
+    }
 	
 }
 var house_width = 10;
@@ -189,20 +209,28 @@ function HousePiece(position, grid)
 	this.mesh.position.y = -5;
 	this.mesh.position.z = position.z;
 	SCENE.add(this.mesh);
-	this.health = 150;
+	this.health = 200;
+    this.maxHealth = this.health;
 	this.units;
-	
-	
-	this.doDamage = function(damage){
-		this.health -= damage;
-		GAME.displayMessage('House is under attack!',3000);
-		if(this.health <= 0){
-			THE_GRID.removeHouse(this);
-			GAME.displayMessage('House has been destroyed!',3000);
-			return true;
-		}
-		return false;
+	this.destroyed = false;
+
+	this.doDamage = function (damage) {
+	    this.health -= damage;
+	    GAME.displayMessage('House is under attack!', 3000);
+	    if (this.health <= 0) {
+	        if (!this.destroyed) {
+	            THE_GRID.removeHouse(this);
+	            GAME.displayMessage('House has been destroyed!', 3000);
+	        }
+	        this.destroyed = true;
+	        return true;
+	    }
+	    return false;
 	}
+
+    this.restoreHealth = function() {
+        this.health = this.maxHealth;
+    }
 }
 function HousePieceUnit(housePiece, position, height)
 {
