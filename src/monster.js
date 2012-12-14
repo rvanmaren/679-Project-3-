@@ -13,7 +13,7 @@ function Monster(position){
 	this.attackPower = 5;
 	this.maxHealth = this.health;
 	this.target = PLAYER;
-
+	this.score = 50;
   	this.mesh = new THREE.Mesh(GEOMETRIES[MONSTER_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.position.x = position.x;
 	this.mesh.position.y = -50;

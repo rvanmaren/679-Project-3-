@@ -13,7 +13,7 @@ function Cerberus(position){
 	this.attackPower = 25;
 	this.maxHealth = this.health;
 	this.target = PLAYER;
-
+	this.score = 250;
   	this.mesh = new THREE.Mesh(GEOMETRIES[CERBERUS_MESH], new THREE.MeshFaceMaterial({overdraw: true}));
 	this.mesh.position.x = position.x;
 	this.mesh.position.y = -40;
